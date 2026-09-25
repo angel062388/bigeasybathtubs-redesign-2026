@@ -142,12 +142,12 @@ p{margin:0 0 1em}
 @keyframes settle{to{transform:scale(1)}}
 @keyframes draw{to{stroke-dashoffset:0}}
 
-/* ---------- trust bar: "bath fill" ----------
-   When the band scrolls into view the tub fills: bathwater rises along
-   the bottom with two drifting wave layers. Each highlight floats up out
-   of the water inside a glass bubble, pops with a splash of droplets, and
-   its label zooms in and settles, leaving a faint ring. Foam bubbles keep
-   rising from the waterline. No JS or reduced motion: the finished strip. */
+/* ---------- trust bar: drip and ripple ----------
+   When the band scrolls into view the tub fills: bathwater rises along the
+   bottom with two drifting wave layers. Over each highlight a drop falls
+   from the faucet and vanishes the moment it lands; two ripples spread
+   from the impact and the label rises. Plays once. No JS or reduced
+   motion: the finished strip, no drops. */
 .trust{position:relative;overflow:hidden;background:var(--navy-deep);border-top:1px solid rgba(255,255,255,.06);isolation:isolate}
 .tb-water{position:absolute;left:0;right:0;bottom:0;height:42%;z-index:0;background:linear-gradient(180deg,#123F66 0%,#0A3357 60%,#072A48 100%)}
 .tb-water i{position:absolute;left:0;right:0;height:26px;top:-24px;background-repeat:repeat-x;background-size:720px 26px}
@@ -156,42 +156,22 @@ p{margin:0 0 1em}
 @keyframes tbWave{to{background-position-x:-720px}}
 .js .trust:not(.go) .tb-water{height:0}
 .js .trust.go .tb-water{transition:height 1.6s cubic-bezier(.22,1,.36,1)}
-.tb-foam{position:absolute;inset:0;z-index:1;pointer-events:none}
-.tb-foam i{position:absolute;left:var(--x);bottom:36%;width:var(--s);height:var(--s);border-radius:50%;opacity:0;
-  background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.92) 0%,rgba(255,255,255,.3) 38%,rgba(255,255,255,.06) 62%,rgba(255,255,255,.18) 100%);
-  box-shadow:inset 0 0 6px rgba(255,255,255,.7),0 0 0 1px rgba(163,209,238,.25);
-  animation:tbFoam var(--fd) linear var(--fdelay) infinite}
-@keyframes tbFoam{0%{opacity:0;transform:translate3d(0,0,0) scale(.4)}12%{opacity:var(--o)}80%{opacity:var(--o)}100%{opacity:0;transform:translate3d(var(--drift),-150px,0) scale(1)}}
 .trust .wrap{position:relative;z-index:2}
 .tb-row{list-style:none;margin:0;padding:0;display:flex;justify-content:center}
-.tb-item{position:relative;flex:1 1 0;min-height:200px;display:flex;align-items:center;justify-content:center;padding:18px 4px;text-align:center}
-.tb-item::before{content:"";position:absolute;left:50%;top:50%;width:132px;height:132px;margin:-66px 0 0 -66px;border-radius:50%;border:1px solid rgba(220,205,184,.28)}
-.tb-txt{position:relative;z-index:3;display:inline-flex;align-items:center;justify-content:center;gap:8px;max-width:150px;font:400 17px/1.25 var(--serif);color:var(--white);transform-origin:center}
-.tb-ico{flex:none;width:20px;height:20px;fill:none;stroke:var(--sand);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.tb-rating{flex-direction:column;gap:6px}
-.tb-rating .stars{font-size:15px;letter-spacing:.14em;margin-right:-.14em}
-.tb-bub{position:absolute;left:50%;top:50%;width:132px;height:132px;margin:-66px 0 0 -66px;border-radius:50%;z-index:2;pointer-events:none;opacity:0;
-  background:radial-gradient(circle at 50% 50%,rgba(255,255,255,0) 60%,rgba(255,255,255,.24) 82%,rgba(255,255,255,.85) 94%,rgba(255,255,255,.55) 98.5%,rgba(255,255,255,0) 100%),
-    radial-gradient(circle at 34% 28%,rgba(255,255,255,.5) 0%,rgba(255,255,255,.16) 34%,rgba(163,209,238,.16) 64%,rgba(255,255,255,.08) 100%),
-    radial-gradient(circle at 50% 55%,rgba(4,34,61,.5) 0%,rgba(4,34,61,.3) 40%,rgba(4,34,61,0) 66%);
-  border:1px solid rgba(255,255,255,.55);
-  box-shadow:inset 0 0 26px rgba(255,255,255,.45),inset 14px 16px 36px rgba(255,255,255,.32),inset -16px -20px 44px rgba(96,150,190,.3),0 16px 36px rgba(0,0,0,.35)}
-.tb-bub i{position:absolute;left:19%;top:13%;width:25%;height:17%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95),rgba(255,255,255,0) 70%)}
-.tb-drops{position:absolute;left:50%;top:50%;z-index:4;pointer-events:none}
-.tb-drops i{position:absolute;left:0;top:0;width:8px;height:8px;border-radius:50%;opacity:0;background:radial-gradient(circle at 34% 30%,rgba(255,255,255,.98),rgba(163,209,238,.5))}
-.tb-drops i:nth-child(1){--dx:-58px;--dy:-44px}.tb-drops i:nth-child(2){--dx:0px;--dy:-72px}.tb-drops i:nth-child(3){--dx:60px;--dy:-40px}
-.tb-drops i:nth-child(4){--dx:70px;--dy:22px}.tb-drops i:nth-child(5){--dx:-66px;--dy:26px}.tb-drops i:nth-child(6){--dx:4px;--dy:58px}
-/* animation runs once, when the band is in view */
-.js .trust:not(.go) .tb-txt,.js .trust:not(.go) .tb-item::before{opacity:0}
-.js .trust.go .tb-bub{animation:tbRise 1.3s cubic-bezier(.2,.8,.25,1) var(--d) both,tbPop .42s cubic-bezier(.3,0,.6,1) calc(1.95s + var(--d)) forwards}
-.js .trust.go .tb-drops i{animation:tbSplash .55s ease-out calc(1.95s + var(--d)) forwards}
-.js .trust.go .tb-txt{animation:tbText 2.8s cubic-bezier(.2,.8,.25,1) var(--d) both}
-.js .trust.go .tb-item::before{animation:tbRing .6s ease-out calc(2.1s + var(--d)) both}
-@keyframes tbRise{0%{opacity:0;transform:translate3d(0,130px,0) scale(.35)}22%{opacity:1}62%{transform:translate3d(0,-10px,0) scale(1.04)}80%{transform:translate3d(0,3px,0) scale(.99)}100%{opacity:1;transform:none}}
-@keyframes tbPop{0%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.16)}100%{opacity:0;transform:scale(1.34)}}
-@keyframes tbSplash{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}18%{opacity:.95}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1)}}
-@keyframes tbText{0%,44%{opacity:0;transform:scale(.5)}56%{opacity:1;transform:scale(.64)}72%{opacity:1;transform:scale(.64)}82%{opacity:1;transform:scale(1.4)}100%{opacity:1;transform:scale(1)}}
-@keyframes tbRing{from{opacity:0;transform:scale(1.25)}to{opacity:1;transform:none}}
+.tb-item{--fall:102px;position:relative;flex:1 1 0;min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px 6px;text-align:center}
+.tb-lbl{position:relative;z-index:2;display:block;max-width:170px;font:400 17px/1.25 var(--serif);color:var(--white)}
+.tb-item .stars{font-size:15px;letter-spacing:.14em;margin-right:-.14em}
+.tb-drop{position:absolute;left:50%;top:-14px;width:10px;height:14px;margin-left:-5px;z-index:3;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:linear-gradient(180deg,#DCEEFA,#7FB6DD);opacity:0;pointer-events:none}
+.tb-rip{position:absolute;left:50%;top:50%;width:170px;height:54px;margin:-27px 0 0 -85px;border:1.5px solid var(--sand);border-radius:50%;opacity:0;pointer-events:none}
+.js .trust:not(.go) .tb-lbl{opacity:0}
+.js .trust.go .tb-drop{animation:tbFall .62s cubic-bezier(.55,0,1,.45) var(--d) forwards}
+.js .trust.go .tb-rip{animation:tbRip 1.3s ease-out calc(var(--d) + .6s) forwards}
+.js .trust.go .tb-rip.r2{animation-delay:calc(var(--d) + .82s)}
+.js .trust.go .tb-lbl{animation:tbUp .8s cubic-bezier(.22,1,.36,1) calc(var(--d) + .75s) both}
+/* the drop falls, flattens on impact and is gone: nothing is left behind */
+@keyframes tbFall{0%{opacity:1;transform:translateY(0)}88%{opacity:1;transform:translateY(var(--fall))}100%{opacity:0;transform:translateY(calc(var(--fall) + 4px)) scale(1.8,.2)}}
+@keyframes tbRip{0%{opacity:.9;transform:scale(.08)}100%{opacity:0;transform:scale(1.1)}}
+@keyframes tbUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
 /* ---------- process ---------- */
 .proc{background:var(--sand);padding:120px 0}
@@ -364,10 +344,9 @@ p{margin:0 0 1em}
   .hero-actions .btn{width:100%;text-align:center}
   .hero-slides{width:88%}
   .why-grid{grid-template-columns:1fr}
-  .tb-item{flex:1 1 50%;min-height:160px}
-  .tb-bub,.tb-item::before{width:112px;height:112px;margin:-56px 0 0 -56px}
-  .tb-txt{font-size:15px;max-width:124px;gap:6px}
-  .tb-ico{width:17px;height:17px}
+  .tb-item{flex:1 1 50%;min-height:150px;--fall:82px}
+  .tb-lbl{font-size:15px;max-width:150px}
+  .tb-rip{width:140px;height:46px;margin:-23px 0 0 -70px}
   .areas-list{grid-template-columns:1fr}
   .news-form{flex-direction:column}
   .foot-grid{grid-template-columns:1fr}
@@ -382,5 +361,6 @@ p{margin:0 0 1em}
   .hero-card,.hero-slides,.fade-seq,.js .reveal{opacity:1!important;transform:none!important}
   .ht-ul path{stroke-dashoffset:0}
   .hero-bg,.slide img{transform:none!important}
-  .tb-water i,.tb-foam i{animation:none!important}
+  .tb-water i{animation:none!important}
+  .tb-drop,.tb-rip{display:none!important}
 }

@@ -125,20 +125,9 @@
     reveals.forEach(function (el) { io.observe(el); });
   }
 
-  // ---------- trust bar: bath fill + rising bubbles ----------
+  // ---------- trust bar: drip and ripple, plays once in view ----------
   var trust = document.querySelector('[data-trust]');
   if (trust) {
-    var foam = trust.querySelector('[data-foam]');
-    if (foam && !reduce) {
-      var rnd = function (a, b) { return a + Math.random() * (b - a); };
-      for (var f = 0; f < 16; f++) {
-        var b = document.createElement('i');
-        b.style.cssText = '--x:' + rnd(2, 97).toFixed(1) + '%;--s:' + rnd(6, 22).toFixed(1) + 'px;' +
-          '--fd:' + rnd(4.5, 9.5).toFixed(2) + 's;--fdelay:-' + rnd(0, 9).toFixed(2) + 's;' +
-          '--drift:' + Math.round(rnd(-40, 40)) + 'px;--o:' + rnd(.3, .8).toFixed(2);
-        foam.appendChild(b);
-      }
-    }
     if (reduce || !('IntersectionObserver' in window)) {
       trust.classList.add('go');
     } else {
