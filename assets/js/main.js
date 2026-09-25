@@ -138,6 +138,31 @@
     }
   }
 
+  // ---------- About video: plays only on screen, never for reduced motion ----------
+  var vid = document.querySelector('[data-about-video]');
+  var vbtn = document.querySelector('[data-video-toggle]');
+  if (vid && vbtn) {
+    var userPaused = reduce;
+    var setBtn = function () {
+      vbtn.textContent = vid.paused ? '▶' : '❙❙';
+      vbtn.setAttribute('aria-label', vid.paused ? 'Play video' : 'Pause video');
+    };
+    if (reduce) { vid.removeAttribute('autoplay'); vid.pause(); }
+    vid.addEventListener('play', setBtn);
+    vid.addEventListener('pause', setBtn);
+    vbtn.addEventListener('click', function () {
+      if (vid.paused) { userPaused = false; vid.play().catch(function () {}); }
+      else { userPaused = true; vid.pause(); }
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (en) {
+        if (en[0].isIntersecting) { if (!userPaused) vid.play().catch(function () {}); }
+        else vid.pause();
+      }, { threshold: 0.25 }).observe(vid);
+    }
+    setBtn();
+  }
+
   // ---------- subtle parallax on the CTA photo ----------
   var ctaBg = document.querySelector('.cta-bg');
   if (ctaBg && !reduce) {

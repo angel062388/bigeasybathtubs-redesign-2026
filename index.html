@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/main.css?v=11">
+<link rel="stylesheet" href="assets/css/main.css?v=12">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
@@ -229,7 +229,14 @@
 <section class="about">
   <div class="wrap about-grid">
     <div class="about-media reveal">
-      <img src="https://www.bigeasybathtubs.com/wp-content/uploads/2026/06/bath-9-1024x681.jpg" alt="White clawfoot tub with a brass floor-mounted faucet" loading="lazy">
+      <!-- Stock clip: "Filling The Bathtub With Water" by cottonbro studio, Pexels (free license, no credit required).
+           Hotlinked for the prototype; host it on the client's site before launch. -->
+      <video class="about-video" data-about-video autoplay muted loop playsinline preload="metadata"
+        poster="https://images.pexels.com/videos/4155071/bath-bathroom-beauty-routine-daily-routine-4155071.jpeg?auto=compress&amp;cs=tinysrgb&amp;h=627&amp;fit=crop&amp;w=1200"
+        aria-label="Water pouring from a brass faucet into a freestanding white bathtub">
+        <source src="https://videos.pexels.com/video-files/4155071/4155071-hd_1366_720_50fps.mp4" type="video/mp4">
+      </video>
+      <button class="vid-toggle" type="button" data-video-toggle aria-label="Pause video">❙❙</button>
       <a class="about-call" href="tel:+15045533699"><span>Call our experts</span><b>504-553-3699</b></a>
     </div>
     <div class="about-copy reveal" style="--d:.1s">
@@ -411,6 +418,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=8" defer></script>
+<script src="assets/js/main.js?v=12" defer></script>
 </body>
 </html>
