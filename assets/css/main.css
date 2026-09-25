@@ -245,16 +245,6 @@ p{margin:0 0 1em}
 .about-call b{font:400 28px/1 var(--serif)}
 .about-copy .btn{margin-top:10px}
 
-/* ---------- why ---------- */
-.why{padding:130px 0;background:var(--cream)}
-.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line)}
-.why-item{padding:40px 30px 10px 0;border-right:1px solid var(--line);margin-right:30px}
-.why-item:last-child{border-right:0;margin-right:0}
-.why-n{display:block;font:300 44px/1 var(--serif);color:var(--taupe);margin-bottom:22px}
-.why-item h3{font-size:22px}
-.badges{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:40px;margin-top:70px;padding-top:50px;border-top:1px solid var(--line)}
-.badges img{height:74px;width:auto;object-fit:contain;filter:grayscale(.2);opacity:.9;transition:.3s}
-.badges img:hover{filter:none;opacity:1}
 
 /* ---------- reviews ---------- */
 .revs{background:var(--hero-wash);padding:130px 0}
@@ -339,10 +329,8 @@ p{margin:0 0 1em}
   .burger{display:block}
   .head-tel{display:none}
   .head-cta{margin-left:auto}
-  .why-grid{grid-template-columns:1fr 1fr}
   .tb-row{flex-wrap:wrap}
   .tb-item{flex:1 1 33%}
-  .why-item{margin-right:0;padding-right:30px;border-right:0;border-bottom:1px solid var(--line);padding-bottom:30px}
   .foot-grid{grid-template-columns:1fr 1fr}
 }
 @media (max-width:960px){
@@ -371,7 +359,7 @@ p{margin:0 0 1em}
   .about-call{right:16px;bottom:-24px}
   .faq-head{position:static}
   .revs-track{grid-auto-columns:82%}
-  .proc,.svc,.about,.why,.revs,.areas,.faq,.blog{padding:90px 0}
+  .proc,.svc,.about,.revs,.areas,.faq,.blog{padding:90px 0}
 }
 @media (max-width:600px){
   :root{--gutter:16px}
@@ -383,7 +371,6 @@ p{margin:0 0 1em}
   .hero-title{font-size:clamp(30px,8.8vw,40px)}
   .hero-actions .btn{width:100%;text-align:center}
   .hero-slides{width:88%}
-  .why-grid{grid-template-columns:1fr}
   .tb-item{flex:1 1 50%;min-height:150px;--fall:82px}
   .tb-lbl{font-size:15px;max-width:150px}
   .tb-rip{width:140px;height:46px;margin:-23px 0 0 -70px}
