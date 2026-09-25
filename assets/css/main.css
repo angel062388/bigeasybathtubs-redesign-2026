@@ -77,8 +77,8 @@ p{margin:0 0 1em}
 .nav{margin-left:auto}
 .nav-list{display:flex;gap:30px;list-style:none;margin:0;padding:0}
 .nav-list>li{position:relative}
-.nav-list a,.nav-btn{font:500 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;text-decoration:none;color:var(--sand-2);background:none;border:0;padding:10px 0;cursor:pointer;transition:color .2s}
-.nav-list a:hover,.nav-btn:hover,.nav-btn[aria-expanded=true]{color:var(--white)}
+.nav-list a,.nav-btn{font:500 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;text-decoration:none;color:var(--white);background:none;border:0;padding:10px 0;cursor:pointer;transition:color .2s}
+.nav-list a:hover,.nav-btn:hover,.nav-btn[aria-expanded=true]{color:var(--sand)}
 .nav-btn span{display:inline-block;margin-left:4px;transition:transform .25s}
 .nav-btn[aria-expanded=true] span{transform:rotate(45deg)}
 .mega{position:absolute;top:calc(100% + 14px);left:50%;transform:translate(-50%,8px);display:grid;grid-template-columns:repeat(3,170px);gap:24px;background:var(--white);color:var(--ink);padding:28px 30px;border-radius:var(--r);box-shadow:0 24px 60px rgba(2,22,41,.25);opacity:0;visibility:hidden;transition:.25s var(--ease)}
@@ -88,7 +88,8 @@ p{margin:0 0 1em}
 .mega a{display:block;color:var(--body);letter-spacing:.04em;text-transform:none;font-size:15px;padding:6px 0}
 .mega a:hover{color:var(--navy)}
 .head-cta{display:flex;align-items:center;gap:18px}
-.head-tel{font:500 15px/1 var(--sans);letter-spacing:.06em;color:var(--white);text-decoration:none}
+.head-tel{font:500 15px/1 var(--sans);letter-spacing:.06em;color:var(--white);text-decoration:none;transition:color .2s}
+.head-tel:hover{color:var(--sand)}
 .head-cta .btn{padding:12px 22px}
 .burger{display:none;width:44px;height:44px;border:0;background:none;cursor:pointer;position:relative}
 .burger span{position:absolute;left:10px;right:10px;height:1.5px;background:var(--white);transition:.3s}
@@ -98,7 +99,8 @@ p{margin:0 0 1em}
 .drawer{position:fixed;inset:0;z-index:19;background:var(--navy);padding:110px var(--gutter) 40px;overflow:auto}
 .drawer nav{display:flex;flex-direction:column;gap:4px}
 .drawer a,.drawer summary{color:var(--white);text-decoration:none;font:400 24px/1.3 var(--serif);padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1);cursor:pointer;list-style:none}
-.drawer details a{font:400 16px/1.3 var(--sans);padding:10px 0 10px 16px;color:var(--sand-2);display:block}
+.drawer details a{font:400 16px/1.3 var(--sans);padding:10px 0 10px 16px;color:rgba(255,255,255,.85);display:block}
+.drawer a:hover,.drawer summary:hover{color:var(--sand)}
 .drawer .btn{margin-top:24px;text-align:center;font:600 13px/1 var(--sans);border-bottom:0}
 
 /* ---------- HERO ---------- */
@@ -107,10 +109,10 @@ p{margin:0 0 1em}
 .hero-card{position:relative;min-height:var(--hero-h);border-radius:var(--r);overflow:hidden;display:flex;align-items:center;isolation:isolate;opacity:0;transform:translateY(24px);animation:rise 1.4s var(--ease) .05s forwards}
 .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transform:scale(1.08);animation:settle 2.4s var(--ease) forwards}
 .hero-card::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(4,34,61,.82) 0%,rgba(4,34,61,.6) 55%,rgba(4,34,61,.35) 100%)}
-.hero-copy{padding:56px 7% 56px 10%;max-width:none;width:100%}
+.hero-copy{padding:56px 6% 56px 8%;max-width:none;width:100%}
 .hero-eyebrow{font:500 13px/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--sand-2);margin-bottom:22px}
 .hero-eyebrow .stars{margin-right:8px}
-.hero-title{font:300 clamp(30px,3vw,46px)/1.15 var(--serif);text-transform:uppercase;letter-spacing:.025em;color:var(--white);margin:0 0 28px}
+.hero-title{font:500 clamp(34px,3.5vw,52px)/1.12 var(--serif);text-transform:uppercase;letter-spacing:.025em;color:var(--white);margin:0 0 28px}
 .ht-line{display:block;position:relative;width:max-content;max-width:100%;padding-bottom:12px;margin-bottom:6px;white-space:nowrap}
 .ht-ul{position:absolute;left:-4px;right:-4px;bottom:0;width:calc(100% + 8px);height:12px;overflow:visible}
 .ht-ul path{fill:none;stroke:var(--sand);stroke-width:2.2;stroke-linecap:round}
@@ -140,10 +142,56 @@ p{margin:0 0 1em}
 @keyframes settle{to{transform:scale(1)}}
 @keyframes draw{to{stroke-dashoffset:0}}
 
-/* ---------- trust bar ---------- */
-.trust{background:var(--navy-deep);color:var(--sand-2);border-top:1px solid rgba(255,255,255,.06)}
-.trust-row{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px 26px;padding:30px var(--gutter);font:500 13px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase}
-.trust-row i{width:5px;height:5px;border-radius:50%;background:var(--sand)}
+/* ---------- trust bar: "bath fill" ----------
+   When the band scrolls into view the tub fills: bathwater rises along
+   the bottom with two drifting wave layers. Each highlight floats up out
+   of the water inside a glass bubble, pops with a splash of droplets, and
+   its label zooms in and settles, leaving a faint ring. Foam bubbles keep
+   rising from the waterline. No JS or reduced motion: the finished strip. */
+.trust{position:relative;overflow:hidden;background:var(--navy-deep);border-top:1px solid rgba(255,255,255,.06);isolation:isolate}
+.tb-water{position:absolute;left:0;right:0;bottom:0;height:42%;z-index:0;background:linear-gradient(180deg,#123F66 0%,#0A3357 60%,#072A48 100%)}
+.tb-water i{position:absolute;left:0;right:0;height:26px;top:-24px;background-repeat:repeat-x;background-size:720px 26px}
+.tb-w1{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 C 90 4, 270 36, 360 20 S 630 4, 720 20 V40 H0Z' fill='%230A3357'/%3E%3C/svg%3E");animation:tbWave 9s linear infinite;opacity:.9}
+.tb-w2{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 40' preserveAspectRatio='none'%3E%3Cpath d='M0 22 C 120 38, 240 6, 360 22 S 600 38, 720 22 V40 H0Z' fill='%23123F66'/%3E%3C/svg%3E");animation:tbWave 6s linear infinite reverse}
+@keyframes tbWave{to{background-position-x:-720px}}
+.js .trust:not(.go) .tb-water{height:0}
+.js .trust.go .tb-water{transition:height 1.6s cubic-bezier(.22,1,.36,1)}
+.tb-foam{position:absolute;inset:0;z-index:1;pointer-events:none}
+.tb-foam i{position:absolute;left:var(--x);bottom:36%;width:var(--s);height:var(--s);border-radius:50%;opacity:0;
+  background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.92) 0%,rgba(255,255,255,.3) 38%,rgba(255,255,255,.06) 62%,rgba(255,255,255,.18) 100%);
+  box-shadow:inset 0 0 6px rgba(255,255,255,.7),0 0 0 1px rgba(163,209,238,.25);
+  animation:tbFoam var(--fd) linear var(--fdelay) infinite}
+@keyframes tbFoam{0%{opacity:0;transform:translate3d(0,0,0) scale(.4)}12%{opacity:var(--o)}80%{opacity:var(--o)}100%{opacity:0;transform:translate3d(var(--drift),-150px,0) scale(1)}}
+.trust .wrap{position:relative;z-index:2}
+.tb-row{list-style:none;margin:0;padding:0;display:flex;justify-content:center}
+.tb-item{position:relative;flex:1 1 0;min-height:200px;display:flex;align-items:center;justify-content:center;padding:18px 4px;text-align:center}
+.tb-item::before{content:"";position:absolute;left:50%;top:50%;width:132px;height:132px;margin:-66px 0 0 -66px;border-radius:50%;border:1px solid rgba(220,205,184,.28)}
+.tb-txt{position:relative;z-index:3;display:inline-flex;align-items:center;justify-content:center;gap:8px;max-width:150px;font:400 17px/1.25 var(--serif);color:var(--white);transform-origin:center}
+.tb-ico{flex:none;width:20px;height:20px;fill:none;stroke:var(--sand);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.tb-rating{flex-direction:column;gap:6px}
+.tb-rating .stars{font-size:15px;letter-spacing:.14em;margin-right:-.14em}
+.tb-bub{position:absolute;left:50%;top:50%;width:132px;height:132px;margin:-66px 0 0 -66px;border-radius:50%;z-index:2;pointer-events:none;opacity:0;
+  background:radial-gradient(circle at 50% 50%,rgba(255,255,255,0) 60%,rgba(255,255,255,.24) 82%,rgba(255,255,255,.85) 94%,rgba(255,255,255,.55) 98.5%,rgba(255,255,255,0) 100%),
+    radial-gradient(circle at 34% 28%,rgba(255,255,255,.5) 0%,rgba(255,255,255,.16) 34%,rgba(163,209,238,.16) 64%,rgba(255,255,255,.08) 100%),
+    radial-gradient(circle at 50% 55%,rgba(4,34,61,.5) 0%,rgba(4,34,61,.3) 40%,rgba(4,34,61,0) 66%);
+  border:1px solid rgba(255,255,255,.55);
+  box-shadow:inset 0 0 26px rgba(255,255,255,.45),inset 14px 16px 36px rgba(255,255,255,.32),inset -16px -20px 44px rgba(96,150,190,.3),0 16px 36px rgba(0,0,0,.35)}
+.tb-bub i{position:absolute;left:19%;top:13%;width:25%;height:17%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95),rgba(255,255,255,0) 70%)}
+.tb-drops{position:absolute;left:50%;top:50%;z-index:4;pointer-events:none}
+.tb-drops i{position:absolute;left:0;top:0;width:8px;height:8px;border-radius:50%;opacity:0;background:radial-gradient(circle at 34% 30%,rgba(255,255,255,.98),rgba(163,209,238,.5))}
+.tb-drops i:nth-child(1){--dx:-58px;--dy:-44px}.tb-drops i:nth-child(2){--dx:0px;--dy:-72px}.tb-drops i:nth-child(3){--dx:60px;--dy:-40px}
+.tb-drops i:nth-child(4){--dx:70px;--dy:22px}.tb-drops i:nth-child(5){--dx:-66px;--dy:26px}.tb-drops i:nth-child(6){--dx:4px;--dy:58px}
+/* animation runs once, when the band is in view */
+.js .trust:not(.go) .tb-txt,.js .trust:not(.go) .tb-item::before{opacity:0}
+.js .trust.go .tb-bub{animation:tbRise 1.3s cubic-bezier(.2,.8,.25,1) var(--d) both,tbPop .42s cubic-bezier(.3,0,.6,1) calc(1.95s + var(--d)) forwards}
+.js .trust.go .tb-drops i{animation:tbSplash .55s ease-out calc(1.95s + var(--d)) forwards}
+.js .trust.go .tb-txt{animation:tbText 2.8s cubic-bezier(.2,.8,.25,1) var(--d) both}
+.js .trust.go .tb-item::before{animation:tbRing .6s ease-out calc(2.1s + var(--d)) both}
+@keyframes tbRise{0%{opacity:0;transform:translate3d(0,130px,0) scale(.35)}22%{opacity:1}62%{transform:translate3d(0,-10px,0) scale(1.04)}80%{transform:translate3d(0,3px,0) scale(.99)}100%{opacity:1;transform:none}}
+@keyframes tbPop{0%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.16)}100%{opacity:0;transform:scale(1.34)}}
+@keyframes tbSplash{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}18%{opacity:.95}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1)}}
+@keyframes tbText{0%,44%{opacity:0;transform:scale(.5)}56%{opacity:1;transform:scale(.64)}72%{opacity:1;transform:scale(.64)}82%{opacity:1;transform:scale(1.4)}100%{opacity:1;transform:scale(1)}}
+@keyframes tbRing{from{opacity:0;transform:scale(1.25)}to{opacity:1;transform:none}}
 
 /* ---------- process ---------- */
 .proc{background:var(--sand);padding:120px 0}
@@ -282,6 +330,8 @@ p{margin:0 0 1em}
   .head-tel{display:none}
   .head-cta{margin-left:auto}
   .why-grid{grid-template-columns:1fr 1fr}
+  .tb-row{flex-wrap:wrap}
+  .tb-item{flex:1 1 33%}
   .why-item{margin-right:0;padding-right:30px;border-right:0;border-bottom:1px solid var(--line);padding-bottom:30px}
   .foot-grid{grid-template-columns:1fr 1fr}
 }
@@ -290,7 +340,7 @@ p{margin:0 0 1em}
   .hero-grid{grid-template-columns:1fr}
   .hero-card{min-height:auto}
   .hero-copy{padding:64px 32px 110px}
-  .hero-title{font-size:clamp(28px,5.4vw,44px)}
+  .hero-title{font-size:clamp(30px,6vw,48px)}
   .hero-slides{margin:-70px 0 0 auto;width:72%;height:auto;aspect-ratio:4/3}
   .ht-line{width:auto;white-space:normal;padding-bottom:0;margin-bottom:.18em}
   .ht-ul{display:none}
@@ -310,11 +360,14 @@ p{margin:0 0 1em}
   .logo img{height:42px}
   .head-cta .btn{display:none}
   .hero-copy{padding:48px 22px 96px}
-  .hero-title{font-size:clamp(28px,8.4vw,38px)}
+  .hero-title{font-size:clamp(30px,8.8vw,40px)}
   .hero-actions .btn{width:100%;text-align:center}
   .hero-slides{width:88%}
-  .trust-row{gap:12px 16px;font-size:11px}
   .why-grid{grid-template-columns:1fr}
+  .tb-item{flex:1 1 50%;min-height:160px}
+  .tb-bub,.tb-item::before{width:112px;height:112px;margin:-56px 0 0 -56px}
+  .tb-txt{font-size:15px;max-width:124px;gap:6px}
+  .tb-ico{width:17px;height:17px}
   .areas-list{grid-template-columns:1fr}
   .news-form{flex-direction:column}
   .foot-grid{grid-template-columns:1fr}
@@ -329,4 +382,5 @@ p{margin:0 0 1em}
   .hero-card,.hero-slides,.fade-seq,.js .reveal{opacity:1!important;transform:none!important}
   .ht-ul path{stroke-dashoffset:0}
   .hero-bg,.slide img{transform:none!important}
+  .tb-water i,.tb-foam i{animation:none!important}
 }
