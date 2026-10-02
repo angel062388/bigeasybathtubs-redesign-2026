@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About Video Options | Big Easy Bathtubs</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css?v=12">
+<style>
+/* Comparison page only: candidate stock clips for the About section, each
+   shown in the same 5:4 rounded frame the homepage uses. Not used by index.html. */
+body{background:var(--sand-bg)}
+.intro{padding:56px 0 8px}
+.intro h1{font-size:clamp(30px,3.4vw,44px)}
+.intro p{max-width:720px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:34px 26px;padding:32px 0 90px}
+.clip{margin:0}
+.clip video{display:block;width:100%;aspect-ratio:5/4;object-fit:cover;border-radius:var(--r);background:var(--navy)}
+.clip figcaption{padding:14px 2px 0}
+.clip b{display:block;font:400 22px/1.2 var(--serif);color:var(--ink)}
+.clip span{display:block;font-size:15px;margin-top:4px}
+.clip a{font-size:13px;color:var(--navy)}
+.tag{display:inline-block;font:600 10px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--navy);padding:5px 9px;border-radius:999px;margin-left:8px;vertical-align:middle}
+@media (max-width:960px){.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="intro">
+    <p class="eyebrow">Big Easy Bathtubs · design options</p>
+    <h1>About section video: pick a clip</h1>
+    <p>Each clip plays in the same rounded frame the homepage uses. All are free Pexels stock clips, licensed for business websites, no credit required. No people appear in the frames checked.</p>
+  </section>
+  <div class="grid" data-grid></div>
+</main>
+<script>
+(function () {
+  var P = 'https://videos.pexels.com/video-files/';
+  var clips = [
+    { n: 'A', id: '4155071', file: '4155071-hd_1366_720_50fps.mp4', slug: 'water-bathroom-interior-bath-4155071', title: 'Brass faucet filling a tub', note: 'Dark, moody tile. On the homepage now.', pos: '32% 50%', now: true },
+    { n: 'B', id: '6694034', file: '6694034-hd_1366_720_30fps.mp4', slug: 'elegant-white-bathtub-being-filled-6694034', title: 'Tub filling by a round window', note: 'Bright marble room, brass faucet. 29 seconds.', pos: '50% 50%' },
+    { n: 'C', id: '19227396', file: '19227396-hd_1280_720_30fps.mp4', slug: 'a-white-bath-tub-sitting-in-a-bathroom-19227396', title: 'Black faucet filling a tub', note: 'Close-up, white tile. Clean and modern.', pos: '50% 50%' },
+    { n: 'D', id: '19228414', file: '19228414-hd_1280_720_30fps.mp4', slug: 'a-white-bath-tub-sitting-in-front-of-a-window-19228414', title: 'Tub under a window', note: 'Soft daylight, gold faucet.', pos: '50% 50%' },
+    { n: 'E', id: '19228174', file: '19228174-hd_1280_720_30fps.mp4', slug: 'a-large-white-bath-tub-in-a-bathroom-19228174', title: 'Jetted tub from above', note: 'Shows the jets clearly.', pos: '50% 50%' },
+    { n: 'F', id: '7578551', file: '7578551-hd_1280_720_30fps.mp4', slug: 'video-of-a-luxurious-bathroom-7578551', title: 'Warm bathroom walk-through', note: 'Camera moves through the room, so the tub is not always in view.', pos: '50% 50%' }
+  ];
+  var grid = document.querySelector('[data-grid]');
+  grid.innerHTML = clips.map(function (c) {
+    return '<figure class="clip"><video muted loop playsinline preload="metadata" style="object-position:' + c.pos + '" data-clip>' +
+      '<source src="' + P + c.id + '/' + c.file + '" type="video/mp4"></video>' +
+      '<figcaption><b>' + c.n + '. ' + c.title + (c.now ? '<i class="tag">Current</i>' : '') + '</b>' +
+      (c.note ? '<span>' + c.note + '</span>' : '') +
+      '<a href="https://www.pexels.com/video/' + c.slug + '/" target="_blank" rel="noopener">Source on Pexels</a></figcaption></figure>';
+  }).join('');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var vids = document.querySelectorAll('[data-clip]');
+  if (reduce) { vids.forEach(function (v) { v.controls = true; }); return; }
+  var io = new IntersectionObserver(function (en) {
+    en.forEach(function (e) { e.isIntersecting ? e.target.play().catch(function () {}) : e.target.pause(); });
+  }, { threshold: 0.3 });
+  vids.forEach(function (v) { io.observe(v); });
+})();
+</script>
+</body>
+</html>
