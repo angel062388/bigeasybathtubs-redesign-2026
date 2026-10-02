@@ -26,9 +26,9 @@
   --gutter:26px;
   --ease:cubic-bezier(0.25,1,0.5,1);
   /* hero card height: fits the first screen on laptops, capped on big monitors */
-  --hero-h:clamp(500px,calc(100vh - 190px),740px);
+  --hero-h:clamp(470px,calc(100vh - 282px),720px);
 }
-@supports (height:100svh){:root{--hero-h:clamp(500px,calc(100svh - 190px),740px)}}
+@supports (height:100svh){:root{--hero-h:clamp(470px,calc(100svh - 282px),720px)}}
 
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -104,7 +104,7 @@ p{margin:0 0 1em}
 .drawer .btn{margin-top:24px;text-align:center;font:600 13px/1 var(--sans);border-bottom:0}
 
 /* ---------- HERO ---------- */
-.hero{background:var(--navy);background-image:radial-gradient(120% 90% at 85% 10%,var(--navy-2) 0%,var(--navy) 45%,var(--navy-deep) 100%);padding:124px 0 72px;position:relative;overflow:hidden}
+.hero{background:var(--navy);background-image:radial-gradient(120% 90% at 85% 10%,var(--navy-2) 0%,var(--navy) 45%,var(--navy-deep) 100%);padding:124px 0 34px;position:relative;overflow:hidden}
 .hero-grid{display:grid;grid-template-columns:58fr 34fr;align-items:start;position:relative}
 .hero-card{position:relative;min-height:var(--hero-h);border-radius:var(--r);overflow:hidden;display:flex;align-items:center;isolation:isolate;opacity:0;transform:translateY(24px);animation:rise 1.4s var(--ease) .05s forwards}
 .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transform:scale(1.08);animation:settle 2.4s var(--ease) forwards}
@@ -142,36 +142,16 @@ p{margin:0 0 1em}
 @keyframes settle{to{transform:scale(1)}}
 @keyframes draw{to{stroke-dashoffset:0}}
 
-/* ---------- trust bar: drip and ripple ----------
-   When the band scrolls into view the tub fills: bathwater rises along the
-   bottom with two drifting wave layers. Over each highlight a drop falls
-   from the faucet and vanishes the moment it lands; two ripples spread
-   from the impact and the label rises. Plays once. No JS or reduced
-   motion: the finished strip, no drops. */
-.trust{position:relative;overflow:hidden;background:var(--navy-deep);border-top:1px solid rgba(255,255,255,.06);isolation:isolate}
-.tb-water{position:absolute;left:0;right:0;bottom:0;height:42%;z-index:0;background:linear-gradient(180deg,#123F66 0%,#0A3357 60%,#072A48 100%)}
-.tb-water i{position:absolute;left:0;right:0;height:26px;top:-24px;background-repeat:repeat-x;background-size:720px 26px}
-.tb-w1{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 C 90 4, 270 36, 360 20 S 630 4, 720 20 V40 H0Z' fill='%230A3357'/%3E%3C/svg%3E");animation:tbWave 9s linear infinite;opacity:.9}
-.tb-w2{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 40' preserveAspectRatio='none'%3E%3Cpath d='M0 22 C 120 38, 240 6, 360 22 S 600 38, 720 22 V40 H0Z' fill='%23123F66'/%3E%3C/svg%3E");animation:tbWave 6s linear infinite reverse}
-@keyframes tbWave{to{background-position-x:-720px}}
-.js .trust:not(.go) .tb-water{height:0}
-.js .trust.go .tb-water{transition:height 1.6s cubic-bezier(.22,1,.36,1)}
-.trust .wrap{position:relative;z-index:2}
-.tb-row{list-style:none;margin:0;padding:0;display:flex;justify-content:center}
-.tb-item{--fall:102px;position:relative;flex:1 1 0;min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px 6px;text-align:center}
-.tb-lbl{position:relative;z-index:2;display:block;max-width:170px;font:400 17px/1.25 var(--serif);color:var(--white)}
-.tb-item .stars{font-size:15px;letter-spacing:.14em;margin-right:-.14em}
-.tb-drop{position:absolute;left:50%;top:-14px;width:10px;height:14px;margin-left:-5px;z-index:3;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:linear-gradient(180deg,#DCEEFA,#7FB6DD);opacity:0;pointer-events:none}
-.tb-rip{position:absolute;left:50%;top:50%;width:170px;height:54px;margin:-27px 0 0 -85px;border:1.5px solid var(--sand);border-radius:50%;opacity:0;pointer-events:none}
-.js .trust:not(.go) .tb-lbl{opacity:0}
-.js .trust.go .tb-drop{animation:tbFall .62s cubic-bezier(.55,0,1,.45) var(--d) forwards}
-.js .trust.go .tb-rip{animation:tbRip 1.3s ease-out calc(var(--d) + .6s) forwards}
-.js .trust.go .tb-rip.r2{animation-delay:calc(var(--d) + .82s)}
-.js .trust.go .tb-lbl{animation:tbUp .8s cubic-bezier(.22,1,.36,1) calc(var(--d) + .75s) both}
-/* the drop falls, flattens on impact and is gone: nothing is left behind */
-@keyframes tbFall{0%{opacity:1;transform:translateY(0)}88%{opacity:1;transform:translateY(var(--fall))}100%{opacity:0;transform:translateY(calc(var(--fall) + 4px)) scale(1.8,.2)}}
-@keyframes tbRip{0%{opacity:.9;transform:scale(.08)}100%{opacity:0;transform:scale(1.1)}}
-@keyframes tbUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+/* ---------- trust bar: ticker ---------- */
+.trust{position:relative;overflow:hidden;background:var(--navy-deep);border-top:1px solid rgba(255,255,255,.06)}
+.tk{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.tk-track{display:flex;width:max-content;animation:tkMove 42s linear infinite}
+.tk:hover .tk-track,.tk:focus-within .tk-track{animation-play-state:paused}
+.tk-run{display:flex;align-items:center;list-style:none;margin:0;padding:0;flex:none}
+.tk-run li{display:flex;align-items:center;white-space:nowrap;padding:24px 0;font:400 19px/1 var(--serif);color:var(--white)}
+.tk-run .stars{font-size:15px;letter-spacing:.14em;margin-right:10px}
+.tk-ico{flex:none;width:24px;height:24px;margin:0 34px;fill:none;stroke:var(--sand);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+@keyframes tkMove{to{transform:translateX(-50%)}}
 
 /* ---------- process ---------- */
 .proc{background:var(--sand);padding:120px 0}
@@ -270,13 +250,47 @@ p{margin:0 0 1em}
 .cta-inner p{font-size:18px;color:rgba(255,255,255,.85)}
 .cta-actions{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:30px}
 
-/* ---------- areas ---------- */
-.areas{background:var(--cream-2);padding:130px 0}
-.areas-grid{display:grid;grid-template-columns:5fr 7fr;gap:80px;align-items:start}
-.areas-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;column-gap:40px}
-.areas-list a{display:flex;align-items:baseline;gap:18px;padding:20px 4px;border-bottom:1px solid var(--line);text-decoration:none;font:400 24px/1.2 var(--serif);color:var(--ink);transition:color .2s,padding .3s var(--ease)}
-.areas-list a span{font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--taupe)}
-.areas-list a:hover{color:var(--navy);padding-left:12px}
+/* ---------- service areas: the water map ---------- */
+.areas{background:var(--cream-2);padding:110px 0}
+.areas .sec-head{max-width:900px;margin-bottom:40px}
+.sa-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:56px;align-items:start}
+.sa-card{background:#FBF8F3;border:1px solid rgba(199,178,154,.55);border-radius:var(--r);padding:18px 18px 14px;box-shadow:0 24px 60px rgba(36,36,36,.12)}
+.sa-prompt{display:flex;justify-content:space-between;align-items:baseline;gap:8px 18px;flex-wrap:wrap;margin:0 2px 12px}
+.sa-prompt span{font:600 11px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--navy)}
+.sa-prompt b{font:500 17px/1.2 var(--serif);color:var(--ink)}
+.sa-map{display:block;width:100%;height:auto;border-radius:14px}
+.sa-water{fill:#CFE0EA}
+.sa-waves path{fill:none;stroke:rgba(4,34,61,.16);stroke-width:2;stroke-linecap:round;animation:saWave 5s linear infinite}
+.sa-waves path:nth-child(even){animation-duration:6.5s;animation-direction:reverse;stroke:rgba(4,34,61,.11)}
+@keyframes saWave{to{transform:translateX(-60px)}}
+.sa-river{fill:none;stroke:#CFE0EA;stroke-width:16;stroke-linecap:round}
+.sa-wlabel{font:italic 400 21px var(--serif);fill:rgba(4,34,61,.6);text-anchor:middle}
+.sa-wlabel.sa-small{font-size:17px}
+.sa-pipe{fill:none;stroke:var(--navy);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+.sa-flow{fill:none;stroke:#9CC7E6;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:10 16;animation:saFlow 1.1s linear infinite}
+@keyframes saFlow{to{stroke-dashoffset:-26}}
+.sa-drop{fill:#EAF5FC;stroke:var(--navy);stroke-width:2;offset-rotate:0deg;animation:saDrop 16s linear infinite}
+@keyframes saDrop{from{offset-distance:0%}to{offset-distance:100%}}
+.sa-dot{cursor:pointer;outline:none}
+.sa-core{fill:#fff;stroke:var(--navy);stroke-width:3.5;transition:fill .2s,r .2s}
+.sa-ring{fill:none;stroke:var(--navy);stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center;animation:saPing 2.6s ease-out infinite}
+.sa-dot:nth-of-type(odd) .sa-ring{animation-delay:1.1s}
+@keyframes saPing{0%{opacity:.55;transform:scale(.7)}100%{opacity:0;transform:scale(2.3)}}
+.sa-name{font:500 19px var(--sans);fill:var(--ink);paint-order:stroke;stroke:#FBF8F3;stroke-width:5;stroke-linejoin:round;transition:fill .2s}
+.sa-dot:hover .sa-core,.sa-dot.is-on .sa-core{fill:var(--navy);r:9}
+.sa-dot:hover .sa-name,.sa-dot.is-on .sa-name{fill:var(--navy);font-weight:600}
+.sa-home circle:not(.sa-ring){fill:var(--navy);stroke:#fff;stroke-width:3}
+.sa-home text{font:500 22px var(--serif);fill:var(--navy);paint-order:stroke;stroke:#FBF8F3;stroke-width:6;stroke-linejoin:round}
+.sa-foot{margin:12px 2px 0;font-size:14px;color:var(--body)}
+.sa-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.sa-list a{display:grid;grid-template-columns:34px 1fr auto 22px;align-items:baseline;column-gap:10px;padding:15px 6px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink);transition:background .2s,padding .3s var(--ease)}
+.sa-n{font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--taupe)}
+.sa-city{font:400 21px/1.2 var(--serif)}
+.sa-parish{font-size:14px;color:var(--body);text-align:right}
+.sa-go{color:var(--taupe);transition:transform .25s var(--ease),color .2s}
+.sa-list a:hover,.sa-list a:focus-visible,.sa-list a.is-on{background:rgba(199,178,154,.18);padding-left:14px}
+.sa-list a:hover .sa-go,.sa-list a.is-on .sa-go{transform:translateX(4px);color:var(--navy)}
+.sa-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
 
 /* ---------- FAQ ---------- */
 .faq{background:var(--sand-bg);padding:130px 0}
@@ -331,12 +345,10 @@ p{margin:0 0 1em}
   .burger{display:block}
   .head-tel{display:none}
   .head-cta{margin-left:auto}
-  .tb-row{flex-wrap:wrap}
-  .tb-item{flex:1 1 33%}
   .foot-grid{grid-template-columns:1fr 1fr}
 }
 @media (max-width:960px){
-  .hero{padding:112px 0 80px}
+  .hero{padding:112px 0 40px}
   .hero-grid{grid-template-columns:1fr}
   .hero-card{min-height:auto}
   .hero-copy{padding:64px 32px 110px}
@@ -357,7 +369,7 @@ p{margin:0 0 1em}
   .fstep{display:grid;grid-template-columns:74px 1fr;column-gap:22px;text-align:left;padding:0}
   .fnode{grid-row:1/span 3;margin:0}
   @keyframes flowRunV{to{background-position-y:200px}}
-  .about-grid,.areas-grid,.faq-grid,.news-row{grid-template-columns:1fr;gap:48px}
+  .about-grid,.sa-grid,.faq-grid,.news-row{grid-template-columns:1fr;gap:48px}
   .about-call{right:16px;bottom:-24px}
   .faq-head{position:static}
   .revs-track{grid-auto-columns:82%}
@@ -373,10 +385,16 @@ p{margin:0 0 1em}
   .hero-title{font-size:clamp(30px,8.8vw,40px)}
   .hero-actions .btn{width:100%;text-align:center}
   .hero-slides{width:88%}
-  .tb-item{flex:1 1 50%;min-height:150px;--fall:82px}
-  .tb-lbl{font-size:15px;max-width:150px}
-  .tb-rip{width:140px;height:46px;margin:-23px 0 0 -70px}
-  .areas-list{grid-template-columns:1fr}
+  .tk-run li{font-size:16px;padding:18px 0}
+  .tk-ico{width:20px;height:20px;margin:0 22px}
+  .sa-name,.sa-home text{font-size:30px}
+  .sa-dot[data-k="slidell"] .sa-name{transform:translateY(62px)}
+  .sa-wlabel{font-size:26px}
+  .sa-wlabel.sa-small{display:none}
+  .sa-core{r:10}
+  .sa-card{padding:12px 12px 10px}
+  .sa-parish{display:none}
+  .sa-list a{grid-template-columns:34px 1fr 22px}
   .news-form{flex-direction:column}
   .foot-grid{grid-template-columns:1fr}
   .faq-list summary{padding:22px 20px;font-size:18px}
@@ -384,13 +402,50 @@ p{margin:0 0 1em}
   .sec-head{margin-bottom:40px}
 }
 
+/* ---------- intro overlay ----------
+   Armed by the inline script in index.html. Timeline from arming:
+   0.3s drop falls · 1.0s ripples + logo rises · 1.7s underline draws ·
+   2.0s tagline · 4.5s fade out (JS timer; the CSS animation on .intro is
+   only a backup for a dead script). */
+.intro{display:none}
+.intro-armed .intro{display:grid;place-items:center;position:fixed;inset:0;z-index:9999;overflow:hidden;background:var(--navy);cursor:pointer;animation:introOut .7s ease 6s forwards}
+.intro-out .intro{opacity:0;pointer-events:none;transition:opacity .7s ease}
+@keyframes introOut{to{opacity:0;pointer-events:none}}
+.intro-scene{position:absolute;inset:0}
+.intro-scene video{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s ease;animation:introDrift 6s ease-out forwards}
+.intro-scene video.on{opacity:1}
+.intro-scene::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(4,34,61,.5) 0%,rgba(4,34,61,.62) 55%,rgba(2,22,41,.82) 100%)}
+@keyframes introDrift{from{transform:scale(1.14)}to{transform:scale(1)}}
+.intro-center{position:relative;z-index:2;display:grid;justify-items:center;text-align:center;padding:0 24px}
+.intro-drop{position:absolute;left:50%;top:-46vh;width:14px;height:20px;margin-left:-7px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:linear-gradient(180deg,#EAF5FC,#8CC0E4);opacity:0;animation:introFall .7s cubic-bezier(.55,0,1,.45) .3s forwards}
+@keyframes introFall{0%{opacity:1;transform:translateY(0)}90%{opacity:1;transform:translateY(calc(46vh + 40px))}100%{opacity:0;transform:translateY(calc(46vh + 46px)) scale(2,.2)}}
+.intro-rip{position:absolute;left:50%;top:50px;width:min(78vw,520px);height:min(24vw,150px);transform:translate(-50%,-50%) scale(.05);border:1.5px solid var(--sand);border-radius:50%;opacity:0;animation:introRip 1.9s ease-out 1s forwards}
+.intro-rip.r2{animation-delay:1.25s}
+.intro-rip.r3{animation-delay:1.5s}
+@keyframes introRip{0%{opacity:.9;transform:translate(-50%,-50%) scale(.05)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.25)}}
+.intro-mark{position:relative;padding-bottom:22px;opacity:0;animation:introLogo 1.1s cubic-bezier(.22,1,.36,1) 1s forwards,introFloat 3.2s ease-in-out 2.1s infinite}
+.intro-mark img{width:min(72vw,380px);height:auto}
+@keyframes introLogo{from{opacity:0;transform:translateY(26px) scale(.86)}to{opacity:1;transform:none}}
+@keyframes introFloat{0%,100%{translate:0 0}50%{translate:0 -8px}}
+.intro-ul{position:absolute;left:4%;right:4%;bottom:0;width:92%;height:14px;overflow:visible}
+.intro-ul path{fill:none;stroke:var(--sand);stroke-width:2.4;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1s var(--ease) 1.7s forwards}
+.intro-tag{margin:22px 0 0;font:500 13px/1.4 var(--sans);letter-spacing:.28em;text-transform:uppercase;color:var(--sand-2);opacity:0;animation:rise .9s var(--ease) 2s forwards;transform:translateY(12px)}
+.intro-skip{position:absolute;right:24px;bottom:24px;z-index:3;font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#fff;background:rgba(4,34,61,.5);border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:13px 22px;cursor:pointer;backdrop-filter:blur(4px)}
+.intro-skip:hover{background:#fff;color:var(--navy)}
+/* hold the hero entrance until the intro has left */
+.intro-armed:not(.intro-out) .hero-card,.intro-armed:not(.intro-out) .hero-slides,.intro-armed:not(.intro-out) .hero-bg{animation-play-state:paused}
+
 /* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
   .hero-card,.hero-slides,.fade-seq,.js .reveal{opacity:1!important;transform:none!important}
   .ht-ul path{stroke-dashoffset:0}
   .hero-bg,.slide img{transform:none!important}
+  .sa-waves path,.sa-flow,.sa-ring{animation:none!important}
+  .sa-drop{display:none}
   .flow-pipe i,.fstep::after{animation:none!important}
-  .tb-water i{animation:none!important}
-  .tb-drop,.tb-rip{display:none!important}
+  .tk{-webkit-mask-image:none;mask-image:none}
+  .tk-track{animation:none!important;width:auto;justify-content:center}
+  .tk-run{flex-wrap:wrap;justify-content:center}
+  .tk-run[aria-hidden]{display:none}
 }

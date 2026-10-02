@@ -9,11 +9,75 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/main.css?v=13">
+<link rel="stylesheet" href="assets/css/main.css?v=18">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+
+<!-- ============ INTRO ============
+     Full-screen opening: the About clip drifts behind, a water drop lands,
+     ripples spread and the logo rises with a drawn underline. About 4.5s.
+     Hidden by default; the script right below arms it, so with no JS or with
+     reduced motion it never appears. The page underneath is fully rendered
+     the whole time. Skippable by button, click, key, scroll or touch. -->
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro-scene">
+    <video muted loop playsinline preload="none"
+      poster="https://images.pexels.com/videos/7578551/apartment-at-home-business-buy-7578551.jpeg?auto=compress&amp;cs=tinysrgb&amp;h=627&amp;fit=crop&amp;w=1200"
+      data-src="https://videos.pexels.com/video-files/7578551/7578551-hd_1280_720_30fps.mp4"></video>
+  </div>
+  <div class="intro-center">
+    <span class="intro-drop"></span>
+    <span class="intro-rip"></span><span class="intro-rip r2"></span><span class="intro-rip r3"></span>
+    <div class="intro-mark">
+      <img src="https://www.bigeasybathtubs.com/wp-content/uploads/2023/06/footer-logo.png" alt="" width="380" height="120">
+      <svg class="intro-ul" viewBox="0 0 400 12" preserveAspectRatio="none"><path pathLength="1" d="M2 8 C 80 3, 160 10, 240 6 S 360 4, 398 7"/></svg>
+    </div>
+    <p class="intro-tag">New Orleans bathtub specialists</p>
+  </div>
+  <button class="intro-skip" id="introSkip" type="button">Skip intro</button>
+</div>
+<script>
+/* Arming script: runs before the rest of the body parses, so the overlay
+   never flashes in or out of place. */
+(function () {
+  var html = document.documentElement, intro = document.getElementById('intro');
+  if (!intro) return;
+  var reduce = false;
+  try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  /* Replay policy. false = plays on every load (handy while reviewing the
+     mockup). Set to true before launch so repeat visitors see it once per tab. */
+  var ONCE_PER_SESSION = false, seen = false;
+  if (ONCE_PER_SESSION) { try { seen = sessionStorage.getItem('bebt_intro') === '1'; } catch (e) {} }
+  if (reduce || seen) { intro.parentNode.removeChild(intro); return; }
+  if (ONCE_PER_SESSION) { try { sessionStorage.setItem('bebt_intro', '1'); } catch (e) {} }
+
+  html.className += ' intro-armed';
+  var film = intro.querySelector('video');
+  film.addEventListener('playing', function () { film.className = 'on'; });
+  film.src = film.getAttribute('data-src');
+  try { var p = film.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+
+  var done = false;
+  var finish = function () {
+    if (done) return; done = true;
+    html.className += ' intro-out';
+    try { document.dispatchEvent(new Event('intro:leaving')); } catch (e) {}
+    setTimeout(function () {
+      try { film.pause(); } catch (e) {}
+      if (intro.parentNode) intro.parentNode.removeChild(intro);
+      html.className = html.className.replace(' intro-armed', '').replace(' intro-out', '') + ' intro-gone';
+      try { document.dispatchEvent(new Event('intro:done')); } catch (e) {}
+    }, 700);
+    ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.removeEventListener(ev, finish); });
+  };
+  window.__introFinish = finish;
+  setTimeout(finish, 4500);
+  intro.addEventListener('click', finish);
+  ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.addEventListener(ev, finish, { passive: true }); });
+})();
+</script>
 
 <!-- ============ HEADER ============ -->
 <header class="site-head" data-head>
@@ -135,18 +199,31 @@
   </div>
 </section>
 
-<!-- ============ TRUST BAR (drip and ripple) ============ -->
-<section class="trust" data-trust aria-label="Highlights">
-  <div class="tb-water" aria-hidden="true"><i class="tb-w1"></i><i class="tb-w2"></i></div>
-  <div class="wrap">
-    <ul class="tb-row">
-      <li class="tb-item" style="--d:0.00s"><span class="tb-drop" aria-hidden="true"></span><span class="tb-rip" aria-hidden="true"></span><span class="tb-rip r2" aria-hidden="true"></span><span class="tb-lbl">Free Estimates</span></li>
-      <li class="tb-item" style="--d:0.18s"><span class="tb-drop" aria-hidden="true"></span><span class="tb-rip" aria-hidden="true"></span><span class="tb-rip r2" aria-hidden="true"></span><span class="tb-lbl">Walk-In Tubs</span></li>
-      <li class="tb-item" style="--d:0.36s"><span class="tb-drop" aria-hidden="true"></span><span class="tb-rip" aria-hidden="true"></span><span class="tb-rip r2" aria-hidden="true"></span><span class="tb-lbl">Clawfoot Restoration</span></li>
-      <li class="tb-item" style="--d:0.54s"><span class="tb-drop" aria-hidden="true"></span><span class="tb-rip" aria-hidden="true"></span><span class="tb-rip r2" aria-hidden="true"></span><b class="stars tb-lbl" aria-label="5 out of 5 stars">★★★★★</b><span class="tb-lbl">5-Star Reviews</span></li>
-      <li class="tb-item" style="--d:0.72s"><span class="tb-drop" aria-hidden="true"></span><span class="tb-rip" aria-hidden="true"></span><span class="tb-rip r2" aria-hidden="true"></span><span class="tb-lbl">Licensed &amp; Insured</span></li>
-      <li class="tb-item" style="--d:0.90s"><span class="tb-drop" aria-hidden="true"></span><span class="tb-rip" aria-hidden="true"></span><span class="tb-rip r2" aria-hidden="true"></span><span class="tb-lbl">Greater New Orleans</span></li>
-    </ul>
+<!-- ============ TRUST BAR (ticker) ============
+     One slim strip of highlights drifting left, a small tub between each.
+     The list is printed twice so the loop is seamless; the second copy is
+     hidden from screen readers. Pauses on hover or focus; with reduced
+     motion it is a still, centred, wrapping row. -->
+<section class="trust" aria-label="Highlights">
+  <div class="tk">
+    <div class="tk-track">
+      <ul class="tk-run">
+        <li>Free Estimates<svg class="tk-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M5 12V6a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/></svg></li>
+        <li>Walk-In Tubs<svg class="tk-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M5 12V6a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/></svg></li>
+        <li>Clawfoot Restoration<svg class="tk-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M5 12V6a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/></svg></li>
+        <li><b class="stars" aria-label="5 out of 5 stars">★★★★★</b> 5-Star Reviews<svg class="tk-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M5 12V6a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/></svg></li>
+        <li>Licensed &amp; Insured<svg class="tk-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M5 12V6a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/></svg></li>
+        <li>Greater New Orleans<svg class="tk-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M5 12V6a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/></svg></li>
+      </ul>
+      <ul class="tk-run" aria-hidden="true">
+        <li>Free Estimates<svg class="tk-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M5 12V6a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/></svg></li>
+        <li>Walk-In Tubs<svg class="tk-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M5 12V6a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/></svg></li>
+        <li>Clawfoot Restoration<svg class="tk-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M5 12V6a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/></svg></li>
+        <li><b class="stars" aria-label="5 out of 5 stars">★★★★★</b> 5-Star Reviews<svg class="tk-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M5 12V6a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/></svg></li>
+        <li>Licensed &amp; Insured<svg class="tk-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M5 12V6a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/></svg></li>
+        <li>Greater New Orleans<svg class="tk-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M5 12V6a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/></svg></li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -290,27 +367,105 @@
 </section>
 </div>
 
-<!-- ============ SERVICE AREAS ============ -->
-<section class="areas">
-  <div class="wrap areas-grid">
-    <div class="areas-copy reveal">
+<!-- ============ SERVICE AREAS: the water map ============
+     A schematic map (positions projected from real coordinates): tiled land,
+     Lake Pontchartrain and the Mississippi as water, and one pipe carrying
+     flowing water from New Orleans out to all ten areas. Markers ripple; a
+     marker and its row in the list light each other up. The map is
+     decorative for assistive tech; the list is the keyboard and
+     screen-reader route. -->
+<section class="areas" data-areas>
+  <div class="wrap">
+    <div class="sec-head reveal">
       <p class="eyebrow">Service areas</p>
       <h2>Serving <span class="kw">Greater New Orleans</span> and the surrounding parishes</h2>
-      <p>Our bathtub specialists cover Greater New Orleans, the Northshore and Baton Rouge. Pick your city to see its page.</p>
-      <a class="btn btn-line" href="https://www.bigeasybathtubs.com/service-areas/">View all service areas</a>
+      <p class="sec-lede">Ten service areas from Baton Rouge to Slidell, all reached from New Orleans. Pick your city on the map or in the list to open its page.</p>
     </div>
-    <ol class="areas-list reveal" style="--d:.1s">
-      <li><a href="https://www.bigeasybathtubs.com/service-areas/baton-rouge/"><span>01</span>Baton Rouge</a></li>
-      <li><a href="https://www.bigeasybathtubs.com/service-areas/covington/"><span>02</span>Covington</a></li>
-      <li><a href="https://www.bigeasybathtubs.com/service-areas/gretna/"><span>03</span>Gretna</a></li>
-      <li><a href="https://www.bigeasybathtubs.com/service-areas/hammond/"><span>04</span>Hammond</a></li>
-      <li><a href="https://www.bigeasybathtubs.com/service-areas/kenner/"><span>05</span>Kenner</a></li>
-      <li><a href="https://www.bigeasybathtubs.com/service-areas/laplace/"><span>06</span>LaPlace</a></li>
-      <li><a href="https://www.bigeasybathtubs.com/service-areas/madisonville/"><span>07</span>Madisonville</a></li>
-      <li><a href="https://www.bigeasybathtubs.com/service-areas/mandeville/"><span>08</span>Mandeville</a></li>
-      <li><a href="https://www.bigeasybathtubs.com/service-areas/slidell/"><span>09</span>Slidell</a></li>
-      <li><a href="https://www.bigeasybathtubs.com/service-areas/st-rose/"><span>10</span>St. Rose</a></li>
-    </ol>
+    <div class="sa-grid">
+      <div class="sa-card reveal">
+        <p class="sa-prompt"><span>Coverage map</span><b>Tap a city to open its page</b></p>
+        <svg class="sa-map" viewBox="0 0 1000 600" aria-hidden="true" focusable="false">
+          <defs>
+            <pattern id="saTile" width="28" height="28" patternUnits="userSpaceOnUse">
+              <rect width="28" height="28" fill="#E8DCCB"/><path d="M0 28V0H28" fill="none" stroke="#F5EEE3" stroke-width="2.5"/>
+            </pattern>
+            <clipPath id="saLake"><ellipse cx="704" cy="307" rx="186" ry="110"/></clipPath>
+          </defs>
+          <rect width="1000" height="600" fill="url(#saTile)"/>
+          <ellipse class="sa-water" cx="704" cy="307" rx="186" ry="110"/>
+          <g class="sa-waves" clip-path="url(#saLake)"><path d="M 500 270 q 15 -6 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0"/><path d="M 500 300 q 15 -6 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0"/><path d="M 500 330 q 15 -6 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0"/><path d="M 500 360 q 15 -6 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0 t 30 0"/></g>
+          <text class="sa-wlabel" x="704" y="316">Lake Pontchartrain</text>
+          <path class="sa-river" d="M 30 80 C 120 210 250 320 400 396 S 540 452 590 512 S 700 548 746 500 S 840 520 1010 566"/>
+          <text class="sa-wlabel sa-small" x="232" y="386">Mississippi River</text>
+          <path class="sa-pipe" d="M 736 487 L 747 514 L 630 455 L 579 490 L 481 400 L 60 112 L 493 72 L 683 147 L 719 94 L 740 182 L 918 244"/>
+          <path class="sa-flow" d="M 736 487 L 747 514 L 630 455 L 579 490 L 481 400 L 60 112 L 493 72 L 683 147 L 719 94 L 740 182 L 918 244"/>
+          <circle class="sa-drop" r="7" style="offset-path:path('M 736 487 L 747 514 L 630 455 L 579 490 L 481 400 L 60 112 L 493 72 L 683 147 L 719 94 L 740 182 L 918 244')"/>
+          <a class="sa-dot" data-k="baton-rouge" href="https://www.bigeasybathtubs.com/service-areas/baton-rouge/" tabindex="-1" transform="translate(60 112)">
+            <circle class="sa-ring" r="11"/><circle class="sa-core" r="7"/>
+            <text class="sa-name" x="18" y="6" text-anchor="start">Baton Rouge</text>
+          </a>
+          <a class="sa-dot" data-k="covington" href="https://www.bigeasybathtubs.com/service-areas/covington/" tabindex="-1" transform="translate(719 94)">
+            <circle class="sa-ring" r="11"/><circle class="sa-core" r="7"/>
+            <text class="sa-name" x="18" y="2" text-anchor="start">Covington</text>
+          </a>
+          <a class="sa-dot" data-k="gretna" href="https://www.bigeasybathtubs.com/service-areas/gretna/" tabindex="-1" transform="translate(747 514)">
+            <circle class="sa-ring" r="11"/><circle class="sa-core" r="7"/>
+            <text class="sa-name" x="18" y="16" text-anchor="start">Gretna</text>
+          </a>
+          <a class="sa-dot" data-k="hammond" href="https://www.bigeasybathtubs.com/service-areas/hammond/" tabindex="-1" transform="translate(493 72)">
+            <circle class="sa-ring" r="11"/><circle class="sa-core" r="7"/>
+            <text class="sa-name" x="18" y="6" text-anchor="start">Hammond</text>
+          </a>
+          <a class="sa-dot" data-k="kenner" href="https://www.bigeasybathtubs.com/service-areas/kenner/" tabindex="-1" transform="translate(630 455)">
+            <circle class="sa-ring" r="11"/><circle class="sa-core" r="7"/>
+            <text class="sa-name" x="-16" y="-12" text-anchor="end">Kenner</text>
+          </a>
+          <a class="sa-dot" data-k="laplace" href="https://www.bigeasybathtubs.com/service-areas/laplace/" tabindex="-1" transform="translate(481 400)">
+            <circle class="sa-ring" r="11"/><circle class="sa-core" r="7"/>
+            <text class="sa-name" x="-18" y="6" text-anchor="end">LaPlace</text>
+          </a>
+          <a class="sa-dot" data-k="madisonville" href="https://www.bigeasybathtubs.com/service-areas/madisonville/" tabindex="-1" transform="translate(683 147)">
+            <circle class="sa-ring" r="11"/><circle class="sa-core" r="7"/>
+            <text class="sa-name" x="-18" y="8" text-anchor="end">Madisonville</text>
+          </a>
+          <a class="sa-dot" data-k="mandeville" href="https://www.bigeasybathtubs.com/service-areas/mandeville/" tabindex="-1" transform="translate(740 182)">
+            <circle class="sa-ring" r="11"/><circle class="sa-core" r="7"/>
+            <text class="sa-name" x="18" y="10" text-anchor="start">Mandeville</text>
+          </a>
+          <a class="sa-dot" data-k="slidell" href="https://www.bigeasybathtubs.com/service-areas/slidell/" tabindex="-1" transform="translate(918 244)">
+            <circle class="sa-ring" r="11"/><circle class="sa-core" r="7"/>
+            <text class="sa-name" x="0" y="-22" text-anchor="middle">Slidell</text>
+          </a>
+          <a class="sa-dot" data-k="st-rose" href="https://www.bigeasybathtubs.com/service-areas/st-rose/" tabindex="-1" transform="translate(579 490)">
+            <circle class="sa-ring" r="11"/><circle class="sa-core" r="7"/>
+            <text class="sa-name" x="0" y="32" text-anchor="middle">St. Rose</text>
+          </a>
+          <g class="sa-home" transform="translate(736 487)">
+            <circle class="sa-ring" r="16"/><circle r="11"/>
+            <text x="20" y="-12">New Orleans</text>
+          </g>
+        </svg>
+        <p class="sa-foot">Free estimates in all ten areas.</p>
+      </div>
+      <div class="sa-side reveal" style="--d:.1s">
+        <ol class="sa-list">
+        <li><a href="https://www.bigeasybathtubs.com/service-areas/baton-rouge/" data-k="baton-rouge"><span class="sa-n">01</span><span class="sa-city">Baton Rouge</span><span class="sa-parish">East Baton Rouge Parish</span><span class="sa-go" aria-hidden="true">→</span></a></li>
+        <li><a href="https://www.bigeasybathtubs.com/service-areas/covington/" data-k="covington"><span class="sa-n">02</span><span class="sa-city">Covington</span><span class="sa-parish">St. Tammany Parish</span><span class="sa-go" aria-hidden="true">→</span></a></li>
+        <li><a href="https://www.bigeasybathtubs.com/service-areas/gretna/" data-k="gretna"><span class="sa-n">03</span><span class="sa-city">Gretna</span><span class="sa-parish">Jefferson Parish</span><span class="sa-go" aria-hidden="true">→</span></a></li>
+        <li><a href="https://www.bigeasybathtubs.com/service-areas/hammond/" data-k="hammond"><span class="sa-n">04</span><span class="sa-city">Hammond</span><span class="sa-parish">Tangipahoa Parish</span><span class="sa-go" aria-hidden="true">→</span></a></li>
+        <li><a href="https://www.bigeasybathtubs.com/service-areas/kenner/" data-k="kenner"><span class="sa-n">05</span><span class="sa-city">Kenner</span><span class="sa-parish">Jefferson Parish</span><span class="sa-go" aria-hidden="true">→</span></a></li>
+        <li><a href="https://www.bigeasybathtubs.com/service-areas/laplace/" data-k="laplace"><span class="sa-n">06</span><span class="sa-city">LaPlace</span><span class="sa-parish">St. John the Baptist Parish</span><span class="sa-go" aria-hidden="true">→</span></a></li>
+        <li><a href="https://www.bigeasybathtubs.com/service-areas/madisonville/" data-k="madisonville"><span class="sa-n">07</span><span class="sa-city">Madisonville</span><span class="sa-parish">St. Tammany Parish</span><span class="sa-go" aria-hidden="true">→</span></a></li>
+        <li><a href="https://www.bigeasybathtubs.com/service-areas/mandeville/" data-k="mandeville"><span class="sa-n">08</span><span class="sa-city">Mandeville</span><span class="sa-parish">St. Tammany Parish</span><span class="sa-go" aria-hidden="true">→</span></a></li>
+        <li><a href="https://www.bigeasybathtubs.com/service-areas/slidell/" data-k="slidell"><span class="sa-n">09</span><span class="sa-city">Slidell</span><span class="sa-parish">St. Tammany Parish</span><span class="sa-go" aria-hidden="true">→</span></a></li>
+        <li><a href="https://www.bigeasybathtubs.com/service-areas/st-rose/" data-k="st-rose"><span class="sa-n">10</span><span class="sa-city">St. Rose</span><span class="sa-parish">St. Charles Parish</span><span class="sa-go" aria-hidden="true">→</span></a></li>
+        </ol>
+        <div class="sa-cta">
+          <a class="btn btn-navy" href="https://www.bigeasybathtubs.com/contact/">Get a free estimate</a>
+          <a class="btn btn-line" href="tel:+15045533699">Call 504-553-3699</a>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -418,6 +573,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=12" defer></script>
+<script src="assets/js/main.js?v=17" defer></script>
 </body>
 </html>

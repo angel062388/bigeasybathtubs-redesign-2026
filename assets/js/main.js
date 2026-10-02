@@ -8,8 +8,14 @@
   // Hero entrance sequence (title fade-ins + underline draw).
   // rAF alone never fires in a background tab, so a timer backs it up.
   var loaded = function () { root.classList.add('is-loaded'); };
-  requestAnimationFrame(loaded);
-  setTimeout(loaded, 60);
+  if (root.classList.contains('intro-armed') && !root.classList.contains('intro-out')) {
+    // The intro overlay is up: start the hero entrance as it begins to leave.
+    document.addEventListener('intro:leaving', loaded);
+    setTimeout(loaded, 7000); // safety net if the intro script dies
+  } else {
+    requestAnimationFrame(loaded);
+    setTimeout(loaded, 60);
+  }
 
   // ---------- sticky header ----------
   var head = document.querySelector('[data-head]');
@@ -125,17 +131,17 @@
     reveals.forEach(function (el) { io.observe(el); });
   }
 
-  // ---------- trust bar: drip and ripple, plays once in view ----------
-  var trust = document.querySelector('[data-trust]');
-  if (trust) {
-    if (reduce || !('IntersectionObserver' in window)) {
-      trust.classList.add('go');
-    } else {
-      var tio = new IntersectionObserver(function (en) {
-        if (en[0].isIntersecting) { trust.classList.add('go'); tio.disconnect(); }
-      }, { threshold: 0.35 });
-      tio.observe(trust);
-    }
+  // ---------- service areas: map markers and list rows light each other up ----------
+  var areas = document.querySelector('[data-areas]');
+  if (areas) {
+    var pair = function (k, on) {
+      areas.querySelectorAll('[data-k="' + k + '"]').forEach(function (el) { el.classList.toggle('is-on', on); });
+    };
+    areas.querySelectorAll('[data-k]').forEach(function (el) {
+      var k = el.getAttribute('data-k');
+      ['mouseenter', 'focus'].forEach(function (ev) { el.addEventListener(ev, function () { pair(k, true); }); });
+      ['mouseleave', 'blur'].forEach(function (ev) { el.addEventListener(ev, function () { pair(k, false); }); });
+    });
   }
 
   // ---------- About video: plays only on screen, never for reduced motion ----------
