@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CTA Band Video Options | Big Easy Bathtubs</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css?v=24">
+<style>
+/* Comparison page only: candidate clips for the "Ready for a new bathtub?"
+   band, each in the band's real shape with the real text on top and NO tint.
+   Not used by index.html. */
+body{background:var(--cream-2)}
+.intro-x{padding:56px 0 8px}
+.intro-x h1{font-size:clamp(30px,3.4vw,44px)}
+.opt{padding:26px 0}
+.opt h2{font-size:24px;margin:0 0 4px}
+.opt p.note{margin:0 0 14px;font-size:15px}
+.opt a.src{font-size:13px;color:var(--navy)}
+.band{position:relative;border-radius:var(--r);overflow:hidden;min-height:440px;display:grid;place-items:center;text-align:center;color:#fff;isolation:isolate;background:#26221E}
+.band video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1}
+.band .inner{padding:60px 24px;max-width:760px}
+.band .eyebrow{justify-content:center;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.75)}
+.band h3{font:400 clamp(34px,4.4vw,60px)/1.15 var(--serif);color:#fff;margin:0 0 .4em;text-shadow:0 0 2px rgba(0,0,0,.7),0 3px 18px rgba(0,0,0,.6)}
+.band p{font-size:18px;text-shadow:0 1px 10px rgba(0,0,0,.8),0 0 2px rgba(0,0,0,.6)}
+.band .acts{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:26px}
+.band .btn{box-shadow:0 10px 26px rgba(0,0,0,.28)}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="intro-x">
+    <p class="eyebrow">Big Easy Bathtubs · design options</p>
+    <h1>"Ready for a new bathtub?" band: pick a video</h1>
+    <p>Each clip is shown in the band's real shape, with the real heading and buttons on top and no color tint. All are free Pexels stock clips. Clips 1 and 5 were checked for people at four points; the others were not fully screened.</p>
+  </section>
+  <div data-list></div>
+  <p style="padding:20px 0 80px;font-size:15px">Previews only. The homepage changes when you pick one.</p>
+</main>
+<script>
+(function () {
+  var P = 'https://videos.pexels.com/video-files/';
+  var clips = [
+    { n: '1', id: '4155071', file: '4155071-hd_1366_720_50fps.mp4', slug: 'water-bathroom-interior-bath-4155071', title: 'Brass faucet filling a tub', pos: '50% 40%' },
+    { n: '2', id: '4155521', file: '4155521-hd_1366_720_50fps.mp4', slug: 'relaxation-water-relaxing-relax-4155521', title: 'Bath water close-up', pos: '50% 50%' },
+    { n: '3', id: '3779988', file: '3779988-hd_1280_720_25fps.mp4', slug: 'water-pouring-into-the-bathtub-3779988', title: 'Tub ledge with plants (cool tone)', pos: '50% 50%' },
+    { n: '4', id: '6702578', file: '6702578-hd_1280_720_50fps.mp4', slug: 'running-water-from-the-bathtub-faucet-6702578', title: 'Running water from the tub faucet', pos: '50% 50%' },
+    { n: '5', id: '6702594', file: '6702594-hd_1280_720_50fps.mp4', slug: 'video-of-a-running-faucet-6702594', title: 'Running faucet (on the homepage now)', pos: '50% 50%' },
+    { n: '6', id: '5698926', file: '5698926-hd_1280_720_25fps.mp4', slug: 'dripping-from-a-bathtub-5698926', title: 'Dripping from a bathtub', pos: '50% 50%' }
+  ];
+  document.querySelector('[data-list]').innerHTML = clips.map(function (c) {
+    return '<section class="opt"><h2>' + c.n + '. ' + c.title + '</h2>' +
+      '<p class="note"><a class="src" href="https://www.pexels.com/video/' + c.slug + '/" target="_blank" rel="noopener">Source on Pexels</a></p>' +
+      '<div class="band"><video muted loop playsinline preload="metadata" data-clip style="object-position:' + c.pos + '">' +
+      '<source src="' + P + c.id + '/' + c.file + '" type="video/mp4"></video>' +
+      '<div class="inner"><p class="eyebrow">Free, no-pressure estimates</p><h3>Ready for a new bathtub?</h3>' +
+      '<p>Tell us about your tub and we\'ll give you a clear, honest estimate.</p>' +
+      '<div class="acts"><span class="btn btn-sand">Get your free estimate</span><span class="btn btn-white">Call 504-553-3699</span></div></div></div></section>';
+  }).join('');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var vids = document.querySelectorAll('[data-clip]');
+  if (reduce) { vids.forEach(function (v) { v.controls = true; }); return; }
+  var io = new IntersectionObserver(function (en) {
+    en.forEach(function (e) { e.isIntersecting ? e.target.play().catch(function () {}) : e.target.pause(); });
+  }, { threshold: 0.25 });
+  vids.forEach(function (v) { io.observe(v); });
+})();
+</script>
+</body>
+</html>

@@ -152,10 +152,11 @@
       rPlay();
     });
     var spot = revs.querySelector('.revs-spot');
-    spot.addEventListener('mouseenter', function () { rHeld = true; rPlay(); });
-    spot.addEventListener('mouseleave', function () { rHeld = false; rPlay(); });
-    spot.addEventListener('focusin', function () { rHeld = true; rPlay(); });
-    spot.addEventListener('focusout', function () { rHeld = false; rPlay(); });
+    var rArea = revs.querySelector('.revs-grid');
+    rArea.addEventListener('mouseenter', function () { rHeld = true; rPlay(); });
+    rArea.addEventListener('mouseleave', function () { rHeld = false; rPlay(); });
+    rArea.addEventListener('focusin', function () { rHeld = true; rPlay(); });
+    rArea.addEventListener('focusout', function () { rHeld = false; rPlay(); });
     document.addEventListener('visibilitychange', rPlay);
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (en) { rSeen = en[0].isIntersecting; rPlay(); }, { threshold: 0.3 }).observe(spot);
@@ -207,10 +208,10 @@
     });
   }
 
-  // ---------- About video: plays only on screen, never for reduced motion ----------
-  var vid = document.querySelector('[data-about-video]');
-  var vbtn = document.querySelector('[data-video-toggle]');
-  if (vid && vbtn) {
+  // ---------- looping videos (About, CTA band): play only on screen, never for reduced motion ----------
+  document.querySelectorAll('[data-about-video],[data-loop-video]').forEach(function (vid) {
+    var vbtn = vid.parentElement.querySelector('[data-video-toggle]');
+    if (!vbtn) return;
     var userPaused = reduce;
     var setBtn = function () {
       vbtn.textContent = vid.paused ? '▶' : '❙❙';
@@ -230,9 +231,9 @@
       }, { threshold: 0.25 }).observe(vid);
     }
     setBtn();
-  }
+  });
 
-  // ---------- subtle parallax on the CTA photo ----------
+  // ---------- subtle parallax on the CTA film ----------
   var ctaBg = document.querySelector('.cta-bg');
   if (ctaBg && !reduce) {
     var band = ctaBg.parentElement, ticking = false;
