@@ -50,15 +50,24 @@ assets/js/main.js     interactions (no libraries)
 
 ## Inner pages
 
-`service-areas.html` is generated, not hand-written:
+The inner pages are generated, not hand-written:
 
 ```bash
-node build-service-areas.js
+node build-pages.js
 ```
 
-The script lifts the shared sections (header, ticker, water map, services, CTA band, footer)
-out of `index.html` and adds the two sections that belong to this page only (page hero and
-"Reach us"). Change a shared section on the homepage, then re-run the script.
+| File | Page |
+|---|---|
+| `service-areas.html` | Service Areas |
+| `about.html` | About |
+| `testimonials.html` | Testimonials |
+| `blog.html` | Blog list |
+| `blog-post.html` | Blog article template, shown with one real article |
+
+The script lifts the shared sections (header, ticker, process, services, reviews, water map,
+FAQ, CTA band, footer) out of `index.html` and adds the sections that belong to each page
+only. Change a shared section on the homepage, then re-run the script. Blog content lives in
+`data/` (copied from the live site).
 
 Rule for every inner page: at least one link in body copy to the live homepage and one to the
 live contact page. The build fails if either is missing. The contact page itself is exempt

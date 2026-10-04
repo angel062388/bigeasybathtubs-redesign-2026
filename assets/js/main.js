@@ -195,6 +195,33 @@
     });
   }
 
+  // ---------- blog list: search + topic filter over the articles on the page ----------
+  var blog = document.querySelector('[data-blog]');
+  if (blog) {
+    var bItems = blog.querySelectorAll('.bpost');
+    var bQ = blog.querySelector('[data-blog-q]');
+    var bCats = blog.querySelectorAll('[data-blog-cat]');
+    var bEmpty = blog.querySelector('[data-blog-empty]');
+    var bCat = '';
+    var bApply = function () {
+      var q = bQ.value.trim().toLowerCase(), shown = 0;
+      bItems.forEach(function (it) {
+        var ok = (!bCat || it.getAttribute('data-cat') === bCat) && (!q || it.textContent.toLowerCase().indexOf(q) > -1);
+        it.hidden = !ok;
+        if (ok) shown++;
+      });
+      bEmpty.hidden = shown > 0;
+    };
+    bCats.forEach(function (b) {
+      b.addEventListener('click', function () {
+        bCat = b.getAttribute('data-blog-cat');
+        bCats.forEach(function (x) { x.classList.toggle('is-on', x === b); x.setAttribute('aria-pressed', String(x === b)); });
+        bApply();
+      });
+    });
+    bQ.addEventListener('input', bApply);
+  }
+
   // ---------- service areas: map markers and list rows light each other up ----------
   var areas = document.querySelector('[data-areas]');
   if (areas) {
