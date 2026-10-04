@@ -219,40 +219,16 @@ ${trust.map(([t, p], i) => `      <li><span class="numlist-n">0${i + 1}</span><h
    TESTIMONIALS
    ===================================================================== */
 {
-  const all = [
-    ['Rebecca Whaley', '2022/12/Rebecca-Whaley-150x150.jpeg', 'We used Big Easy Bathtubs for our tub replacement, and it looks amazing! The crew was friendly, polite, and professional. I would definitely recommend them to anyone who needs this service done in their bathtub.'],
-    ['Craig Harris', '2022/03/Craig-Harris-150x150.jpeg', 'We were so pleased with the installation work they did on our tub! The service was timely and professional, for a very reasonable price. Thank you!'],
-    ['Phillip Randle', '2022/03/Phillip-Randle-150x150.jpeg', 'They were on time, friendly and professional. I would highly recommend their bathtub service to anyone who needs help with a tub remodel!'],
-    ['Jessica Dodd', '2022/03/Jessica-Dodd-150x150.jpeg', "The bathtub they installed is perfect. It's really deep and looks sleek in my house, just like I wanted! The company was also very professional and on time with the installation process."],
-    ['Debra Williams', '2022/03/Debra-Williams-150x150.jpeg', "The team at Big Easy Bathtubs was great! They got back to me quickly with an estimate for refinishing our tubs, which are old. The workmanship looks phenomenal! I'd recommend them if you need help with your bathtub remodeling."],
-    ['Rusty Comer', '2022/03/Rusty-Comer-150x150.jpeg', "We are so happy with the work Big Easy Bathtubs did on our 10 year old tub. It's like new again! The friendly service and high-quality products were just what we needed to make this happen, would 100% recommend their services to anyone who wants an upgrade or repairs done to their bathtubs."],
-    ['Clifton Thompson', '2022/03/Clifton-Thompson-150x150.jpeg', 'They do amazing work. I had my very old tub reglazed and it came out looking brand new! Great business, reasonable price and professional. I highly recommend them for your next bathroom project.'],
-  ];
-  const list = `<!-- ============ EVERY REVIEW, IN FULL (Testimonials page only) ============ -->
-<section class="allrev">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <p class="eyebrow">All reviews</p>
-      <h2>Every review, ${kw('in full')}</h2>
-      <p class="sec-lede">Seven homeowners, in their own words. Ready to add your own story? <a href="${CONTACT}">Request your free estimate</a> and we'll take it from there.</p>
-    </div>
-    <div class="allrev-list reveal" style="--d:.1s">
-${all.map(([n, img, q]) => `      <figure class="arev"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>${q}</blockquote><figcaption><img src="${U}${img}" alt="" width="46" height="46" loading="lazy">${n}</figcaption></figure>`).join('\n')}
-    </div>
-  </div>
-</section>
-
-`;
   write('testimonials.html', {
     title: 'Customer Reviews &amp; Testimonials | Big Easy Bathtubs',
     desc: 'Read what New Orleans homeowners say about their bathtub installation, remodel and repair projects. Call Big Easy Bathtubs today for your free estimate.',
     sections: [
       pageHero({
         crumbs: [['Testimonials']], title: 'Testimonials',
-        lede: `Real reviews from New Orleans homeowners who trusted <a href="${HOME}">Big Easy Bathtubs</a> with their installation, refinishing, remodeling and repair projects.`,
+        lede: `Real reviews from New Orleans homeowners who trusted <a href="${HOME}">Big Easy Bathtubs</a> with their installation, refinishing, remodeling and repair projects. Ready to start yours? <a href="${CONTACT}">Contact our team</a>.`,
         img: '2026/06/tubhd_9-1024x768.jpg', alt: 'White clawfoot tub with gold feet',
         caption: '<b class="stars" aria-label="5 out of 5 stars">★★★★★</b><span>5-star reviews<br>on Google and Facebook</span>',
-      }), ticker, reviews, list, services, ctaBand],
+      }), ticker, reviews, services, ctaBand],
   });
 }
 
