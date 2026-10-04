@@ -391,13 +391,14 @@ p{margin:0 0 1em}
 .phero .hero-lede a{color:var(--white)}
 .phero .hero-lede a:hover{color:var(--sand)}
 .sa-note a:hover,.reach .sec-lede a:hover{color:var(--navy)}
-.ph-shots{display:grid;grid-template-columns:1fr 1fr;gap:14px;height:440px;overflow:hidden;border-radius:var(--r);-webkit-mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent)}
-.ph-track{animation:phUp 44s linear infinite}
-.ph-col-b .ph-track{animation-name:phDown}
-.ph-set{display:grid;gap:14px;padding-bottom:14px}
-.ph-set img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:var(--r)}
-@keyframes phUp{from{transform:translateY(0)}to{transform:translateY(-50%)}}
-@keyframes phDown{from{transform:translateY(-50%)}to{transform:translateY(0)}}
+/* one photo: a thin sand frame sits offset behind it, a small label overlaps its corner */
+.ph-photo{position:relative;margin:0 24px 24px 0;opacity:0;transform:translateY(26px);animation:rise 1.3s var(--ease) .25s forwards}
+.ph-photo::before{content:"";position:absolute;inset:24px -24px -24px 24px;border:1.5px solid var(--sand);border-radius:var(--r);opacity:.75}
+.ph-img{position:relative;display:block;aspect-ratio:5/4;border-radius:var(--r);overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.35)}
+.ph-img img{width:100%;height:100%;object-fit:cover;transform:scale(1.1);animation:settle 2.6s var(--ease) .25s forwards}
+.ph-photo figcaption{position:absolute;left:-28px;bottom:36px;display:flex;align-items:center;gap:14px;padding:14px 22px 14px 18px;border-radius:16px;background:var(--cream);box-shadow:0 18px 40px rgba(0,0,0,.3)}
+.ph-photo figcaption b{font:400 44px/1 var(--serif);color:var(--navy)}
+.ph-photo figcaption span{font:600 11px/1.5 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--body)}
 
 /* ---------- inner pages: reach us ---------- */
 .sa-note{margin:22px 0 0;font-size:15px}
@@ -446,7 +447,10 @@ p{margin:0 0 1em}
   .about-grid,.sa-grid,.news-row{grid-template-columns:1fr;gap:48px}
   .phero{padding:124px 0 44px}
   .phero-grid{grid-template-columns:1fr;gap:36px}
-  .ph-shots{height:300px}
+  .ph-photo{margin:0 14px 14px 0}
+  .ph-photo::before{inset:14px -14px -14px 14px}
+  .ph-photo figcaption{left:12px;bottom:12px;padding:10px 16px 10px 14px}
+  .ph-photo figcaption b{font-size:34px}
   .reach-row{grid-template-columns:1fr}
   .reach-row > div{border-right:0;margin-right:0;padding:24px 0;border-bottom:1px solid var(--line)}
   .reach-row > div:last-child{border-bottom:0}
@@ -537,7 +541,8 @@ p{margin:0 0 1em}
   .hero-card,.hero-slides,.fade-seq,.js .reveal{opacity:1!important;transform:none!important}
   .ht-ul path{stroke-dashoffset:0}
   .hero-bg,.slide img{transform:none!important}
-  .ph-track{animation:none!important}
+  .ph-photo{opacity:1!important;transform:none!important}
+  .ph-img img{transform:none!important}
   .revs-bar{display:none}
   .sa-waves path,.sa-flow,.sa-ring{animation:none!important}
   .sa-drop{display:none}

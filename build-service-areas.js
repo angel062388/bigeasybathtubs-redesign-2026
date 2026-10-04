@@ -49,20 +49,12 @@ areas = once(areas, '        <div class="sa-cta">',
   `        <p class="sa-note">Don't see your neighborhood listed? <a href="${CONTACT}">Contact our team</a>. We serve homeowners throughout Greater New Orleans and would be glad to help with your bathtub project.</p>\n        <div class="sa-cta">`);
 
 // ---------- this page's own sections ----------
-const shots = [
-  ['2026/06/bath-13-1024x768.jpg', '2026/06/tubhd_2-1024x683.jpg', '2025/08/Claw-Tub-Blue-Bathtub.jpg', '2026/06/bath-11-1024x768.jpg'],
-  ['2026/06/tubhd_9-1024x768.jpg', '2026/06/bath-14-1024x768.jpg', '2026/06/bath-6.jpg', '2026/06/bath-9-1024x681.jpg'],
-];
-// each column is printed twice so the drift loops without a seam; it is decoration only
-const col = (list, cls) => `        <div class="ph-col${cls}"><div class="ph-track">\n` +
-  // no lazy-loading here: the strip sits in the first screen and moves, which lazy-loading handles badly
-  [0, 1].map(() => `          <div class="ph-set">${list.map(f => `<img src="${U}${f}" alt="">`).join('')}</div>`).join('\n') +
-  '\n        </div></div>';
+const heroImg = { file: '2026/06/bath-14-1024x768.jpg', alt: 'Freestanding tub under a window in a gray-blue bathroom' };
 
 const hero = `<!-- ============ PAGE HERO (inner pages) ============
-     Same navy ground and headline treatment as the homepage hero. The two
-     photo columns drift slowly in opposite directions; they are decoration,
-     hidden from assistive tech, and stand still under reduced motion. -->
+     Same navy ground and headline treatment as the homepage hero. One
+     photo, set in a thin sand frame that sits offset behind it, with a
+     small label; it settles from a slight zoom as the page opens. -->
 <section class="phero" aria-label="Introduction">
   <div class="wrap phero-grid">
     <div class="phero-copy">
@@ -76,10 +68,10 @@ const hero = `<!-- ============ PAGE HERO (inner pages) ============
         <a class="btn btn-line-light" href="tel:+15045533699">Call 504-553-3699</a>
       </div>
     </div>
-    <div class="ph-shots" aria-hidden="true">
-${col(shots[0], '')}
-${col(shots[1], ' ph-col-b')}
-    </div>
+    <figure class="ph-photo">
+      <span class="ph-img"><img src="${U}${heroImg.file}" alt="${heroImg.alt}" fetchpriority="high"></span>
+      <figcaption><b>10</b><span>service areas<br>from Baton Rouge to Slidell</span></figcaption>
+    </figure>
   </div>
 </section>
 
