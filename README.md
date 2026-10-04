@@ -47,3 +47,22 @@ assets/js/main.js     interactions (no libraries)
 - Page carries `noindex, nofollow` so it can't be indexed if hosted for review.
 - Homepage only. Inner pages (services, areas, blog) still need templates.
 - Final build target (WordPress theme `bigeasybathtubs-2026`) not yet decided.
+
+## Inner pages
+
+`service-areas.html` is generated, not hand-written:
+
+```bash
+node build-service-areas.js
+```
+
+The script lifts the shared sections (header, ticker, water map, services, CTA band, footer)
+out of `index.html` and adds the two sections that belong to this page only (page hero and
+"Reach us"). Change a shared section on the homepage, then re-run the script.
+
+Rule for every inner page: at least one link in body copy to the live homepage and one to the
+live contact page. The build fails if either is missing. The contact page itself is exempt
+from linking to itself.
+
+Comparison pages kept for reference: `trust-options.html`, `video-options.html`,
+`cta-video-options.html`.
