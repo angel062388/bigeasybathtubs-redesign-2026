@@ -106,16 +106,62 @@
     setPaused(paused);
   }
 
-  // ---------- reviews carousel buttons ----------
-  var track = document.querySelector('[data-rev-track]');
-  if (track) {
-    var step = function (dir) {
-      var card = track.querySelector('.rev');
-      var w = card ? card.getBoundingClientRect().width + 24 : track.clientWidth;
-      track.scrollBy({ left: dir * w, behavior: reduce ? 'auto' : 'smooth' });
+  // ---------- reviews spotlight ----------
+  var revs = document.querySelector('[data-revs]');
+  if (revs) {
+    var rq = revs.querySelectorAll('.rq');
+    var rthumbs = revs.querySelectorAll('[data-rev-thumb]');
+    var rstage = revs.querySelector('[data-rev-stage]');
+    var rbar = revs.querySelector('[data-rev-bar]');
+    var rcur = revs.querySelector('[data-rev-cur]');
+    var rpause = revs.querySelector('[data-rev-pause]');
+    var ri = 0, rtimer = null, rPaused = reduce, rHeld = false, rSeen = false;
+    var two = function (n) { return (n < 10 ? '0' : '') + n; };
+    var runBar = function (on) {
+      rbar.classList.remove('run');
+      if (on) { void rbar.offsetWidth; rbar.classList.add('run'); }
     };
-    document.querySelector('[data-rev-prev]').addEventListener('click', function () { step(-1); });
-    document.querySelector('[data-rev-next]').addEventListener('click', function () { step(1); });
+    var rPlay = function () {
+      clearTimeout(rtimer);
+      var go = !rPaused && !rHeld && rSeen && !document.hidden;
+      runBar(go);
+      if (go) rtimer = setTimeout(function () { rShow(ri + 1, false); }, 7000);
+    };
+    var rShow = function (i, byUser) {
+      ri = (i + rq.length) % rq.length;
+      rq.forEach(function (q, n) {
+        q.classList.toggle('is-on', n === ri);
+        if (n === ri) q.removeAttribute('aria-hidden'); else q.setAttribute('aria-hidden', 'true');
+      });
+      rthumbs.forEach(function (t, n) {
+        t.classList.toggle('is-on', n === ri);
+        if (n === ri) t.setAttribute('aria-current', 'true'); else t.removeAttribute('aria-current');
+      });
+      rcur.textContent = two(ri + 1);
+      // announce a change only when the visitor asked for it
+      rstage.setAttribute('aria-live', byUser ? 'polite' : 'off');
+      rPlay();
+    };
+    revs.querySelector('[data-rev-prev]').addEventListener('click', function () { rShow(ri - 1, true); });
+    revs.querySelector('[data-rev-next]').addEventListener('click', function () { rShow(ri + 1, true); });
+    rthumbs.forEach(function (t, n) { t.addEventListener('click', function () { rShow(n, true); }); });
+    rpause.addEventListener('click', function () {
+      rPaused = !rPaused;
+      rpause.textContent = rPaused ? '▶' : '❙❙';
+      rpause.setAttribute('aria-label', rPaused ? 'Play reviews' : 'Pause reviews');
+      rPlay();
+    });
+    var spot = revs.querySelector('.revs-spot');
+    spot.addEventListener('mouseenter', function () { rHeld = true; rPlay(); });
+    spot.addEventListener('mouseleave', function () { rHeld = false; rPlay(); });
+    spot.addEventListener('focusin', function () { rHeld = true; rPlay(); });
+    spot.addEventListener('focusout', function () { rHeld = false; rPlay(); });
+    document.addEventListener('visibilitychange', rPlay);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (en) { rSeen = en[0].isIntersecting; rPlay(); }, { threshold: 0.3 }).observe(spot);
+    } else { rSeen = true; }
+    if (rPaused) { rpause.textContent = '▶'; rpause.setAttribute('aria-label', 'Play reviews'); }
+    rPlay();
   }
 
   // ---------- scroll reveal ----------

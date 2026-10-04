@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/main.css?v=20">
+<link rel="stylesheet" href="assets/css/main.css?v=23">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
@@ -347,27 +347,71 @@
   </div>
 </section>
 
-<!-- ============ REVIEWS ============ -->
-<section class="revs">
-  <div class="wrap">
-    <div class="sec-head row reveal">
-      <div>
-        <p class="eyebrow">Client testimonials</p>
-        <h2>What our <span class="kw">clients say</span></h2>
+<!-- ============ REVIEWS: spotlight ============
+     One review at a time, set large and directly on the ground (no card).
+     The customers' own photos are the navigation. It advances every 7s with
+     a progress line; it waits while the pointer or keyboard focus is inside,
+     while it is off screen, and never auto-plays under reduced motion. -->
+<section class="revs" data-revs aria-roledescription="carousel" aria-label="Customer reviews">
+  <div class="wrap revs-grid">
+    <div class="revs-head reveal">
+      <p class="eyebrow">Client testimonials</p>
+      <h2>What our <span class="kw">clients say</span></h2>
+      <div class="revs-rating">
+        <b class="stars" aria-label="5 out of 5 stars">★★★★★</b><span>5-star reviews on</span>
+        <img src="https://www.bigeasybathtubs.com/wp-content/uploads/2026/06/google-300x163.png" alt="Google" loading="lazy">
+        <img src="https://www.bigeasybathtubs.com/wp-content/uploads/2026/06/fb-300x135.png" alt="Facebook" loading="lazy">
       </div>
-      <div class="revs-nav">
-        <button class="round" aria-label="Previous reviews" data-rev-prev>&#8249;</button>
-        <button class="round" aria-label="Next reviews" data-rev-next>&#8250;</button>
-      </div>
+      <a class="btn btn-line" href="https://www.bigeasybathtubs.com/testimonials/">Read all testimonials</a>
     </div>
-    <div class="revs-track" data-rev-track tabindex="0" aria-label="Customer reviews">
-      <figure class="rev"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>We used Big Easy Bathtubs for our tub replacement, and it looks amazing! The crew was friendly, polite, and professional.</blockquote><figcaption><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/12/Rebecca-Whaley-150x150.jpeg" alt="" loading="lazy">Rebecca Whaley</figcaption></figure>
-      <figure class="rev"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>We were so pleased with the installation work they did on our tub! The service was timely and professional, for a very reasonable price. Thank you!</blockquote><figcaption><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Craig-Harris-150x150.jpeg" alt="" loading="lazy">Craig Harris</figcaption></figure>
-      <figure class="rev"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>They were on time, friendly and professional. I would highly recommend their bathtub service to anyone who needs help with a tub remodel!</blockquote><figcaption><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Phillip-Randle-150x150.jpeg" alt="" loading="lazy">Phillip Randle</figcaption></figure>
-      <figure class="rev"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>The bathtub they installed is perfect. It's really deep and looks sleek in my house, just like I wanted! The company was also very professional and on time with the installation process.</blockquote><figcaption><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Jessica-Dodd-150x150.jpeg" alt="" loading="lazy">Jessica Dodd</figcaption></figure>
-      <figure class="rev"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>The team at Big Easy Bathtubs was great! They got back to me quickly with an estimate for refinishing our tubs, which are old. The workmanship looks phenomenal!</blockquote><figcaption><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Debra-Williams-150x150.jpeg" alt="" loading="lazy">Debra Williams</figcaption></figure>
-      <figure class="rev"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>We are so happy with the work Big Easy Bathtubs did on our 10 year old tub. It's like new again!</blockquote><figcaption><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Rusty-Comer-150x150.jpeg" alt="" loading="lazy">Rusty Comer</figcaption></figure>
-      <figure class="rev"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>They do amazing work. I had my very old tub reglazed and it came out looking brand new! Great business, reasonable price and professional.</blockquote><figcaption><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Clifton-Thompson-150x150.jpeg" alt="" loading="lazy">Clifton Thompson</figcaption></figure>
+    <div class="revs-spot reveal" style="--d:.1s">
+      <span class="revs-mark" aria-hidden="true">&ldquo;</span>
+      <div class="revs-stage" data-rev-stage aria-live="off">
+          <figure class="rq is-on">
+            <blockquote>We used Big Easy Bathtubs for our tub replacement, and it looks amazing! The crew was friendly, polite, and professional.</blockquote>
+            <figcaption><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/12/Rebecca-Whaley-150x150.jpeg" alt="" width="54" height="54" loading="lazy"><span><b>Rebecca Whaley</b><i class="stars" aria-label="5 out of 5 stars">★★★★★</i></span></figcaption>
+          </figure>
+          <figure class="rq" aria-hidden="true">
+            <blockquote>We were so pleased with the installation work they did on our tub! The service was timely and professional, for a very reasonable price. Thank you!</blockquote>
+            <figcaption><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Craig-Harris-150x150.jpeg" alt="" width="54" height="54" loading="lazy"><span><b>Craig Harris</b><i class="stars" aria-label="5 out of 5 stars">★★★★★</i></span></figcaption>
+          </figure>
+          <figure class="rq" aria-hidden="true">
+            <blockquote>They were on time, friendly and professional. I would highly recommend their bathtub service to anyone who needs help with a tub remodel!</blockquote>
+            <figcaption><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Phillip-Randle-150x150.jpeg" alt="" width="54" height="54" loading="lazy"><span><b>Phillip Randle</b><i class="stars" aria-label="5 out of 5 stars">★★★★★</i></span></figcaption>
+          </figure>
+          <figure class="rq" aria-hidden="true">
+            <blockquote>The bathtub they installed is perfect. It's really deep and looks sleek in my house, just like I wanted! The company was also very professional and on time with the installation process.</blockquote>
+            <figcaption><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Jessica-Dodd-150x150.jpeg" alt="" width="54" height="54" loading="lazy"><span><b>Jessica Dodd</b><i class="stars" aria-label="5 out of 5 stars">★★★★★</i></span></figcaption>
+          </figure>
+          <figure class="rq" aria-hidden="true">
+            <blockquote>The team at Big Easy Bathtubs was great! They got back to me quickly with an estimate for refinishing our tubs, which are old. The workmanship looks phenomenal!</blockquote>
+            <figcaption><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Debra-Williams-150x150.jpeg" alt="" width="54" height="54" loading="lazy"><span><b>Debra Williams</b><i class="stars" aria-label="5 out of 5 stars">★★★★★</i></span></figcaption>
+          </figure>
+          <figure class="rq" aria-hidden="true">
+            <blockquote>We are so happy with the work Big Easy Bathtubs did on our 10 year old tub. It's like new again!</blockquote>
+            <figcaption><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Rusty-Comer-150x150.jpeg" alt="" width="54" height="54" loading="lazy"><span><b>Rusty Comer</b><i class="stars" aria-label="5 out of 5 stars">★★★★★</i></span></figcaption>
+          </figure>
+          <figure class="rq" aria-hidden="true">
+            <blockquote>They do amazing work. I had my very old tub reglazed and it came out looking brand new! Great business, reasonable price and professional.</blockquote>
+            <figcaption><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Clifton-Thompson-150x150.jpeg" alt="" width="54" height="54" loading="lazy"><span><b>Clifton Thompson</b><i class="stars" aria-label="5 out of 5 stars">★★★★★</i></span></figcaption>
+          </figure>
+      </div>
+      <div class="revs-ctrl">
+        <button class="round" type="button" aria-label="Previous review" data-rev-prev>&#8249;</button>
+        <button class="round" type="button" aria-label="Next review" data-rev-next>&#8250;</button>
+        <div class="revs-thumbs">
+            <button class="revs-thumb is-on" type="button" data-rev-thumb="0" aria-label="Show the review from Rebecca Whaley" aria-current="true"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/12/Rebecca-Whaley-150x150.jpeg" alt="" width="40" height="40" loading="lazy"></button>
+            <button class="revs-thumb" type="button" data-rev-thumb="1" aria-label="Show the review from Craig Harris"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Craig-Harris-150x150.jpeg" alt="" width="40" height="40" loading="lazy"></button>
+            <button class="revs-thumb" type="button" data-rev-thumb="2" aria-label="Show the review from Phillip Randle"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Phillip-Randle-150x150.jpeg" alt="" width="40" height="40" loading="lazy"></button>
+            <button class="revs-thumb" type="button" data-rev-thumb="3" aria-label="Show the review from Jessica Dodd"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Jessica-Dodd-150x150.jpeg" alt="" width="40" height="40" loading="lazy"></button>
+            <button class="revs-thumb" type="button" data-rev-thumb="4" aria-label="Show the review from Debra Williams"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Debra-Williams-150x150.jpeg" alt="" width="40" height="40" loading="lazy"></button>
+            <button class="revs-thumb" type="button" data-rev-thumb="5" aria-label="Show the review from Rusty Comer"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Rusty-Comer-150x150.jpeg" alt="" width="40" height="40" loading="lazy"></button>
+            <button class="revs-thumb" type="button" data-rev-thumb="6" aria-label="Show the review from Clifton Thompson"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/03/Clifton-Thompson-150x150.jpeg" alt="" width="40" height="40" loading="lazy"></button>
+        </div>
+        <button class="round revs-pause" type="button" aria-label="Pause reviews" data-rev-pause>❙❙</button>
+        <span class="revs-bar" aria-hidden="true"><i data-rev-bar></i></span>
+        <span class="revs-count" aria-hidden="true"><b data-rev-cur>01</b> / 07</span>
+      </div>
     </div>
   </div>
 </section>
@@ -594,6 +638,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=20" defer></script>
+<script src="assets/js/main.js?v=21" defer></script>
 </body>
 </html>
