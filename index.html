@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/main.css?v=18">
+<link rel="stylesheet" href="assets/css/main.css?v=20">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
@@ -17,24 +17,30 @@
 
 <!-- ============ INTRO ============
      Full-screen opening: the About clip drifts behind, a water drop lands,
-     ripples spread and the logo rises with a drawn underline. About 4.5s.
+     ripples spread and the logo rises with a drawn underline, then two
+     buttons. The film is shown as shot, with no tint. About 7s.
      Hidden by default; the script right below arms it, so with no JS or with
      reduced motion it never appears. The page underneath is fully rendered
-     the whole time. Skippable by button, click, key, scroll or touch. -->
-<div class="intro" id="intro" aria-hidden="true">
-  <div class="intro-scene">
+     the whole time. Skippable by the Skip button, a click or tap outside the buttons, Esc or
+     scroll. -->
+<div class="intro" id="intro" role="region" aria-label="Welcome">
+  <div class="intro-scene" aria-hidden="true">
     <video muted loop playsinline preload="none"
       poster="https://images.pexels.com/videos/7578551/apartment-at-home-business-buy-7578551.jpeg?auto=compress&amp;cs=tinysrgb&amp;h=627&amp;fit=crop&amp;w=1200"
       data-src="https://videos.pexels.com/video-files/7578551/7578551-hd_1280_720_30fps.mp4"></video>
   </div>
   <div class="intro-center">
-    <span class="intro-drop"></span>
-    <span class="intro-rip"></span><span class="intro-rip r2"></span><span class="intro-rip r3"></span>
+    <span class="intro-drop" aria-hidden="true"></span>
+    <span class="intro-rip" aria-hidden="true"></span><span class="intro-rip r2" aria-hidden="true"></span><span class="intro-rip r3" aria-hidden="true"></span>
     <div class="intro-mark">
-      <img src="https://www.bigeasybathtubs.com/wp-content/uploads/2023/06/footer-logo.png" alt="" width="380" height="120">
-      <svg class="intro-ul" viewBox="0 0 400 12" preserveAspectRatio="none"><path pathLength="1" d="M2 8 C 80 3, 160 10, 240 6 S 360 4, 398 7"/></svg>
+      <img src="https://www.bigeasybathtubs.com/wp-content/uploads/2023/06/footer-logo.png" alt="Big Easy Bathtubs" width="340" height="108">
+      <svg class="intro-ul" aria-hidden="true" viewBox="0 0 400 12" preserveAspectRatio="none"><path pathLength="1" d="M2 8 C 80 3, 160 10, 240 6 S 360 4, 398 7"/></svg>
     </div>
     <p class="intro-tag">New Orleans bathtub specialists</p>
+    <div class="intro-actions" data-intro-actions>
+      <a class="btn btn-white" href="https://www.bigeasybathtubs.com/contact/">Contact Us</a>
+      <a class="btn btn-sand" href="https://www.bigeasybathtubs.com/contact/">Free Estimate</a>
+    </div>
   </div>
   <button class="intro-skip" id="introSkip" type="button">Skip intro</button>
 </div>
@@ -55,7 +61,6 @@
 
   html.className += ' intro-armed';
   var film = intro.querySelector('video');
-  film.addEventListener('playing', function () { film.className = 'on'; });
   film.src = film.getAttribute('data-src');
   try { var p = film.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
 
@@ -70,12 +75,28 @@
       html.className = html.className.replace(' intro-armed', '').replace(' intro-out', '') + ' intro-gone';
       try { document.dispatchEvent(new Event('intro:done')); } catch (e) {}
     }, 700);
-    ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.removeEventListener(ev, finish); });
+    ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.removeEventListener(ev, dismiss); });
   };
   window.__introFinish = finish;
-  setTimeout(finish, 4500);
-  intro.addEventListener('click', finish);
-  ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.addEventListener(ev, finish, { passive: true }); });
+  /* The two buttons are real links: a click, tap or key press on them must
+     follow the link, not dismiss the intro. The countdown also waits while
+     the pointer or keyboard focus is on them. */
+  var actions = intro.querySelector('[data-intro-actions]');
+  var onActions = function (e) { return actions && e.target && actions.contains(e.target); };
+  var dismiss = function (e) {
+    if (onActions(e)) return;
+    if (e.type === 'keydown' && e.key !== 'Escape') return;
+    finish();
+  };
+  var timer = setTimeout(finish, 7000);
+  if (actions) {
+    var hold = function () { clearTimeout(timer); };
+    var release = function () { clearTimeout(timer); timer = setTimeout(finish, 2500); };
+    actions.addEventListener('mouseenter', hold); actions.addEventListener('focusin', hold);
+    actions.addEventListener('mouseleave', release); actions.addEventListener('focusout', release);
+  }
+  intro.addEventListener('click', dismiss);
+  ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.addEventListener(ev, dismiss, { passive: true }); });
 })();
 </script>
 
@@ -249,21 +270,29 @@
   </div>
 </section>
 
-<!-- ============ SERVICES ============ -->
-<section class="svc">
+<!-- ============ SERVICES: showcase split, no cards ============
+     One large photo on the left; the three tub categories on the right as
+     plain headings divided by thin rules, each with its service links in a
+     row. Pointing at, focusing or tapping a category crossfades the photo to
+     match and draws the underline under its name. Every link is always
+     visible, so nothing depends on hover. -->
+<section class="svc" data-svc>
   <div class="wrap">
     <div class="sec-head reveal">
       <p class="eyebrow">Services</p>
       <h2>Complete bathtub &amp; <span class="kw">walk-in tub services</span> in New Orleans</h2>
       <p class="sec-lede">Ready to transform your tub? Pick the kind of tub you have, then the service you need.</p>
     </div>
-    <div class="svc-grid">
-      <article class="svc-card reveal" style="--d:.05s">
-        <div class="svc-img"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2026/06/bath-6.jpg" alt="Modern bathroom with a built-in jetted tub" loading="lazy"></div>
-        <div class="svc-body">
-          <p class="svc-cat">Category · 5 services</p>
-          <h3>Bathtubs</h3>
-          <ul>
+    <div class="svc-split">
+      <div class="svc-stage reveal">
+        <img class="is-on" src="https://www.bigeasybathtubs.com/wp-content/uploads/2026/06/bath-6.jpg" alt="Modern bathroom with a built-in jetted tub" loading="lazy">
+        <img src="https://www.bigeasybathtubs.com/wp-content/uploads/2023/03/walk-in-bathtub-with-bench-seat.jpg" alt="Bathtub fitted with a bath seat and grab bar" loading="lazy">
+        <img src="https://www.bigeasybathtubs.com/wp-content/uploads/2025/08/Claw-Tub-Blue-Bathtub.jpg" alt="Navy clawfoot tub against blue paneled walls" loading="lazy">
+      </div>
+      <div class="svc-menu reveal" style="--d:.1s">
+        <div class="svc-group is-on" data-svc-group="0">
+          <div class="svc-top"><span class="svc-num">01</span><h3><span class="svc-name">Bathtubs</span></h3><span class="svc-count">5 services</span></div>
+          <ul class="svc-links">
             <li><a href="https://www.bigeasybathtubs.com/bathtub-installation/">Installation</a></li>
             <li><a href="https://www.bigeasybathtubs.com/bathtub-refinishing/">Refinishing</a></li>
             <li><a href="https://www.bigeasybathtubs.com/bathtub-remodel/">Remodel</a></li>
@@ -271,33 +300,25 @@
             <li><a href="https://www.bigeasybathtubs.com/bathtub-replacement/">Replacement</a></li>
           </ul>
         </div>
-      </article>
-      <article class="svc-card reveal" style="--d:.15s">
-        <div class="svc-img"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2023/03/walk-in-bathtub-with-bench-seat.jpg" alt="Bathtub fitted with a bath seat and grab bar" loading="lazy"></div>
-        <div class="svc-body">
-          <p class="svc-cat">Category · 4 services</p>
-          <h3>Walk-in tubs</h3>
-          <ul>
+        <div class="svc-group" data-svc-group="1">
+          <div class="svc-top"><span class="svc-num">02</span><h3><span class="svc-name">Walk-in tubs</span></h3><span class="svc-count">4 services</span></div>
+          <ul class="svc-links">
             <li><a href="https://www.bigeasybathtubs.com/walk-in-bathtub-installation/">Installation</a></li>
             <li><a href="https://www.bigeasybathtubs.com/walk-in-bathtub-remodel/">Remodel</a></li>
             <li><a href="https://www.bigeasybathtubs.com/walk-in-bathtub-refinishing/">Refinishing</a></li>
             <li><a href="https://www.bigeasybathtubs.com/walk-in-bathtub-repair/">Repair</a></li>
           </ul>
         </div>
-      </article>
-      <article class="svc-card reveal" style="--d:.25s">
-        <div class="svc-img"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2025/08/Claw-Tub-Blue-Bathtub.jpg" alt="Navy clawfoot tub against blue paneled walls" loading="lazy"></div>
-        <div class="svc-body">
-          <p class="svc-cat">Category · 4 services</p>
-          <h3>Clawfoot tubs</h3>
-          <ul>
+        <div class="svc-group" data-svc-group="2">
+          <div class="svc-top"><span class="svc-num">03</span><h3><span class="svc-name">Clawfoot tubs</span></h3><span class="svc-count">4 services</span></div>
+          <ul class="svc-links">
             <li><a href="https://www.bigeasybathtubs.com/claw-tub-installation/">Installation</a></li>
             <li><a href="https://www.bigeasybathtubs.com/claw-tub-remodel/">Remodel</a></li>
             <li><a href="https://www.bigeasybathtubs.com/claw-tub-refinishing/">Refinishing</a></li>
             <li><a href="https://www.bigeasybathtubs.com/claw-tub-repair/">Repair</a></li>
           </ul>
         </div>
-      </article>
+      </div>
     </div>
   </div>
 </section>
@@ -573,6 +594,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=17" defer></script>
+<script src="assets/js/main.js?v=20" defer></script>
 </body>
 </html>

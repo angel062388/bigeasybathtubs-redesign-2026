@@ -11,7 +11,7 @@
   if (root.classList.contains('intro-armed') && !root.classList.contains('intro-out')) {
     // The intro overlay is up: start the hero entrance as it begins to leave.
     document.addEventListener('intro:leaving', loaded);
-    setTimeout(loaded, 7000); // safety net if the intro script dies
+    setTimeout(loaded, 11000); // safety net if the intro script dies
   } else {
     requestAnimationFrame(loaded);
     setTimeout(loaded, 60);
@@ -129,6 +129,23 @@
       });
     }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
     reveals.forEach(function (el) { io.observe(el); });
+  }
+
+  // ---------- services: the photo follows the category in use ----------
+  var svc = document.querySelector('[data-svc]');
+  if (svc) {
+    var svcImgs = svc.querySelectorAll('.svc-stage img');
+    var svcGroups = svc.querySelectorAll('[data-svc-group]');
+    var showSvc = function (i) {
+      svcGroups.forEach(function (g, n) { g.classList.toggle('is-on', n === i); });
+      svcImgs.forEach(function (im, n) {
+        if (n === i && im.loading === 'lazy') im.loading = 'eager';
+        im.classList.toggle('is-on', n === i);
+      });
+    };
+    svcGroups.forEach(function (g, i) {
+      ['mouseenter', 'focusin', 'click'].forEach(function (ev) { g.addEventListener(ev, function () { showSvc(i); }); });
+    });
   }
 
   // ---------- service areas: map markers and list rows light each other up ----------
