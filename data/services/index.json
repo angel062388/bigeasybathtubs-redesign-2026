@@ -1,0 +1,135 @@
+{
+  "note": "Copied from the live service pages on 2026-10-04. Client content, words unchanged.",
+  "services": [
+    {
+      "slug": "bathtub-installation",
+      "group": "Bathtubs",
+      "title": "Bathtub Installation in New Orleans | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs installs alcove, drop-in, freestanding and walk-in bathtubs in homes across New Orleans. Call 504-553-3699 today to book your free estimate.",
+      "h1": "Bathtub Installation in New Orleans",
+      "heroText": "Transform Your Bathroom with a Luxurious Bathtub Installation! - Contact us today!",
+      "heroImage": "https://www.bigeasybathtubs.com/wp-content/uploads/2022/09/Planned-renovation-of-a-Luxury-modern-bathroom.jpg",
+      "words": 1058
+    },
+    {
+      "slug": "bathtub-refinishing",
+      "group": "Bathtubs",
+      "title": "Bathtub Refinishing in New Orleans | Big Easy Bathtubs",
+      "desc": "Bathtub refinishing restores a worn, stained or chipped tub for less time and cost than a full replacement. Call Big Easy Bathtubs today for a free estimate.",
+      "h1": "Refinishing",
+      "heroText": "Revitalize Your Bathroom with Expert Bathtub Refinishing - Save Time and Money while Restoring Your Tub&#039;s Beauty!",
+      "heroImage": "https://www.bigeasybathtubs.com/wp-content/uploads/2022/09/White-luxury-bathtub-Big-easy-Bathtubs.jpg",
+      "words": 975
+    },
+    {
+      "slug": "bathtub-remodel",
+      "group": "Bathtubs",
+      "title": "Bathtub Remodeling in New Orleans | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs handles bathtub remodeling in New Orleans from design and tub selection through installation. Call 504-553-3699 today for your free estimate.",
+      "h1": "Remodel",
+      "heroText": "Upgrade your bathroom with a beautiful new shower or tub installed",
+      "heroImage": "https://www.bigeasybathtubs.com/wp-content/uploads/2022/09/Bathtub-Remodeled-in-New-Orleans.jpg",
+      "words": 1125
+    },
+    {
+      "slug": "tub-repairs",
+      "group": "Bathtubs",
+      "title": "New Orleans Bathtub Repair Service | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs fixes chips, cracks, leaks and worn finishes on all types of bathtubs across New Orleans. Call 504-553-3699 today for your free estimate.",
+      "h1": "Repairs",
+      "heroText": "Repair Your Bathtub with Confidence - Trust Our Experts to Restore Your Tub&#039;s Functionality and Beauty!",
+      "heroImage": "https://www.bigeasybathtubs.com/wp-content/uploads/2022/08/sealant-Big-Easy-Bathtubs.jpg",
+      "words": 1099
+    },
+    {
+      "slug": "bathtub-replacement",
+      "group": "Bathtubs",
+      "title": "New Orleans Bathtub Replacement | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs replaces worn, damaged or outdated bathtubs in homes across New Orleans with a clean install. Call 504-553-3699 today for your free estimate.",
+      "h1": "Replacement",
+      "heroText": "Upgrade Your Bathroom with Our Expert Bathtub Replacement Services - Contact Us Today!",
+      "heroImage": "https://www.bigeasybathtubs.com/wp-content/uploads/2022/09/White-luxury-bathtub-Big-easy-Bathtubs.jpg",
+      "words": 1007
+    },
+    {
+      "slug": "walk-in-bathtub-installation",
+      "group": "Walk-in tubs",
+      "title": "New Orleans Walk-in Bathtub Installation | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs installs walk-in bathtubs in New Orleans homes for safer, more comfortable bathing. Call 504-553-3699 today for a free installation quote.",
+      "h1": "Installation",
+      "heroText": "Experience Safety and Luxury with Walk-In Bathtub Installation - Upgrade Your Bathing Experience Today!",
+      "heroImage": "https://www.bigeasybathtubs.com/wp-content/uploads/2022/09/New-Orleans-Walk-in-Bathtub.jpg",
+      "words": 1166
+    },
+    {
+      "slug": "walk-in-bathtub-remodel",
+      "group": "Walk-in tubs",
+      "title": "Walk-In Bathtub Remodel in New Orleans | Big Easy Bathtubs",
+      "desc": "Remodel your walk-in bathtub for better safety, comfort and style with help from our New Orleans team. Call Big Easy Bathtubs today to get your free quote.",
+      "h1": "Remodel",
+      "heroText": "Transform Your Bathroom with Walk-In Bathtub Remodel - Enjoy the Perfect Blend of Accessibility and Comfort!",
+      "heroImage": "https://www.bigeasybathtubs.com/wp-content/uploads/2022/09/Walk-in-Bathtubs-Remodel-in-New-Orleans-By-Big-Easy-Bathtubs.jpg",
+      "words": 1061
+    },
+    {
+      "slug": "walk-in-bathtub-refinishing",
+      "group": "Walk-in tubs",
+      "title": "New Orleans Walk in Bathtub Refinishing | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs refinishes walk-in bathtubs across greater New Orleans to restore a clean, like-new surface. Call 504-553-3699 today for your free estimate.",
+      "h1": "Refinishing",
+      "heroText": "Renew Your Walk-In Bathtub with Professional Refinishing - Enhance the Look and Feel of Your Bathroom!",
+      "heroImage": "https://www.bigeasybathtubs.com/wp-content/uploads/2022/08/Walk-in-Bathtubs-Refinishing-in-New-Orleans-By-Big-Easy-Bathtubs.jpg",
+      "words": 977
+    },
+    {
+      "slug": "walk-in-bathtub-repair",
+      "group": "Walk-in tubs",
+      "title": "Walk-In Bathtub Repair, New Orleans | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs repairs leaking door seals, jet problems, cracks and worn surfaces on walk-in tubs. Call 504-553-3699 today to schedule your tub repair.",
+      "h1": "Repair",
+      "heroText": "Restore Your Walk-In Bathtub to Like-New Condition - Trust Our Experts for Reliable Repair Services!",
+      "heroImage": "https://www.bigeasybathtubs.com/wp-content/uploads/2022/11/walk-in-bathtub.jpg",
+      "words": 1243
+    },
+    {
+      "slug": "claw-tub-installation",
+      "group": "Clawfoot tubs",
+      "title": "Claw Tub Installation In New Orleans | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs installs classic and modern clawfoot tubs in homes across greater New Orleans. Call 504-553-3699 today to get your free installation estimate.",
+      "h1": "Installation",
+      "heroText": "Elevate Your Bathroom with a Stunning Claw Tub Installation - Add Classic Charm and Luxury to Your Home!",
+      "heroImage": "https://www.bigeasybathtubs.com/wp-content/uploads/2022/09/Luxury-Bathroom-Big-Easy-Bathtubs.jpg",
+      "words": 953
+    },
+    {
+      "slug": "claw-tub-remodel",
+      "group": "Clawfoot tubs",
+      "title": "Clawfoot Tub Remodel in New Orleans | Big Easy Bathtubs",
+      "desc": "Clawfoot tub remodeling in New Orleans can include tub-to-shower conversions that keep the vintage look. Call Big Easy Bathtubs today to learn your options.",
+      "h1": "Remodel",
+      "heroText": "Upgrade Your Bathroom with a Custom Claw Tub Remodel - Achieve the Perfect Balance of Functionality and Style!",
+      "heroImage": "https://www.bigeasybathtubs.com/wp-content/uploads/2022/09/Clawfoot-Tub-Remodel-in-New-Orleans.jpg",
+      "words": 971
+    },
+    {
+      "slug": "claw-tub-refinishing",
+      "group": "Clawfoot tubs",
+      "title": "Clawfoot Tub Refinishing, New Orleans | Big Easy Bathtubs",
+      "desc": "Clawfoot tub refinishing and reglazing restores worn, stained and chipped tubs across greater New Orleans. Call Big Easy Bathtubs today for your free estimate.",
+      "h1": "Refinishing",
+      "heroText": "Revitalize Your Claw Tub with Expert Refinishing - Restore the Beauty and Elegance of Your Bathroom!",
+      "heroImage": "https://www.bigeasybathtubs.com/wp-content/uploads/2022/08/Claw-Tub-Premium-Bathtub.jpg",
+      "words": 938
+    },
+    {
+      "slug": "claw-tub-repair",
+      "group": "Clawfoot tubs",
+      "title": "Clawfoot Tub Repair in New Orleans | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs repairs and restores clawfoot tubs in New Orleans, fixing chips, cracks, stains and leaks. Call 504-553-3699 today for your free estimate.",
+      "h1": "Repair",
+      "heroText": "Revive Your Claw Tub with Expert Repair Services - Contact Us Today!",
+      "heroImage": "https://www.bigeasybathtubs.com/wp-content/uploads/2022/08/banner-image.png",
+      "words": 942
+    }
+  ]
+}

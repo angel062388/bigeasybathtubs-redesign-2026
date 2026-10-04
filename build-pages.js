@@ -49,7 +49,7 @@ const footer = src.slice(src.indexOf('<!-- ============ FOOTER ============ -->'
 // ---------- the inner-page hero: one framed photo ----------
 function pageHero({ crumbs, title, lede, img, alt, caption, post }) {
   const trail = [`<a href="${HOME}">Home</a>`].concat(crumbs.map((c, i) =>
-    i === crumbs.length - 1 ? `<span aria-current="page">${c[0]}</span>` : `<a href="${c[1]}">${c[0]}</a>`))
+    i === crumbs.length - 1 ? `<span aria-current="page">${c[0]}</span>` : c[1] ? `<a href="${c[1]}">${c[0]}</a>` : `<span>${c[0]}</span>`))
     .join('<span aria-hidden="true">›</span>');
   const lines = [].concat(title);
   const h1 = post
@@ -82,7 +82,7 @@ ${caption ? `      <figcaption>${caption}</figcaption>\n` : ''}    </figure>
 
 // ---------- assemble + check ----------
 const built = [];
-function write(file, { title, desc, sections, exemptContact }) {
+function write(file, { title, desc, sections, exemptContact, clientCopy }) {
   const page = head(title, desc) + '</head>\n<body class="inner">\n<a class="skip" href="#main">Skip to content</a>\n\n' +
     header + '<main id="main">\n\n' + sections.join('') + '</main>\n\n' + footer;
   const body = page.slice(page.indexOf('<main id="main">'), page.indexOf('</main>'));
@@ -95,7 +95,9 @@ function write(file, { title, desc, sections, exemptContact }) {
   const h1s = (body.match(/<h1[\s>]/g) || []).length;
   if (h1s !== 1) throw new Error(file + ': must have exactly one h1, has ' + h1s);
   if (/id="intro"/.test(page)) throw new Error(file + ': the intro overlay belongs to the homepage only');
-  if (/—/.test(body.replace(/<!--[\s\S]*?-->/g, ''))) throw new Error(file + ': em dash in page copy');
+  // our own template copy never uses em dashes; a client's published article is left exactly as written
+  const ours = (clientCopy ? body.replace(clientCopy, '') : body).replace(/<!--[\s\S]*?-->/g, '');
+  if (/—/.test(ours)) throw new Error(file + ': em dash in page copy');
   const ids = [...body.matchAll(/ id="([^"]+)"/g)].map(m => m[1]);
   const dup = ids.filter((v, i) => ids.indexOf(v) !== i);
   if (dup.length) throw new Error(file + ': duplicate ids ' + dup.join(', '));
@@ -345,6 +347,78 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
         img: thumb(post.image), alt: '',
       }), article, areasHome, ctaBand],
   });
+}
+
+/* =====================================================================
+   SERVICE PAGES (13): one template, each page's own article from data/services/
+   ===================================================================== */
+{
+  const data = JSON.parse(fs.readFileSync(path.join(dir, 'data', 'services', 'index.json'), 'utf8'));
+  const photo = {
+    'Bathtubs': ['2026/06/bath-6.jpg', 'Modern bathroom with a built-in jetted tub'],
+    'Walk-in tubs': ['2023/03/walk-in-bathtub-with-bench-seat.jpg', 'Bathtub fitted with a bath seat and grab bar'],
+    'Clawfoot tubs': ['2025/08/Claw-Tub-Blue-Bathtub.jpg', 'Navy clawfoot tub against blue paneled walls'],
+  };
+  // The live pages' own main headings are mostly one word ("Refinishing", "Repair"); the page title
+  // without the brand is used here instead, split over two lines where it reads naturally.
+  const lines = (t) => {
+    let m;
+    if ((m = t.match(/^(.*?),? in New Orleans$/i))) return [m[1], 'in New Orleans'];
+    if ((m = t.match(/^New Orleans (.*)$/))) return ['New Orleans', m[1]];
+    if ((m = t.match(/^(.*), New Orleans$/))) return [m[1], 'New Orleans'];
+    return [t];
+  };
+  // a line too long to sit beside the photo is broken once more, at the space nearest its middle
+  const fit = (arr) => arr.flatMap((t) => {
+    if (t.length <= 21) return [t];
+    const sp = [...t.matchAll(/ /g)].map(m => m.index).sort((a, b) => Math.abs(a - t.length / 2) - Math.abs(b - t.length / 2))[0];
+    return [t.slice(0, sp), t.slice(sp + 1)];
+  });
+  const short = { 'Bathtubs': 'Bathtub', 'Walk-in tubs': 'Walk-in tub', 'Clawfoot tubs': 'Clawfoot tub' };
+  for (const s of data.services) {
+    const name = s.title.replace(/\s*\|\s*Big Easy Bathtubs\s*$/, '');
+    let art = fs.readFileSync(path.join(dir, 'data', 'services', s.slug + '.html'), 'utf8').replace(/\r\n/g, '\n').trim();
+    const toc = [], used = {};
+    art = art.replace(/<h2>([\s\S]*?)<\/h2>/g, (m, t) => {
+      const text = t.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+      let id = 's-' + text.toLowerCase().replace(/&[a-z#0-9]+;/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
+      used[id] = (used[id] || 0) + 1;
+      if (used[id] > 1) id += '-' + used[id];
+      toc.push([id, text]);
+      return `<h2 id="${id}">${t}</h2>`;
+    });
+    art = art.replace(/<img /g, '<img loading="lazy" ');
+    const [img, alt] = photo[s.group];
+    const article = `<!-- ============ THE SERVICE, IN DETAIL (service pages only) ============
+     Contents list on the left, the page's own article on the right. The
+     words are the client's, exactly as published on the live page. -->
+<section class="art">
+  <div class="wrap art-grid">
+    <aside class="art-rail" aria-label="On this page">
+      <p class="art-rail-h">On this page</p>
+      <ol>
+${toc.map(([id, t]) => `        <li><a href="#${id}">${t}</a></li>`).join('\n')}
+      </ol>
+      <a class="btn btn-navy" href="${CONTACT}">Get a free estimate</a>
+      <a class="art-rail-tel" href="tel:+15045533699"><span>Call our experts</span><b>504-553-3699</b></a>
+    </aside>
+    <article class="prose">
+${art}
+    </article>
+  </div>
+</section>
+
+`;
+    write(s.slug + '.html', {
+      title: s.title.replace(/&(?!amp;)/g, '&amp;'), desc: s.desc, clientCopy: art,
+      sections: [
+        pageHero({
+          crumbs: [['Services'], [`${short[s.group]} ${s.h1.replace(/ in New Orleans$/, '').replace(/^Bathtub /, '').toLowerCase()}`]], title: fit(lines(name)),
+          lede: s.heroText.replace(/&#0?39;/g, "'"),
+          img, alt, caption: `<b class="ph-cap-sm">${s.group}</b><span>Free estimates<br>across Greater New Orleans</span>`,
+        }), ticker, article, services, process_, reviews, areasHome, ctaBand],
+    });
+  }
 }
 
 console.log(built.join('\n'));

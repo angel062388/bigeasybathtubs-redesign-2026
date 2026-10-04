@@ -63,6 +63,7 @@ node build-pages.js
 | `testimonials.html` | Testimonials |
 | `blog.html` | Blog list |
 | `blog-post.html` | Blog article template, shown with one real article |
+| `bathtub-installation.html` and 12 more | The 13 service pages (one template). Each page's words come from `data/services/{slug}.html`, copied unchanged from the live page; titles and descriptions come from `data/services/index.json` |
 
 The script lifts the shared sections (header, ticker, process, services, reviews, water map,
 FAQ, CTA band, footer) out of `index.html` and adds the sections that belong to each page

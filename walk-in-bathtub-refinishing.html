@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>New Orleans Bathtub Installation &amp; Repair | Big Easy Bathtubs</title>
-<meta name="description" content="Bathtub installation, refinishing, remodels and repairs in New Orleans, including walk-in and clawfoot tubs. Free estimates. Call 504-553-3699.">
+<title>New Orleans Walk in Bathtub Refinishing | Big Easy Bathtubs</title>
+<meta name="description" content="Big Easy Bathtubs refinishes walk-in bathtubs across greater New Orleans to restore a clean, like-new surface. Call 504-553-3699 today for your free estimate.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,93 +12,8 @@
 <link rel="stylesheet" href="assets/css/main.css?v=34">
 <script>document.documentElement.classList.add("js")</script>
 </head>
-<body>
+<body class="inner">
 <a class="skip" href="#main">Skip to content</a>
-
-<!-- ============ INTRO ============
-     Full-screen opening: the About clip drifts behind, a water drop lands,
-     ripples spread and the logo rises with a drawn underline, then two
-     buttons. The film is shown as shot, with no tint. About 7s.
-     Hidden by default; the script right below arms it, so with no JS or with
-     reduced motion it never appears. The page underneath is fully rendered
-     the whole time. Skippable by the Skip button, a click or tap outside the buttons, Esc or
-     scroll. -->
-<div class="intro" id="intro" role="region" aria-label="Welcome">
-  <div class="intro-scene" aria-hidden="true">
-    <video muted loop playsinline preload="none"
-      poster="https://images.pexels.com/videos/7578551/apartment-at-home-business-buy-7578551.jpeg?auto=compress&amp;cs=tinysrgb&amp;h=627&amp;fit=crop&amp;w=1200"
-      data-src="https://videos.pexels.com/video-files/7578551/7578551-hd_1280_720_30fps.mp4"></video>
-  </div>
-  <div class="intro-center">
-    <span class="intro-drop" aria-hidden="true"></span>
-    <span class="intro-rip" aria-hidden="true"></span><span class="intro-rip r2" aria-hidden="true"></span><span class="intro-rip r3" aria-hidden="true"></span>
-    <div class="intro-mark">
-      <img src="https://www.bigeasybathtubs.com/wp-content/uploads/2023/06/footer-logo.png" alt="Big Easy Bathtubs" width="340" height="108">
-      <svg class="intro-ul" aria-hidden="true" viewBox="0 0 400 12" preserveAspectRatio="none"><path pathLength="1" d="M2 8 C 80 3, 160 10, 240 6 S 360 4, 398 7"/></svg>
-    </div>
-    <p class="intro-tag">New Orleans bathtub specialists</p>
-    <div class="intro-actions" data-intro-actions>
-      <a class="btn btn-white" href="https://www.bigeasybathtubs.com/contact/">Contact Us</a>
-      <a class="btn btn-sand" href="https://www.bigeasybathtubs.com/contact/">Free Estimate</a>
-    </div>
-  </div>
-  <button class="intro-skip" id="introSkip" type="button">Skip intro</button>
-</div>
-<script>
-/* Arming script: runs before the rest of the body parses, so the overlay
-   never flashes in or out of place. */
-(function () {
-  var html = document.documentElement, intro = document.getElementById('intro');
-  if (!intro) return;
-  var reduce = false;
-  try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
-  /* Replay policy. false = plays on every load (handy while reviewing the
-     mockup). Set to true before launch so repeat visitors see it once per tab. */
-  var ONCE_PER_SESSION = false, seen = false;
-  if (ONCE_PER_SESSION) { try { seen = sessionStorage.getItem('bebt_intro') === '1'; } catch (e) {} }
-  if (reduce || seen) { intro.parentNode.removeChild(intro); return; }
-  if (ONCE_PER_SESSION) { try { sessionStorage.setItem('bebt_intro', '1'); } catch (e) {} }
-
-  html.className += ' intro-armed';
-  var film = intro.querySelector('video');
-  film.src = film.getAttribute('data-src');
-  try { var p = film.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
-
-  var done = false;
-  var finish = function () {
-    if (done) return; done = true;
-    html.className += ' intro-out';
-    try { document.dispatchEvent(new Event('intro:leaving')); } catch (e) {}
-    setTimeout(function () {
-      try { film.pause(); } catch (e) {}
-      if (intro.parentNode) intro.parentNode.removeChild(intro);
-      html.className = html.className.replace(' intro-armed', '').replace(' intro-out', '') + ' intro-gone';
-      try { document.dispatchEvent(new Event('intro:done')); } catch (e) {}
-    }, 700);
-    ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.removeEventListener(ev, dismiss); });
-  };
-  window.__introFinish = finish;
-  /* The two buttons are real links: a click, tap or key press on them must
-     follow the link, not dismiss the intro. The countdown also waits while
-     the pointer or keyboard focus is on them. */
-  var actions = intro.querySelector('[data-intro-actions]');
-  var onActions = function (e) { return actions && e.target && actions.contains(e.target); };
-  var dismiss = function (e) {
-    if (onActions(e)) return;
-    if (e.type === 'keydown' && e.key !== 'Escape') return;
-    finish();
-  };
-  var timer = setTimeout(finish, 7000);
-  if (actions) {
-    var hold = function () { clearTimeout(timer); };
-    var release = function () { clearTimeout(timer); timer = setTimeout(finish, 2500); };
-    actions.addEventListener('mouseenter', hold); actions.addEventListener('focusin', hold);
-    actions.addEventListener('mouseleave', release); actions.addEventListener('focusout', release);
-  }
-  intro.addEventListener('click', dismiss);
-  ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.addEventListener(ev, dismiss, { passive: true }); });
-})();
-</script>
 
 <!-- ============ HEADER ============ -->
 <header class="site-head" data-head>
@@ -183,40 +98,29 @@
 
 <main id="main">
 
-<!-- ============ HERO (McDonald Remodeling pattern) ============ -->
-<section class="hero" aria-label="Introduction">
-  <div class="wrap hero-grid">
-    <div class="hero-card">
-      <img class="hero-bg" src="https://www.bigeasybathtubs.com/wp-content/uploads/2026/06/hero-main.jpg" alt="" fetchpriority="high">
-      <div class="hero-copy">
-        <p class="hero-eyebrow fade-seq" style="--d:.15s"><span class="stars" aria-hidden="true">★★★★★</span> Rated by hundreds of satisfied customers</p>
-        <h1 class="hero-title">
-          <span class="ht-line fade-seq" style="--d:.3s"><span class="ht-txt">New Orleans Bathtub</span><svg class="ht-ul" viewBox="0 0 400 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 C 80 3, 160 10, 240 6 S 360 4, 398 7"/></svg></span>
-          <span class="ht-line fade-seq" style="--d:.5s"><span class="ht-txt">Installation &amp; Repair</span><svg class="ht-ul" viewBox="0 0 400 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 6 C 90 9, 170 3, 250 7 S 350 9, 398 5"/></svg></span>
-        </h1>
-        <p class="hero-lede fade-seq" style="--d:.75s">From flawless installations to refinishing, remodels and repairs, our New Orleans craftsmen handle every type of tub, including accessible walk-in tubs and timeless clawfoot models.</p>
-        <div class="hero-actions fade-seq" style="--d:.95s">
-          <a class="btn btn-sand" href="https://www.bigeasybathtubs.com/contact/">Get your free estimate</a>
-          <a class="btn btn-line-light" href="tel:+15045533699">Call 504-553-3699</a>
-        </div>
+<!-- ============ PAGE HERO (inner pages) ============
+     Same navy ground and headline treatment as the homepage hero. One
+     photo, set in a thin sand frame that sits offset behind it, with a
+     small label; it settles from a slight zoom as the page opens. -->
+<section class="phero" aria-label="Introduction">
+  <div class="wrap phero-grid">
+    <div class="phero-copy">
+      <nav class="crumb fade-seq" style="--d:.1s" aria-label="Breadcrumb"><a href="https://www.bigeasybathtubs.com/">Home</a><span aria-hidden="true">›</span><span>Services</span><span aria-hidden="true">›</span><span aria-current="page">Walk-in tub refinishing</span></nav>
+      <h1 class="hero-title">
+        <span class="ht-line fade-seq" style="--d:0.25s"><span class="ht-txt">New Orleans</span><svg class="ht-ul" viewBox="0 0 400 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 C 80 3, 160 10, 240 6 S 360 4, 398 7"/></svg></span>
+        <span class="ht-line fade-seq" style="--d:0.43s"><span class="ht-txt">Walk in Bathtub</span><svg class="ht-ul" viewBox="0 0 400 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 6 C 90 9, 170 3, 250 7 S 350 9, 398 5"/></svg></span>
+        <span class="ht-line fade-seq" style="--d:0.61s"><span class="ht-txt">Refinishing</span><svg class="ht-ul" viewBox="0 0 400 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 C 80 3, 160 10, 240 6 S 360 4, 398 7"/></svg></span>
+      </h1>
+      <p class="hero-lede fade-seq" style="--d:.6s">Renew Your Walk-In Bathtub with Professional Refinishing - Enhance the Look and Feel of Your Bathroom!</p>
+      <div class="hero-actions fade-seq" style="--d:.8s">
+        <a class="btn btn-sand" href="https://www.bigeasybathtubs.com/contact/">Get your free estimate</a>
+        <a class="btn btn-line-light" href="tel:+15045533699">Call 504-553-3699</a>
       </div>
     </div>
-
-    <div class="hero-slides" data-slider aria-roledescription="carousel" aria-label="Recent bathtub projects">
-      <div class="slides-track">
-        <figure class="slide is-active"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2026/06/bath-13-1024x768.jpg" alt="Classic bathroom with a chandelier, framed art and a bathtub"></figure>
-        <figure class="slide"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2026/06/tubhd_2-1024x683.jpg" alt="Freestanding tub with a chrome floor-mounted faucet" loading="lazy"></figure>
-        <figure class="slide"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2026/06/bath-14-1024x768.jpg" alt="Freestanding tub under a window in a gray-blue bathroom" loading="lazy"></figure>
-        <figure class="slide"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2026/06/bath-11-1024x768.jpg" alt="Traditional bathroom with a round jetted tub" loading="lazy"></figure>
-        <figure class="slide"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2026/06/tubhd_9-1024x768.jpg" alt="White clawfoot tub with gold feet" loading="lazy"></figure>
-      </div>
-      <button class="sl-arrow sl-prev" aria-label="Previous photo" data-prev>&#8249;</button>
-      <button class="sl-arrow sl-next" aria-label="Next photo" data-next>&#8250;</button>
-      <div class="sl-meta">
-        <span class="sl-count" aria-live="polite"><b data-cur>01</b> / <span data-total>05</span></span>
-        <button class="sl-pause" aria-label="Pause slideshow" data-pause>❙❙</button>
-      </div>
-    </div>
+    <figure class="ph-photo">
+      <span class="ph-img"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2023/03/walk-in-bathtub-with-bench-seat.jpg" alt="Bathtub fitted with a bath seat and grab bar" fetchpriority="high"></span>
+      <figcaption><b class="ph-cap-sm">Walk-in tubs</b><span>Free estimates<br>across Greater New Orleans</span></figcaption>
+    </figure>
   </div>
 </section>
 
@@ -248,25 +152,61 @@
   </div>
 </section>
 
-<!-- ============ PROCESS ============ -->
-<section class="proc">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <p class="eyebrow">How we work</p>
-      <h2>Five simple steps to a <span class="kw">new bathtub</span></h2>
-    </div>
-    <ol class="flow reveal" aria-label="Our 5-step process">
-      <li class="flow-pipe" aria-hidden="true"><i></i></li>
-      <li class="fstep" style="--i:0"><span class="fnode" aria-hidden="true"><b>01</b></span><p class="fstep-tag">Step 1</p><h3>Free Consultation</h3><p>We talk through your tub, your bathroom and your preferences to work out exactly what you need.</p></li>
-      <li class="fstep" style="--i:1"><span class="fnode" aria-hidden="true"><b>02</b></span><p class="fstep-tag">Step 2</p><h3>Custom Design</h3><p>We plan a tub setup around your wants and needs, from the model and finish to accessibility features.</p></li>
-      <li class="fstep" style="--i:2"><span class="fnode" aria-hidden="true"><b>03</b></span><p class="fstep-tag">Step 3</p><h3>Clear Estimate</h3><p>You get a clear, honest estimate before any work begins, so you know the cost up front.</p></li>
-      <li class="fstep" style="--i:3"><span class="fnode" aria-hidden="true"><b>04</b></span><p class="fstep-tag">Step 4</p><h3>Professional Installation</h3><p>Our experienced technicians install your new tub. Most standard installs take one to two days.</p></li>
-      <li class="fstep" style="--i:4"><span class="fnode" aria-hidden="true"><b>05</b></span><p class="fstep-tag">Step 5</p><h3>Final Inspection</h3><p>We inspect the finished work and make sure you're completely satisfied.</p></li>
-    </ol>
-    <div class="center reveal">
+<!-- ============ THE SERVICE, IN DETAIL (service pages only) ============
+     Contents list on the left, the page's own article on the right. The
+     words are the client's, exactly as published on the live page. -->
+<section class="art">
+  <div class="wrap art-grid">
+    <aside class="art-rail" aria-label="On this page">
+      <p class="art-rail-h">On this page</p>
+      <ol>
+        <li><a href="#s-bathroom-refinishing-reglazing-walk-in-bathtub-r">Bathroom Refinishing &amp; Reglazing: Walk in Bathtub Refinishing New Orleans &amp; Surrounding Areas</a></li>
+        <li><a href="#s-the-value-of-walk-in-bathtub-refinishing">The Value of Walk-in Bathtub Refinishing</a></li>
+        <li><a href="#s-our-walk-in-bathtub-refinishing-process">Our Walk-in Bathtub Refinishing Process</a></li>
+        <li><a href="#s-if-you-want-bathtub-refinishing-services-call-us">If You Want Bathtub Refinishing Services, Call Us for a Free Estimate</a></li>
+      </ol>
       <a class="btn btn-navy" href="https://www.bigeasybathtubs.com/contact/">Get a free estimate</a>
-      <a class="btn btn-line" href="tel:+15045533699">Call 504-553-3699</a>
-    </div>
+      <a class="art-rail-tel" href="tel:+15045533699"><span>Call our experts</span><b>504-553-3699</b></a>
+    </aside>
+    <article class="prose">
+<h2 id="s-bathroom-refinishing-reglazing-walk-in-bathtub-r">Bathroom Refinishing &amp; Reglazing: Walk in Bathtub Refinishing New Orleans &amp; Surrounding Areas</h2>
+<p><img loading="lazy" src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/08/Walk-in-Bathtubs-Refinishing-in-New-Orleans-By-Big-Easy-Bathtubs.jpg" alt="Walk-in Bathtubs Refinishing in New Orleans By Big Easy Bathtubs">After years of use, your walk-in bathtub will show signs of aging that may make it unpleasant to look at. However, just because it has small cosmetic issues doesn&#8217;t mean you should have it replaced. If you want a better and more cost-effective option, slide bathtub refinishing services from <a href="https://www.bigeasybathtubs.com/"><strong>Big Easy Bathtubs</strong></a> into your budget.</p>
+<p>We offer top-tier walk-in tub refinishing in New Orleans and surrounding areas, giving your bathtub a fresh new look. Whether you need replacement services, <a href="https://www.bigeasybathtubs.com/bathtub-refinishing/">bathtub refinishing</a>, shower repair, or something else, you can count on us to be with you every step of the way. We&#8217;ll make your old bathroom feel new again and you won&#8217;t have to spend too much — seems like a win-win to us!</p>
+<p><strong><a href="https://www.bigeasybathtubs.com/contact/">Get a free quote for your bathtub refinishing project from us today</a>!</strong></p>
+<h2 id="s-the-value-of-walk-in-bathtub-refinishing">The Value of Walk-in Bathtub Refinishing</h2>
+<p>We aim to provide our clients with the best possible service so they can experience the full value of bathtub refinishing. Trying to decide whether you should refinish or replace your walk-in bathtub? We&#8217;ll dig into the benefits of a well-done bathtub refinish below.</p>
+<h3>It’s Cheaper</h3>
+<p><img loading="lazy" src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/08/Cheaper-Walk-in-Bathtubs-Refinishing-in-New-Orleans-By-Big-Easy-Bathtubs.jpg" alt="Cheaper Walk-in Bathtubs Refinishing in New Orleans By Big Easy Bathtubs">Why spend more on getting the latest bathtub if there’s a way to revamp your old one? Cosmetic issues don&#8217;t make a bathtub unusable — you shouldn&#8217;t jump to replace it as soon as it shows wear. The best way to remedy any cosmetic issue, such as scratches or stains, is with a good, old-fashioned refinish from a reliable contractor.</p>
+<p>While there are walk-in bathtub options that aren&#8217;t that expensive, you also need to consider the other expenses that come with tub replacement. You need to have the old tub removed, get another installed, and shell out some serious money to update the tiling and plumbing. When compared to the price of bathtub refinishing or bathtub resurfacing,<strong> you may be shocked by the difference.</strong></p>
+<h3>It&#8217;s Faster</h3>
+<p>Since a lot of things need to be accomplished to complete a bathtub replacement, your contractor may need several days to complete the entire project. Not only does this contribute to the hefty price of bathtub replacement, but it also means that you can’t use your bathtub for that period of time.</p>
+<p>This makes bathtub refinishing the go-to choice for a lot of homeowners. This project can <strong>typically be completed in only three to six hours.</strong> Once the contractor leaves, you only need to wait about a day for the materials to cure properly. After that, you can use the bathtub again as you normally would.</p>
+<h3>It&#8217;s Simpler for Homeowners</h3>
+<p>If you like the design of your current bathtub and you can’t find another that looks just like it, refinishing your walk-in tub is the perfect solution. This can be especially useful for homes with unique or classic bathtubs that were installed decades ago; with bathtub refinishing, you can restore your bathtub&#8217;s former beauty and preserve your bathroom’s original style.</p>
+<p>By hiring a reliable contractor to carry out the refinishing project, you can effectively prolong the lifespan of your walk-in bathtub for about 10 – 15 more years. This makes it a very cost-effective solution; it should be your go-to option for any bathtub in your home that has significant scratches and chips.</p>
+<h3>It&#8217;s Less Wasteful</h3>
+<p><img loading="lazy" src="https://www.bigeasybathtubs.com/wp-content/uploads/2022/08/Less-Wasteful-Walk-in-Bathtubs-Refinishing-in-New-Orleans-By-Big-Easy-Bathtubs.jpg" alt="Less Wasteful Walk-in Bathtubs Refinishing in New Orleans By Big Easy Bathtubs">When it comes to bathroom improvement, it’s not always about upgrading your fixtures. Sometimes, you can simply refurbish them in order to make them look brand-new once again.</p>
+<p>By reglazing your bathtub, you&#8217;ll be able to save it and prevent it from ending in a landfill. If you’re looking for more sustainable solutions, bathtub refinishing is the way to go. That way, you can <strong>reduce the amount of waste you produce and minimize your carbon footprint.</strong></p>
+<h2 id="s-our-walk-in-bathtub-refinishing-process">Our Walk-in Bathtub Refinishing Process</h2>
+<p>As a trusted bathtub restoration company, our team is dedicated to providing our clients with top-notch services and meeting all of their expectations and demands. If you&#8217;d like a better idea of our process, this is our bathtub refinishing process from start to finish:</p>
+<h3>Step 1: Get in Touch With Our Team</h3>
+<p>Our clients <strong>speak to one of our professional advisors</strong> to communicate all of the important details about their refinishing projects. Once we’ve collected all of the information we need, we’ll provide you with a reasonable quote absolutely free of charge. If you’re happy with the price we give you, you can schedule the refinishing project for your preferred times.</p>
+<p>You can get in touch today by calling us.</p>
+<h3>Step 2: We Refinish Your Bathtub</h3>
+<p>Our experienced refinishing specialists will arrive at your home and work on your walk-in bathtub with minimal disruptions. With our advanced tools and equipment, <strong>our team can complete the process in just a few hours.</strong> From aggressively cleaning to making the necessary <a href="https://www.bigeasybathtubs.com/walk-in-bathtub-repair/">repairs on your walk-in tub</a>, we guarantee that everything will be handled professionally. You don’t even have to worry about cleaning the bathroom afterward — we&#8217;ll leave it cleaner than when we found it.</p>
+<h3>Step 3: Enjoy Your Refinished Tub!</h3>
+<p>After we’ve completed the refinishing project, you just need to <strong>wait for 24 hours before you can use your walk-in bathtub again.</strong> Once the wait is over, you can enjoy your fully-refinished bathtub at a fraction of the price of replacement.</p>
+<h2 id="s-if-you-want-bathtub-refinishing-services-call-us">If You Want Bathtub Refinishing Services, Call Us for a Free Estimate</h2>
+<p>If you want the best bathtub refinishing you can get in New Orleans and the surrounding areas, get in touch with us at <strong>Big Easy Bathtubs.</strong> We offer high-quality yet cost-effective bathtub refinishing solutions, allowing you to update your bathroom without going over your budget.</p>
+<h3>Aside from walk-in bathtub refinishing, we also offer the following services:</h3>
+<ul>
+<li><a href="https://www.bigeasybathtubs.com/walk-in-bathtub-installation/">Walk-in Bathtub Installation</a></li>
+<li><a href="https://www.bigeasybathtubs.com/walk-in-bathtub-remodel/">Walk-in tub Remodel</a></li>
+<li>Bathtub Replacement</li>
+<li>And more!</li>
+</ul>
+<p><strong>Get in touch with us today and get a free quote by calling us.</strong></p>
+    </article>
   </div>
 </section>
 
@@ -323,26 +263,24 @@
   </div>
 </section>
 
-<!-- ============ ABOUT / LOCAL ============ -->
-<section class="about">
-  <div class="wrap about-grid">
-    <div class="about-media reveal">
-      <!-- Stock clip: "Video of a Luxurious Bathroom", Pexels video 7578551 (free license, no credit required).
-           Hotlinked for the prototype; host it on the client's site before launch. -->
-      <video class="about-video" data-about-video autoplay muted loop playsinline preload="metadata"
-        poster="https://images.pexels.com/videos/7578551/apartment-at-home-business-buy-7578551.jpeg?auto=compress&amp;cs=tinysrgb&amp;h=627&amp;fit=crop&amp;w=1200"
-        aria-label="Slow camera move through a warm, sunlit bathroom with a freestanding white bathtub">
-        <source src="https://videos.pexels.com/video-files/7578551/7578551-hd_1280_720_30fps.mp4" type="video/mp4">
-      </video>
-      <button class="vid-toggle" type="button" data-video-toggle aria-label="Pause video">❙❙</button>
-      <a class="about-call" href="tel:+15045533699"><span>Call our experts</span><b>504-553-3699</b></a>
+<!-- ============ PROCESS ============ -->
+<section class="proc">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">How we work</p>
+      <h2>Five simple steps to a <span class="kw">new bathtub</span></h2>
     </div>
-    <div class="about-copy reveal" style="--d:.1s">
-      <p class="eyebrow">About Big Easy Bathtubs</p>
-      <h2>Your local New Orleans <span class="kw">bathtub specialists</span></h2>
-      <p>If bathtub renovation has you in a tizzy, we're here to help. We install and renovate bathtubs for New Orleans homeowners, and we make the whole process feel easy.</p>
-      <p>Our team is highly trained in bathtub installation and remodeling. We carry tubs to suit any budget or style, from modern soakers to timeless clawfoot models, and we can help you choose accessories that match.</p>
-      <a class="btn btn-navy" href="https://www.bigeasybathtubs.com/about/">More about us</a>
+    <ol class="flow reveal" aria-label="Our 5-step process">
+      <li class="flow-pipe" aria-hidden="true"><i></i></li>
+      <li class="fstep" style="--i:0"><span class="fnode" aria-hidden="true"><b>01</b></span><p class="fstep-tag">Step 1</p><h3>Free Consultation</h3><p>We talk through your tub, your bathroom and your preferences to work out exactly what you need.</p></li>
+      <li class="fstep" style="--i:1"><span class="fnode" aria-hidden="true"><b>02</b></span><p class="fstep-tag">Step 2</p><h3>Custom Design</h3><p>We plan a tub setup around your wants and needs, from the model and finish to accessibility features.</p></li>
+      <li class="fstep" style="--i:2"><span class="fnode" aria-hidden="true"><b>03</b></span><p class="fstep-tag">Step 3</p><h3>Clear Estimate</h3><p>You get a clear, honest estimate before any work begins, so you know the cost up front.</p></li>
+      <li class="fstep" style="--i:3"><span class="fnode" aria-hidden="true"><b>04</b></span><p class="fstep-tag">Step 4</p><h3>Professional Installation</h3><p>Our experienced technicians install your new tub. Most standard installs take one to two days.</p></li>
+      <li class="fstep" style="--i:4"><span class="fnode" aria-hidden="true"><b>05</b></span><p class="fstep-tag">Step 5</p><h3>Final Inspection</h3><p>We inspect the finished work and make sure you're completely satisfied.</p></li>
+    </ol>
+    <div class="center reveal">
+      <a class="btn btn-navy" href="https://www.bigeasybathtubs.com/contact/">Get a free estimate</a>
+      <a class="btn btn-line" href="tel:+15045533699">Call 504-553-3699</a>
     </div>
   </div>
 </section>
@@ -415,27 +353,6 @@
     </div>
   </div>
 </section>
-
-<!-- ============ CTA BAND ============ -->
-<div class="cta-shell">
-<section class="cta-band">
-  <!-- Stock clip: "Video of a Running Faucet", Pexels video 6702594 (free license, no credit required).
-       Shown as shot, no tint. Hotlinked for the prototype; host it on the client's site before launch. -->
-  <video class="cta-bg" data-loop-video muted loop playsinline preload="metadata" aria-hidden="true">
-    <source src="https://videos.pexels.com/video-files/6702594/6702594-hd_1280_720_50fps.mp4" type="video/mp4">
-  </video>
-  <button class="vid-toggle" type="button" data-video-toggle aria-label="Pause video">❙❙</button>
-  <div class="wrap cta-inner reveal">
-    <p class="eyebrow">Free, no-pressure estimates</p>
-    <h2>Ready for a <span class="kw">new bathtub</span>?</h2>
-    <p>Tell us about your tub and we'll give you a clear, honest estimate.</p>
-    <div class="cta-actions">
-      <a class="btn btn-sand" href="https://www.bigeasybathtubs.com/contact/">Get your free estimate</a>
-      <a class="btn btn-white" href="tel:+15045533699">Call 504-553-3699</a>
-    </div>
-  </div>
-</section>
-</div>
 
 <!-- ============ SERVICE AREAS: the water map ============
      A schematic map (positions projected from real coordinates): tiled land,
@@ -539,70 +456,26 @@
   </div>
 </section>
 
-<!-- ============ FAQ ============ -->
-<section class="faq">
-  <div class="wrap faq-grid">
-    <div class="faq-head reveal">
-      <p class="eyebrow">FAQs</p>
-      <h2>Bathtub questions, <span class="kw">answered</span></h2>
-      <p>Still have questions? We're happy to help.</p>
-      <a class="btn btn-navy" href="https://www.bigeasybathtubs.com/faqs/">View all FAQs</a>
-    </div>
-    <div class="faq-list reveal" style="--d:.1s">
-      <details open><summary><span>01</span>How long does a bathtub installation take?</summary><p>Most standard bathtub installations are completed in one to two days. The timeline can vary with the type of tub, any plumbing changes, and the condition of your existing bathroom. We'll give you a clear estimate before we begin.</p></details>
-      <details><summary><span>02</span>Do you install walk-in tubs for seniors and accessibility?</summary><p>Yes. Walk-in tubs are one of our specialties. We help you choose a safe, comfortable model with features like a low step-in threshold, built-in seating and grab bars, then handle the complete installation.</p></details>
-      <details><summary><span>03</span>What is bathtub refinishing, and how long does it last?</summary><p>Refinishing restores the surface of your existing tub. We repair chips and stains and apply a fresh, durable coating for a like-new look at a fraction of the cost of replacement. With proper care, a quality refinish typically lasts 10 to 15 years.</p></details>
-      <details><summary><span>04</span>Should I repair, refinish, or replace my bathtub?</summary><p>It depends on the tub's condition and your goals. Minor cracks, stains or a dated color are often perfect for repair or refinishing. Structural damage, leaks or a full layout change usually call for replacement. We'll assess it honestly during your free estimate.</p></details>
-      <details><summary><span>05</span>Do you restore antique clawfoot tubs?</summary><p>Absolutely. We refinish and restore clawfoot and other vintage tubs, inside and out, bringing back their classic charm while making them fully functional for everyday use.</p></details>
-    </div>
-  </div>
-</section>
-
-<!-- ============ BLOG ============ -->
-<section class="blog">
-  <div class="wrap">
-    <div class="sec-head row reveal">
-      <div>
-        <p class="eyebrow">Our latest news</p>
-        <h2>From the Big Easy Bathtubs <span class="kw">blog</span></h2>
-      </div>
-      <a class="btn btn-line" href="https://www.bigeasybathtubs.com/blog/">View all articles</a>
-    </div>
-    <div class="blog-grid">
-      <a class="post reveal" style="--d:.05s" href="https://www.bigeasybathtubs.com/choose-bathtub-guest-bathroom/">
-        <div class="post-img"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2026/06/hdimage-04-768x512.jpg" alt="" loading="lazy"></div>
-        <p class="post-meta">Aug 25, 2026 · Bathroom Design</p>
-        <h3>How to Choose a Bathtub for a Guest Bathroom in New Orleans</h3>
-      </a>
-      <a class="post reveal" style="--d:.12s" href="https://www.bigeasybathtubs.com/walk-in-tubs-support-family-caregivers/">
-        <div class="post-img"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2026/06/bath-1-768x513.jpg" alt="" loading="lazy"></div>
-        <p class="post-meta">Aug 24, 2026 · Walk-in Tub Safety</p>
-        <h3>How Walk-In Tubs Support Family Caregivers in New Orleans</h3>
-      </a>
-      <a class="post reveal" style="--d:.19s" href="https://www.bigeasybathtubs.com/jetted-whirlpool-air-tub-difference/">
-        <div class="post-img"><img src="https://www.bigeasybathtubs.com/wp-content/uploads/2023/04/Whirlpool-Tub-768x512.jpg" alt="" loading="lazy"></div>
-        <p class="post-meta">Aug 23, 2026 · Jetted Bathtub</p>
-        <h3>Jetted, Whirlpool, or Air Tub: What's the Difference for New Orleans Homes?</h3>
-      </a>
+<!-- ============ CTA BAND ============ -->
+<div class="cta-shell">
+<section class="cta-band">
+  <!-- Stock clip: "Video of a Running Faucet", Pexels video 6702594 (free license, no credit required).
+       Shown as shot, no tint. Hotlinked for the prototype; host it on the client's site before launch. -->
+  <video class="cta-bg" data-loop-video muted loop playsinline preload="metadata" aria-hidden="true">
+    <source src="https://videos.pexels.com/video-files/6702594/6702594-hd_1280_720_50fps.mp4" type="video/mp4">
+  </video>
+  <button class="vid-toggle" type="button" data-video-toggle aria-label="Pause video">❙❙</button>
+  <div class="wrap cta-inner reveal">
+    <p class="eyebrow">Free, no-pressure estimates</p>
+    <h2>Ready for a <span class="kw">new bathtub</span>?</h2>
+    <p>Tell us about your tub and we'll give you a clear, honest estimate.</p>
+    <div class="cta-actions">
+      <a class="btn btn-sand" href="https://www.bigeasybathtubs.com/contact/">Get your free estimate</a>
+      <a class="btn btn-white" href="tel:+15045533699">Call 504-553-3699</a>
     </div>
   </div>
 </section>
-
-<!-- ============ NEWSLETTER ============ -->
-<section class="news">
-  <div class="wrap news-row reveal">
-    <div>
-      <p class="eyebrow">Stay in touch</p>
-      <h2>Get <span class="kw">exclusive offers</span></h2>
-      <p>Be the first to hear about seasonal savings and fresh bathtub inspiration.</p>
-    </div>
-    <form class="news-form" onsubmit="return false" aria-label="Newsletter signup (prototype, not connected)">
-      <label class="sr" for="nl-email">Email address</label>
-      <input id="nl-email" type="email" placeholder="Your email address" autocomplete="email" required>
-      <button class="btn btn-navy" type="submit">Subscribe</button>
-    </form>
-  </div>
-</section>
+</div>
 
 </main>
 
