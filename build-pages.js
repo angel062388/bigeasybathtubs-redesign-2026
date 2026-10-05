@@ -494,6 +494,12 @@ ${own}`;
 </section>
 
 `;
+    // the Services section, minus the page we are on (a page does not link to itself)
+    const self = new RegExp(`\\n *<li><a href="${HOME}${s.slug}/">[^<]*</a></li>`);
+    const n = data.services.filter(x => x.group === s.group).length;
+    const servicesOther = once(once(services, self.exec(services)[0], ''),
+      `<span class="svc-name">${s.group}</span></h3><span class="svc-count">${n} services</span>`,
+      `<span class="svc-name">${s.group}</span></h3><span class="svc-count">${n - 1} more services</span>`);
     const [img, alt] = photo[s.group];
     write(s.slug + '.html', {
       title: s.title.replace(/&(?!amp;)/g, '&amp;'), desc: s.desc, clientCopy: own,
@@ -502,7 +508,7 @@ ${own}`;
           crumbs: [['Services'], [label]], title: fit(lines(name)),
           lede: s.heroText.replace(/&#0?39;/g, "'"),
           img, alt, caption: `<b class="ph-cap-sm">${s.group}</b><span>Free estimates<br>across Greater New Orleans</span>`,
-        }), ticker, ownBlock, services, areasHome, process_, reviews, callLine, ctaBand],
+        }), ticker, ownBlock, servicesOther, areasHome, process_, reviews, callLine, ctaBand],
     });
   }
 }
