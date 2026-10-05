@@ -332,6 +332,7 @@ p{margin:0 0 1em}
 .faq-head > *{grid-column:1}
 .faq-head h2{margin-bottom:.3em}
 .faq-head p:last-of-type{margin:0}
+.faq-head p a{color:var(--navy);text-decoration:underline;text-decoration-color:var(--taupe);text-underline-offset:4px;text-decoration-thickness:1.5px}
 .faq-head .btn{grid-column:2;grid-row:1/span 3;align-self:end}
 .faq-list{columns:2;column-gap:14px}
 .faq-list details{background:var(--cream);border-radius:var(--r);overflow:hidden;break-inside:avoid;margin-bottom:14px}
@@ -341,6 +342,11 @@ p{margin:0 0 1em}
 .faq-list summary::after{content:"+";margin-left:auto;font:300 28px/1 var(--sans);color:var(--taupe);transition:transform .3s var(--ease)}
 .faq-list details[open] summary::after{transform:rotate(45deg)}
 .faq-list details p{padding:0 26px 22px 55px;margin:0}
+.faq-list details ul,.faq-list details ol{margin:0;padding:0 26px 12px 75px}
+.faq-list details li{margin-bottom:10px}
+.faq-list details h3,.faq-list details h4{font:600 16px/1.4 var(--sans);color:var(--ink);margin:0;padding:0 26px 8px 55px}
+.faq-list details img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:14px;margin:0 0 14px}
+.faq-list details a{color:var(--navy);text-decoration:underline;text-decoration-color:var(--sand);text-underline-offset:4px;text-decoration-thickness:1.5px}
 
 /* ---------- blog ---------- */
 .blog{padding:68px 0;background:var(--cream)}
@@ -659,6 +665,8 @@ p{margin:0 0 1em}
   .foot-grid{grid-template-columns:1fr}
   .faq-list summary{padding:22px 20px;font-size:18px}
   .faq-list details p{padding:0 20px 22px}
+  .faq-list details ul,.faq-list details ol{padding:0 20px 12px 40px}
+  .faq-list details h3,.faq-list details h4{padding:0 20px 8px}
   .sec-head{margin-bottom:30px}
 }
 

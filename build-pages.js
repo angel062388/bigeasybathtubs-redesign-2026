@@ -96,7 +96,7 @@ function write(file, { title, desc, sections, exemptContact, clientCopy }) {
   if (h1s !== 1) throw new Error(file + ': must have exactly one h1, has ' + h1s);
   if (/id="intro"/.test(page)) throw new Error(file + ': the intro overlay belongs to the homepage only');
   // our own template copy never uses em dashes; a client's published article is left exactly as written
-  const ours = (clientCopy ? body.split(clientCopy).join('') : body).replace(/<!--[\s\S]*?-->/g, '');
+  const ours = [].concat(clientCopy || []).reduce((t, c) => t.split(c).join(''), body).replace(/<!--[\s\S]*?-->/g, '');
   if (/—/.test(ours)) throw new Error(file + ': em dash in page copy');
   const ids = [...body.matchAll(/ id="([^"]+)"/g)].map(m => m[1]);
   const dup = ids.filter((v, i) => ids.indexOf(v) !== i);
@@ -397,6 +397,30 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
       if (!plain(head) && chunks.length) chunks[chunks.length - 1].body += head + rest;   // an empty heading: its text belongs to the section above
       else { chunks.push({ head, body: carry + rest }); carry = ''; }
     }
+    // Three text sections per page: the intro, plus two more (sections with sub-topics first, then
+    // the earliest that are not a question or a cost note). Every other section moves
+    // into the FAQ list further down the page. Words are not changed.
+    // The client's closing "call us for a quote" section is left out: the call line and the CTA band
+    // lower on the page do that job. (Where no heading says so, the closing section is the last one.)
+    const isCta = (c) => /\b(quote|estimate)\b|call us|call now|contact us|give us a call/i.test(plain(c.head));
+    const dropped = chunks.some(isCta) ? chunks.filter(isCta) : [chunks[chunks.length - 1]];
+    for (const c of dropped) chunks.splice(chunks.indexOf(c), 1);
+    const mid = chunks.slice(1);
+    const hasSub = (c) => (c.body.match(/<h3>/g) || []).length >= 2 || (c.body.match(/<h4>/g) || []).length >= 2;
+    const isQ = (c) => /\?$/.test(plain(c.head)) || /\bcosts?\b/i.test(plain(c.head));
+    const keep = [];
+    for (const pick of [hasSub, (c) => !isQ(c), () => true]) for (const c of mid) if (keep.length < 2 && !keep.includes(c) && pick(c)) keep.push(c);
+    const ownFaq = mid.filter(c => !keep.includes(c));
+    for (const c of ownFaq) chunks.splice(chunks.indexOf(c), 1);
+    const answers = ownFaq.map(c => c.body.replace(/<img /g, '<img loading="lazy" ').trim());
+    const homeFaq = [...faq.matchAll(/<details[^>]*><summary><span>\d+<\/span>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/g)].map(m => [m[1], m[2]]);
+    const faqItems = ownFaq.map((c, k) => [c.head.replace(/<img [^>]*>/g, '').trim(), answers[k]]).concat(homeFaq).slice(0, Math.max(6, ownFaq.length));
+    const fa = faq.indexOf('<details'), fb = faq.lastIndexOf('</details>') + 10;
+    if (fa < 0 || fb < fa || !homeFaq.length) throw new Error('faq markers');
+    // the contact link in body copy (interlink rule) sits in the FAQ intro line on these pages
+    const faqBlock = once(faq.slice(0, fa), "<p>Still have questions? We're happy to help.</p>",
+      `<p>Still have questions? <a href="${CONTACT}">Contact our team</a> and we'll be happy to help.</p>`) +faqItems.map(([q, a], k) =>
+      `<details${k === 0 ? ' open' : ''}><summary><span>0${k + 1}</span>${q}</summary>${a}</details>`).join('\n      ') + faq.slice(fb);
     let flip = false, navyUsed = false, tone = 0;
     const own = chunks.map((c, i) => {
       const imgs = [];
@@ -411,7 +435,7 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
         return `<ul class="${avg < 40 ? 'tags' : 'sv-ticks'}">${inner}</ul>`;
       }).replace(/<ol>/g, '<ol class="sv-steps">').trim();
       const rich = (h, d) => h.trim() ? `<div class="sv-rich"${d || ''}>\n${h.trim()}\n</div>` : '';
-      const last = i === chunks.length - 1;
+      const last = false;
 
       if (last) {
         return `<section class="sv sv-close">
@@ -484,16 +508,9 @@ ${rich(body, ' data-r')}
     const ownBlock = `<!-- ============ THE SERVICE (service pages only) ============
      The client's own words from the live page, unchanged, cut at their own
      headings into separate sections: words beside a heading, words beside
-     a photo, sub-topics as a row of columns, and a closing call to action. -->
+     a photo, or sub-topics as a row of columns. Three per page; the rest
+     of the article is in the FAQ list further down. -->
 ${own}`;
-    const callLine = `<!-- ============ ONE-LINE CALL (service pages only) ============ -->
-<section class="sv-call">
-  <div class="wrap">
-    <p class="reveal">Questions about your tub? Call our experts at <a href="tel:+15045533699">504-553-3699</a> or <a href="${CONTACT}">request a free estimate online</a>.</p>
-  </div>
-</section>
-
-`;
     // the Services section, minus the page we are on (a page does not link to itself)
     const self = new RegExp(`\\n *<li><a href="${HOME}${s.slug}/">[^<]*</a></li>`);
     const n = data.services.filter(x => x.group === s.group).length;
@@ -502,13 +519,13 @@ ${own}`;
       `<span class="svc-name">${s.group}</span></h3><span class="svc-count">${n - 1} more services</span>`);
     const [img, alt] = photo[s.group];
     write(s.slug + '.html', {
-      title: s.title.replace(/&(?!amp;)/g, '&amp;'), desc: s.desc, clientCopy: own,
+      title: s.title.replace(/&(?!amp;)/g, '&amp;'), desc: s.desc, clientCopy: [own, ...answers],
       sections: [
         pageHero({
           crumbs: [['Services'], [label]], title: fit(lines(name)),
           lede: s.heroText.replace(/&#0?39;/g, "'"),
           img, alt, caption: `<b class="ph-cap-sm">${s.group}</b><span>Free estimates<br>across Greater New Orleans</span>`,
-        }), ticker, ownBlock, servicesOther, areasHome, process_, reviews, callLine, ctaBand],
+        }), ticker, ownBlock, servicesOther, areasHome, process_, reviews, faqBlock, ctaBand],
     });
   }
 }
