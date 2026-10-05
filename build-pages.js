@@ -448,6 +448,9 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
   for (const s of data.services) {
     const name = s.title.replace(/\s*\|\s*Big Easy Bathtubs\s*$/, '');
     let art = fs.readFileSync(path.join(dir, 'data', 'services', s.slug + '.html'), 'utf8').replace(/\r\n/g, '\n').trim();
+    // some live pages wrap each sub-heading in its own one-item bullet list; the heading is kept, the wrapper dropped
+    art = art.replace(/<([uo])l>\s*<li>\s*(<h[34]>[\s\S]*?<\/h[34]>)\s*<\/li>\s*<\/\1l>/g, '$2');
+    if (/<li>\s*<h[2-4]>/.test(art)) throw new Error(s.slug + ': a heading inside a list item would be cut in half');
     // photos the user asked to leave off a particular page, by file name
     for (const f of { 'walk-in-bathtub-refinishing': ['Less-Wasteful-Walk-in-Bathtubs-Refinishing'] }[s.slug] || []) {
       const tag = new RegExp(`<img [^>]*${f}[^>]*>`).exec(art);
