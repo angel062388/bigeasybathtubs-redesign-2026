@@ -398,8 +398,8 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
       else { chunks.push({ head, body: carry + rest }); carry = ''; }
     }
     // Three text sections per page: the intro, plus two more (sections with sub-topics first, then
-    // the earliest that are not a question or a cost note). Every other section moves
-    // into the FAQ list further down the page. Words are not changed.
+    // the earliest that are not a question or a cost note). Every other section of the
+    // article is left off the page (it stays in data/services/). Words are not changed.
     // The client's closing "call us for a quote" section is left out: the call line and the CTA band
     // lower on the page do that job. (Where no heading says so, the closing section is the last one.)
     const isCta = (c) => /\b(quote|estimate)\b|call us|call now|contact us|give us a call/i.test(plain(c.head));
@@ -410,17 +410,10 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
     const isQ = (c) => /\?$/.test(plain(c.head)) || /\bcosts?\b/i.test(plain(c.head));
     const keep = [];
     for (const pick of [hasSub, (c) => !isQ(c), () => true]) for (const c of mid) if (keep.length < 2 && !keep.includes(c) && pick(c)) keep.push(c);
-    const ownFaq = mid.filter(c => !keep.includes(c));
-    for (const c of ownFaq) chunks.splice(chunks.indexOf(c), 1);
-    const answers = ownFaq.map(c => c.body.replace(/<img /g, '<img loading="lazy" ').trim());
-    const homeFaq = [...faq.matchAll(/<details[^>]*><summary><span>\d+<\/span>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/g)].map(m => [m[1], m[2]]);
-    const faqItems = ownFaq.map((c, k) => [c.head.replace(/<img [^>]*>/g, '').trim(), answers[k]]).concat(homeFaq).slice(0, Math.max(6, ownFaq.length));
-    const fa = faq.indexOf('<details'), fb = faq.lastIndexOf('</details>') + 10;
-    if (fa < 0 || fb < fa || !homeFaq.length) throw new Error('faq markers');
-    // the contact link in body copy (interlink rule) sits in the FAQ intro line on these pages
-    const faqBlock = once(faq.slice(0, fa), "<p>Still have questions? We're happy to help.</p>",
-      `<p>Still have questions? <a href="${CONTACT}">Contact our team</a> and we'll be happy to help.</p>`) +faqItems.map(([q, a], k) =>
-      `<details${k === 0 ? ' open' : ''}><summary><span>0${k + 1}</span>${q}</summary>${a}</details>`).join('\n      ') + faq.slice(fb);
+    for (const c of mid.filter(c => !keep.includes(c))) chunks.splice(chunks.indexOf(c), 1);
+    // the homepage FAQ section; its intro line carries the contact link in body copy (interlink rule)
+    const faqBlock = once(faq, "<p>Still have questions? We're happy to help.</p>",
+      `<p>Still have questions? <a href="${CONTACT}">Contact our team</a> and we'll be happy to help.</p>`);
     let flip = false, navyUsed = false, tone = 0;
     const own = chunks.map((c, i) => {
       const imgs = [];
@@ -509,7 +502,7 @@ ${rich(body, ' data-r')}
      The client's own words from the live page, unchanged, cut at their own
      headings into separate sections: words beside a heading, words beside
      a photo, or sub-topics as a row of columns. Three per page; the rest
-     of the article is in the FAQ list further down. -->
+     of the article is left off the page. -->
 ${own}`;
     // the Services section, minus the page we are on (a page does not link to itself)
     const self = new RegExp(`\\n *<li><a href="${s.slug}\\.html">[^<]*</a></li>`);
@@ -518,23 +511,16 @@ ${own}`;
       `<span class="svc-name">${s.group}</span></h3><span class="svc-count">${n} services</span>`,
       `<span class="svc-name">${s.group}</span></h3><span class="svc-count">${n - 1} more services</span>`);
     const [img, alt] = photo[s.group];
-    // interlink rule: where the three sections carry no contact link, the hero line does
-    // (on the client's own "Contact us today" where it has one, otherwise as a short closing sentence)
-    let lede = s.heroText.replace(/&#0?39;/g, "'");
-    if (!(own.match(/<p[\s>][\s\S]*?<\/p>/g) || []).some(p => p.includes(`href="${CONTACT}"`))) {
-      lede = /contact us today/i.test(lede) ? lede.replace(/contact us today/i, (m) => `<a href="${CONTACT}">${m}</a>`)
-        : `${lede} <a href="${CONTACT}">Contact us</a> for a free estimate.`;
-    }
     write(s.slug + '.html', {
-      title: s.title.replace(/&(?!amp;)/g, '&amp;'), desc: s.desc, clientCopy: [own, ...answers],
+      title: s.title.replace(/&(?!amp;)/g, '&amp;'), desc: s.desc, clientCopy: own,
       sections: [
         pageHero({
           crumbs: [['Services'], [label]], title: fit(lines(name)),
-          lede,
+          lede: s.heroText.replace(/&#0?39;/g, "'"),
           img, alt, caption: `<b class="ph-cap-sm">${s.group}</b><span>Free estimates<br>across Greater New Orleans</span>`,
           // the page is only what the user listed: three text sections, Services, Service areas, How we
-          // work, reviews and the CTA band. faqBlock (above) is built but not placed; add it back here to restore.
-        }), ownBlock, servicesOther, areasHome, process_, reviews, ctaBand],
+          // work, reviews, FAQs and the CTA band (no ticker, no closing text section)
+        }), ownBlock, servicesOther, areasHome, process_, reviews, faqBlock, ctaBand],
     });
   }
 }
