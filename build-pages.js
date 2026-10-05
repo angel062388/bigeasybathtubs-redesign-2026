@@ -423,10 +423,36 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
     const isQ = (c) => /\?$/.test(plain(c.head)) || /\bcosts?\b/i.test(plain(c.head));
     const keep = [];
     for (const pick of [hasSub, (c) => !isQ(c), () => true]) for (const c of mid) if (keep.length < 2 && !keep.includes(c) && pick(c)) keep.push(c);
-    for (const c of mid.filter(c => !keep.includes(c))) chunks.splice(chunks.indexOf(c), 1);
-    // the homepage FAQ section; its intro line carries the contact link in body copy (interlink rule)
-    const faqBlock = once(faq, "<p>Still have questions? We're happy to help.</p>",
-      `<p>Still have questions? <a href="${CONTACT}">Contact our team</a> and we'll be happy to help.</p>`);
+    const left = mid.filter(c => !keep.includes(c));
+    for (const c of left) chunks.splice(chunks.indexOf(c), 1);
+
+    // ----- FAQs that belong to this service -----
+    // 1. the questions the client's own article asks and answers (sections not shown above whose heading is a question)
+    // 2. the questions from the live FAQ page that fit this kind of service and this kind of tub
+    const ownQ = left.filter(c => /\?$/.test(plain(c.head)));
+    const answers = ownQ.map(c => c.body.replace(/<img [^>]*>/g, '').replace(/<(p|strong|em)>\s*<\/\1>/g, '').trim());
+    const kind = (s.slug.match(/installation|refinishing|remodel|repair|replacement/) || [''])[0];
+    const fits = [
+      [/^How long does a bathtub installation take/, ['installation', 'replacement'].includes(kind)],
+      [/^Do you install walk-in tubs/, s.group === 'Walk-in tubs'],
+      [/^What is bathtub refinishing/, kind === 'refinishing'],
+      [/^Should I repair, refinish, or replace/, ['repair', 'refinishing', 'replacement', 'remodel'].includes(kind)],
+      [/^Do you restore antique clawfoot/, s.group === 'Clawfoot tubs'],
+      [/^How much does a new bathtub or remodel cost/, ['installation', 'remodel', 'replacement'].includes(kind) && !ownQ.some(c => /cost/i.test(plain(c.head)))],
+    ];
+    const liveFaq = [...faq.matchAll(/<details[^>]*><summary><span>\d+<\/span>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/g)].map(m => [m[1], m[2]])
+      // on the live FAQ page but not among the homepage's five; answer copied from that page unchanged
+      .concat([['How much does a new bathtub or remodel cost?', '<p>Cost depends on the tub type, materials, and scope of work. We offer competitive pricing and provide a free, no-pressure estimate so you know exactly what to expect before any work begins.</p>']]);
+    for (const [re] of fits) if (!liveFaq.some(([q]) => re.test(q))) throw new Error('FAQ not found: ' + re);
+    const faqItems = ownQ.map((c, k) => [c.head.replace(/<img [^>]*>/g, '').trim(), answers[k]])
+      .concat(liveFaq.filter(([q]) => fits.some(([re, ok]) => ok && re.test(q))));
+    if (faqItems.length < 2) throw new Error(s.slug + ': fewer than two related FAQs');
+    const fa = faq.indexOf('<details'), fb = faq.lastIndexOf('</details>') + 10;
+    // the intro line carries the contact link in body copy (interlink rule)
+    const faqBlock = once(once(faq.slice(0, fa), "<p>Still have questions? We're happy to help.</p>",
+      `<p>Still have questions? <a href="${CONTACT}">Contact our team</a> and we'll be happy to help.</p>`),
+      `<h2>Bathtub questions, ${kw('answered')}</h2>`, `<h2>${label[0].toUpperCase() + label.slice(1)} questions, ${kw('answered')}</h2>`) +
+      faqItems.map(([q, a], k) => `<details${k === 0 ? ' open' : ''}><summary><span>0${k + 1}</span>${q}</summary>${a}</details>`).join('\n      ') + faq.slice(fb);
     let flip = false, navyUsed = false, tone = 0;
     const own = chunks.map((c, i) => {
       const imgs = [];
@@ -525,7 +551,7 @@ ${own}`;
       `<span class="svc-name">${s.group}</span></h3><span class="svc-count">${n - 1} more services</span>`);
     const [img, alt] = photo[s.group];
     write(s.slug + '.html', {
-      title: s.title.replace(/&(?!amp;)/g, '&amp;'), desc: s.desc, clientCopy: own,
+      title: s.title.replace(/&(?!amp;)/g, '&amp;'), desc: s.desc, clientCopy: [own, ...answers],
       sections: [
         pageHero({
           crumbs: [['Services'], [label]], title: fit(lines(name)),
