@@ -47,7 +47,7 @@ const faq = cut('<!-- ============ FAQ ============ -->', '<!-- ============ BLO
 const footer = src.slice(src.indexOf('<!-- ============ FOOTER ============ -->'));
 
 // ---------- the inner-page hero: one framed photo ----------
-function pageHero({ crumbs, title, lede, img, alt, caption, post }) {
+function pageHero({ crumbs, title, lede, img, alt, caption, post, cta }) {
   const trail = [`<a href="${HOME}">Home</a>`].concat(crumbs.map((c, i) =>
     i === crumbs.length - 1 ? `<span aria-current="page">${c[0]}</span>` : c[1] ? `<a href="${c[1]}">${c[0]}</a>` : `<span>${c[0]}</span>`))
     .join('<span aria-hidden="true">›</span>');
@@ -67,7 +67,7 @@ function pageHero({ crumbs, title, lede, img, alt, caption, post }) {
       <nav class="crumb fade-seq" style="--d:.1s" aria-label="Breadcrumb">${trail}</nav>
 ${h1}
 ${lede ? `      <p class="hero-lede fade-seq" style="--d:.6s">${lede}</p>\n` : ''}      <div class="hero-actions fade-seq" style="--d:.8s">
-        <a class="btn btn-sand" href="${CONTACT}">Get your free estimate</a>
+        <a class="btn btn-sand" href="${cta || CONTACT}">Get your free estimate</a>
         <a class="btn btn-line-light" href="tel:+15045533699">Call 504-553-3699</a>
       </div>
     </div>
@@ -346,6 +346,69 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
         crumbs: [['Blog', HOME + 'blog/'], ['Article']], title: post.title, post: { meta: `${fmt(post.date)} · ${post.category}` },
         img: thumb(post.image), alt: '',
       }), article, areasHome, ctaBand],
+  });
+}
+
+/* =====================================================================
+   CONTACT
+   Hero, how to reach us, the estimate form, then the homepage's service-area map
+   (TurnKey's contact page: hero, contact details, form, service areas).
+   This page is exempt from linking to itself; its buttons jump to the form instead.
+   ===================================================================== */
+{
+  const reach = `<!-- ============ REACH US (Contact page) ============ -->
+<section class="reach">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Reach us</p>
+      <h2>Big Easy Bathtubs, ${kw('New Orleans')}</h2>
+    </div>
+    <dl class="reach-row reveal" style="--d:.1s">
+      <div><dt>Address</dt><dd>517 Soraparu St, Suite 103-M<br>New Orleans, LA 70130</dd></div>
+      <div><dt>Call us</dt><dd><a href="tel:+15045533699">504-553-3699</a></dd></div>
+      <div><dt>Hours of operation</dt><dd>Monday to Friday: 8 AM to 6 PM<small>Saturday and Sunday: Closed</small></dd></div>
+    </dl>
+  </div>
+</section>
+
+`;
+  const form = `<!-- ============ ESTIMATE FORM (Contact page) ============
+     The fields below are a picture of the form area only: nothing is sent.
+     On the live site the client's existing form (a LeadConnector embed)
+     loads in this panel. -->
+<section class="cform" id="estimate">
+  <div class="wrap cform-grid">
+    <div class="cform-copy reveal">
+      <p class="eyebrow">Free estimate</p>
+      <h2>Talk to ${kw('us')}</h2>
+      <p>We don't let any messages get drowned in our inbox. The team at Big Easy Bathtubs ensures all questions and concerns are addressed.</p>
+      <p>Prefer to talk? Call <a href="tel:+15045533699">504-553-3699</a>.</p>
+    </div>
+    <div class="cform-panel reveal" style="--d:.1s">
+      <form class="cform-form" onsubmit="return false" aria-label="Estimate request (preview only)">
+        <label>Full name<input type="text" readonly tabindex="-1"></label>
+        <label>Phone<input type="tel" readonly tabindex="-1"></label>
+        <label class="full">Email<input type="email" readonly tabindex="-1"></label>
+        <label class="full">How can we help?<textarea readonly tabindex="-1"></textarea></label>
+        <button class="btn btn-navy" type="button">Request my free estimate</button>
+        <p class="cform-note">Preview only. On the live site, the current contact form loads in this space.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+`;
+  const here = (h) => h.split(`href="${CONTACT}"`).join('href="#estimate"');
+  write('contact.html', {
+    title: 'Contact Our Bathtub Specialist | Big Easy Bathtubs',
+    desc: 'Reach the Big Easy Bathtubs team in New Orleans with questions about installation, repair or a new tub. Call 504-553-3699 or send us a message online today.',
+    exemptContact: true,
+    sections: [
+      pageHero({
+        crumbs: [['Contact']], title: ['Contact', 'Big Easy Bathtubs'], cta: '#estimate',
+        lede: `Have a question or ready for a free estimate? Our <a href="${HOME}">New Orleans bathtub team</a> is here to help. Reach out any time.`,
+        img: '2026/06/bath-11-1024x768.jpg', alt: 'Traditional bathroom with a round jetted tub',
+      }), reach, form, here(areasHome)],
   });
 }
 

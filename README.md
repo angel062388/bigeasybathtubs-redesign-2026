@@ -63,6 +63,7 @@ node build-pages.js
 | `testimonials.html` | Testimonials |
 | `blog.html` | Blog list |
 | `blog-post.html` | Blog article template, shown with one real article |
+| `contact.html` | Contact: hero, address / phone / hours, the estimate form area, the service-area map. The form fields are a picture only and send nothing; on the live site the client's existing LeadConnector form loads in that panel. Exempt from the contact-link rule (it cannot link to itself) |
 | `bathtub-installation.html` and 12 more | The 13 service pages (one template). **`bathtub-installation.html` is the approved example**: the other service pages follow it. Navigation (header, mobile menu, footer, the Services chips) links to the prototype's own pages so the mock-up can be clicked through; body-copy links and Contact still go to the live site. Before launch, switch the navigation links back to the real addresses. Three text sections per page from the client's article (the intro plus two more), then the homepage's Services (minus the current page), Service areas, Process, Reviews, FAQ and CTA sections. The rest of the client's article becomes the first FAQ entries; its closing "call us for a quote" section is left out. Each page's words come from `data/services/{slug}.html`, copied unchanged from the live page; titles and descriptions come from `data/services/index.json` |
 
 The script lifts the shared sections (header, ticker, process, services, reviews, water map,
