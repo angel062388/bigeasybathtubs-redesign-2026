@@ -345,7 +345,7 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
       pageHero({
         crumbs: [['Blog', HOME + 'blog/'], ['Article']], title: post.title, post: { meta: `${fmt(post.date)} · ${post.category}` },
         img: thumb(post.image), alt: '',
-      }), article, areasHome, ctaBand],
+      }), ticker, article, areasHome, ctaBand],
   });
 }
 
@@ -408,7 +408,7 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
         crumbs: [['Contact']], title: ['Contact', 'Big Easy Bathtubs'], cta: '#estimate',
         lede: `Have a question or ready for a free estimate? Our <a href="${HOME}">New Orleans bathtub team</a> is here to help. Reach out any time.`,
         img: '2026/06/bath-11-1024x768.jpg', alt: 'Traditional bathroom with a round jetted tub',
-      }), reach, form, here(areasHome)],
+      }), ticker, reach, form, here(areasHome)],
   });
 }
 
@@ -557,7 +557,7 @@ ${I.about.map(([t, p]) => `      <li><h3>${t}</h3><div class="sv-rich">\n<p>${p}
           lede: I.lede(c.heroText),
           img: heroImg[1].replace(U, ''), alt: heroImg[2] || `Bathtub in a ${City} home`,
           caption: `<b class="ph-cap-sm">${City}</b><span>${I.parish}<br>Free estimates</span>`,
-        }), expect, svc, areas, about, faqBlock],
+        }), ticker, expect, svc, areas, about, faqBlock, ctaBand],
     });
   }
 }
@@ -788,7 +788,7 @@ ${own}`;
           img, alt, caption: `<b class="ph-cap-sm">${s.group}</b><span>Free estimates<br>across Greater New Orleans</span>`,
           // the page is only what the user listed: three text sections, Services, Service areas, How we
           // work, reviews, FAQs and the CTA band (no ticker, no closing text section)
-        }), ownBlock, servicesOther, areasHome, process_, reviews, faqBlock, ctaBand],
+        }), ticker, ownBlock, servicesOther, areasHome, process_, reviews, faqBlock, ctaBand],
     });
   }
 }
