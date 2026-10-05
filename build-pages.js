@@ -384,7 +384,13 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
   const short = { 'Bathtubs': 'Bathtub', 'Walk-in tubs': 'Walk-in tub', 'Clawfoot tubs': 'Clawfoot tub' };
   for (const s of data.services) {
     const name = s.title.replace(/\s*\|\s*Big Easy Bathtubs\s*$/, '');
-    const art = fs.readFileSync(path.join(dir, 'data', 'services', s.slug + '.html'), 'utf8').replace(/\r\n/g, '\n').trim();
+    let art = fs.readFileSync(path.join(dir, 'data', 'services', s.slug + '.html'), 'utf8').replace(/\r\n/g, '\n').trim();
+    // photos the user asked to leave off a particular page, by file name
+    for (const f of { 'walk-in-bathtub-refinishing': ['Less-Wasteful-Walk-in-Bathtubs-Refinishing'] }[s.slug] || []) {
+      const tag = new RegExp(`<img [^>]*${f}[^>]*>`).exec(art);
+      if (!tag) throw new Error(s.slug + ': photo to omit not found: ' + f);
+      art = art.replace(tag[0], '');
+    }
     const label = `${short[s.group]} ${s.h1.replace(/ in New Orleans$/, '').replace(/^Bathtub /, '').toLowerCase()}`;
 
     // ----- the client's article, cut at its own headings into separate sections -----
