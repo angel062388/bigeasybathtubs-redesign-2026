@@ -96,7 +96,7 @@ function write(file, { title, desc, sections, exemptContact, clientCopy }) {
   if (h1s !== 1) throw new Error(file + ': must have exactly one h1, has ' + h1s);
   if (/id="intro"/.test(page)) throw new Error(file + ': the intro overlay belongs to the homepage only');
   // our own template copy never uses em dashes; a client's published article is left exactly as written
-  const ours = (clientCopy ? body.replace(clientCopy, '') : body).replace(/<!--[\s\S]*?-->/g, '');
+  const ours = (clientCopy ? body.split(clientCopy).join('') : body).replace(/<!--[\s\S]*?-->/g, '');
   if (/—/.test(ours)) throw new Error(file + ': em dash in page copy');
   const ids = [...body.matchAll(/ id="([^"]+)"/g)].map(m => m[1]);
   const dup = ids.filter((v, i) => ids.indexOf(v) !== i);
@@ -374,49 +374,135 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
     const sp = [...t.matchAll(/ /g)].map(m => m.index).sort((a, b) => Math.abs(a - t.length / 2) - Math.abs(b - t.length / 2))[0];
     return [t.slice(0, sp), t.slice(sp + 1)];
   });
+  const plain = (h) => h.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/g, ' ').replace(/\s+/g, ' ').trim();
+  // every section heading gets the animated underline on its closing words (the words themselves are untouched)
+  const underline = (t) => {
+    if (/</.test(t)) return t;
+    const m = t.match(/^(.*?)(\S+ \S+?)([?.!:]*)$/);
+    return m ? m[1] + kw(m[2]) + m[3] : kw(t);
+  };
   const short = { 'Bathtubs': 'Bathtub', 'Walk-in tubs': 'Walk-in tub', 'Clawfoot tubs': 'Clawfoot tub' };
   for (const s of data.services) {
     const name = s.title.replace(/\s*\|\s*Big Easy Bathtubs\s*$/, '');
-    let art = fs.readFileSync(path.join(dir, 'data', 'services', s.slug + '.html'), 'utf8').replace(/\r\n/g, '\n').trim();
-    const toc = [], used = {};
-    art = art.replace(/<h2>([\s\S]*?)<\/h2>/g, (m, t) => {
-      const text = t.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-      let id = 's-' + text.toLowerCase().replace(/&[a-z#0-9]+;/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
-      used[id] = (used[id] || 0) + 1;
-      if (used[id] > 1) id += '-' + used[id];
-      toc.push([id, text]);
-      return `<h2 id="${id}">${t}</h2>`;
-    });
-    art = art.replace(/<img /g, '<img loading="lazy" ');
-    const [img, alt] = photo[s.group];
-    const article = `<!-- ============ THE SERVICE, IN DETAIL (service pages only) ============
-     Contents list on the left, the page's own article on the right. The
-     words are the client's, exactly as published on the live page. -->
-<section class="art">
-  <div class="wrap art-grid">
-    <aside class="art-rail" aria-label="On this page">
-      <p class="art-rail-h">On this page</p>
-      <ol>
-${toc.map(([id, t]) => `        <li><a href="#${id}">${t}</a></li>`).join('\n')}
-      </ol>
-      <a class="btn btn-navy" href="${CONTACT}">Get a free estimate</a>
-      <a class="art-rail-tel" href="tel:+15045533699"><span>Call our experts</span><b>504-553-3699</b></a>
-    </aside>
-    <article class="prose">
-${art}
-    </article>
+    const art = fs.readFileSync(path.join(dir, 'data', 'services', s.slug + '.html'), 'utf8').replace(/\r\n/g, '\n').trim();
+    const label = `${short[s.group]} ${s.h1.replace(/ in New Orleans$/, '').replace(/^Bathtub /, '').toLowerCase()}`;
+
+    // ----- the client's article, cut at its own headings into separate sections -----
+    const chunks = [];
+    let carry = '';
+    for (const part of art.split(/(?=<h2>)/)) {
+      const m = part.match(/^<h2>([\s\S]*?)<\/h2>/);
+      if (!m) { carry += part; continue; }                       // anything before the first heading joins the first section
+      const head = m[1].trim(), rest = part.slice(m[0].length);
+      if (!plain(head) && chunks.length) chunks[chunks.length - 1].body += head + rest;   // an empty heading: its text belongs to the section above
+      else { chunks.push({ head, body: carry + rest }); carry = ''; }
+    }
+    let flip = false, navyUsed = false, tone = 0;
+    const own = chunks.map((c, i) => {
+      const imgs = [];
+      const grab = (h) => h.replace(/<img [^>]*>/g, (t) => { imgs.push(t.replace('<img ', '<img loading="lazy" ')); return ''; });
+      const head = underline(grab(c.head).trim());
+      let body = grab(c.body);
+      for (let k = 0; k < 2; k++) body = body.replace(/<(p|strong|em)>\s*<\/\1>/g, '');
+      // lists: short entries become sand chips, long ones a ticked list, numbered ones numbered steps
+      body = body.replace(/<ul>([\s\S]*?)<\/ul>/g, (m, inner) => {
+        const li = [...inner.matchAll(/<li>([\s\S]*?)<\/li>/g)].map(x => plain(x[1]).length);
+        const avg = li.reduce((a, n) => a + n, 0) / (li.length || 1);
+        return `<ul class="${avg < 40 ? 'tags' : 'sv-ticks'}">${inner}</ul>`;
+      }).replace(/<ol>/g, '<ol class="sv-steps">').trim();
+      const rich = (h, d) => h.trim() ? `<div class="sv-rich"${d || ''}>\n${h.trim()}\n</div>` : '';
+      const last = i === chunks.length - 1;
+
+      if (last) {
+        return `<section class="sv sv-close">
+  <div class="wrap">
+    <div class="sv-close-in reveal">
+      <h2>${head}</h2>
+${rich(body + imgs.join(''))}
+      <div class="sv-actions">
+        <a class="btn btn-navy" href="${CONTACT}">Get your free estimate</a>
+        <a class="btn btn-line" href="tel:+15045533699">Call 504-553-3699</a>
+      </div>
+    </div>
   </div>
 </section>
 
 `;
+      }
+      const sub = (body.match(/<h3>/g) || []).length >= 2 ? 'h3' : (body.match(/<h4>/g) || []).length >= 2 ? 'h4' : null;
+      if (sub) {
+        // several sub-topics: a row of columns divided by hairlines, no boxes
+        const parts = body.split(new RegExp('(?=<' + sub + '>)'));
+        const lead = parts[0].startsWith('<' + sub + '>') ? '' : parts.shift();
+        const items = parts.map((p) => { const m = p.match(new RegExp('^<' + sub + '>([\\s\\S]*?)</' + sub + '>')); return [m[1].trim(), p.slice(m[0].length)]; });
+        const avg = items.reduce((a, it) => a + plain(it[1]).length, 0) / items.length;
+        const cols = items.length === 2 ? 2 : items.length === 4 ? (avg > 330 ? 2 : 4) : avg > 520 ? 2 : 3;
+        const navy = !navyUsed; navyUsed = true;
+        return `<section class="sv sv-points${navy ? ' sv-navy' : tone++ % 2 ? ' sv-alt' : ''}">
+  <div class="wrap">
+    <div class="sv-phead${imgs.length ? ' has-img' : ''} reveal">
+      <div>
+        <h2>${head}</h2>
+${rich(lead)}
+      </div>
+${imgs.length ? `      ${imgs[0]}\n` : ''}    </div>
+    <ol class="sv-items reveal" style="--d:.1s;--cols:${cols}">
+${items.map(([t, h], n) => `      <li>${/^\d/.test(plain(t)) ? '' : `<span class="sv-n" aria-hidden="true">0${n + 1}</span>`}<${sub}>${t}</${sub}>${rich(h)}</li>`).join('\n')}
+    </ol>
+${imgs.length > 1 ? `    <div class="sv-more reveal">${imgs.slice(1).join('')}</div>\n` : ''}  </div>
+</section>
+
+`;
+      }
+      const alt = tone++ % 2 ? ' sv-alt' : '';
+      if (imgs.length) {
+        // a photo beside the words, the side alternating down the page
+        flip = !flip;
+        return `<section class="sv sv-split${flip ? '' : ' sv-flip'}${alt}">
+  <div class="wrap sv-grid">
+    <div class="sv-media reveal">${imgs.join('')}</div>
+    <div class="sv-copy reveal" style="--d:.1s">
+${i === 0 ? `      <p class="eyebrow">${label}</p>\n` : ''}      <h2>${head}</h2>
+${rich(body)}
+    </div>
+  </div>
+</section>
+
+`;
+      }
+      return `<section class="sv sv-stmt${alt}">
+  <div class="wrap sv-grid">
+    <div class="sv-head reveal">
+${i === 0 ? `      <p class="eyebrow">${label}</p>\n` : ''}      <h2>${head}</h2>
+    </div>
+${rich(body, ' data-r')}
+  </div>
+</section>
+
+`.replace('<div class="sv-rich" data-r>', '<div class="sv-rich reveal" style="--d:.1s">');
+    }).join('');
+    const ownBlock = `<!-- ============ THE SERVICE (service pages only) ============
+     The client's own words from the live page, unchanged, cut at their own
+     headings into separate sections: words beside a heading, words beside
+     a photo, sub-topics as a row of columns, and a closing call to action. -->
+${own}`;
+    const callLine = `<!-- ============ ONE-LINE CALL (service pages only) ============ -->
+<section class="sv-call">
+  <div class="wrap">
+    <p class="reveal">Questions about your tub? Call our experts at <a href="tel:+15045533699">504-553-3699</a> or <a href="${CONTACT}">request a free estimate online</a>.</p>
+  </div>
+</section>
+
+`;
+    const [img, alt] = photo[s.group];
     write(s.slug + '.html', {
-      title: s.title.replace(/&(?!amp;)/g, '&amp;'), desc: s.desc, clientCopy: art,
+      title: s.title.replace(/&(?!amp;)/g, '&amp;'), desc: s.desc, clientCopy: own,
       sections: [
         pageHero({
-          crumbs: [['Services'], [`${short[s.group]} ${s.h1.replace(/ in New Orleans$/, '').replace(/^Bathtub /, '').toLowerCase()}`]], title: fit(lines(name)),
+          crumbs: [['Services'], [label]], title: fit(lines(name)),
           lede: s.heroText.replace(/&#0?39;/g, "'"),
           img, alt, caption: `<b class="ph-cap-sm">${s.group}</b><span>Free estimates<br>across Greater New Orleans</span>`,
-        }), ticker, article, services, process_, reviews, areasHome, ctaBand],
+        }), ticker, ownBlock, services, areasHome, process_, reviews, callLine, ctaBand],
     });
   }
 }
