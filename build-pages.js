@@ -435,6 +435,12 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
       servicesAnswer: 'Big Easy Bathtubs is a company that specializes in quality bathtub installation, replacement, remodel services, and bathtub construction in Covington LA.',
       // sources: en.wikipedia.org/wiki/Covington,_Louisiana (parish seat, rivers, 1813/1816, Tammany Trace, statue, films);
       //          stpgov.org/transportation (STAR Transit, call-ahead curb-to-curb)
+      // a real photo of the place, from Wikimedia Commons; the licence requires the credit line shown under it
+      photo: {
+        src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Downtown_Covington_Louisiana_June_2013_-_Boston_Street.jpg/1280px-Downtown_Covington_Louisiana_June_2013_-_Boston_Street.jpg',
+        alt: 'Boston Street in downtown Covington, Louisiana', caption: 'Boston Street, downtown Covington.',
+        page: 'https://commons.wikimedia.org/wiki/File:Downtown_Covington_Louisiana_June_2013_-_Boston_Street.jpg', by: 'Saint Tammany', license: 'CC BY 2.0',
+      },
       aboutLede: 'Covington is the parish seat of St. Tammany Parish, on the Northshore where the Bogue Falaya and the Tchefuncte River meet.',
       about: [
         ['Things to Do', 'Walk or cycle the Tammany Trace, a 31-mile paved trail on an old rail line that runs through Covington. Downtown you will also find a 10-foot statue of Ronald Reagan.'],
@@ -508,7 +514,7 @@ ${items.map(([t, h], n) => `      <li><span class="sv-n" aria-hidden="true">0${n
      sources noted beside this city in build-pages.js. -->
 <section class="sv sv-alt sv-points">
   <div class="wrap">
-    <div class="sv-phead reveal">
+    <div class="sv-phead has-img reveal">
       <div>
         <p class="eyebrow">About ${City}</p>
         <h2>Getting to know ${kw(`${City}, Louisiana`)}</h2>
@@ -516,6 +522,10 @@ ${items.map(([t, h], n) => `      <li><span class="sv-n" aria-hidden="true">0${n
 <p>${I.aboutLede}</p>
 </div>
       </div>
+      <figure class="sv-fig">
+        <img src="${I.photo.src}" alt="${esc(I.photo.alt)}" loading="lazy">
+        <figcaption>${I.photo.caption} Photo: <a href="${I.photo.page}" rel="nofollow noopener" target="_blank">${I.photo.by}</a>, ${I.photo.license}.</figcaption>
+      </figure>
     </div>
     <ol class="sv-items reveal" style="--d:.1s;--cols:4">
 ${I.about.map(([t, p]) => `      <li><h3>${t}</h3><div class="sv-rich">\n<p>${p}</p>\n</div></li>`).join('\n')}
