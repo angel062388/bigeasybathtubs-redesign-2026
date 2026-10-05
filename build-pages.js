@@ -413,35 +413,40 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
 }
 
 /* =====================================================================
-   CITY PAGES (service areas)
+   CITY PAGES (service areas), ten pages from one template. Covington is the approved example.
    Order set by the user (2026-10-05), after the Big Easy Bathrooms city page:
-     hero > What to expect > Services (named for the city) > Service areas (without this city)
-     > About the city (Things to Do, Nearby Suburbs, Fun Facts, Public Transportation) > FAQs (service + city)
-   "What to expect" and the FAQ answers use the client's own words from the live city page and the
-   live FAQ page. "About the city" is new copy: every fact in it was checked against a public source
-   (listed beside it below) before it was written. A city is built only once it has an entry here.
+     hero > ticker > What to expect (dark) > Services (named for the city) > Service areas (without
+     this city) > About the city (photo; Things to Do, Nearby Suburbs, Fun Facts, Public
+     Transportation) > FAQs (service + city) > CTA band
+   "What to expect" and the FAQ answers are the client's own words from the live city page and the
+   live FAQ page. "About the city" is new copy: every fact in it was checked against the public
+   source noted beside it before it was written. Photos are from Wikimedia Commons; the user wants
+   no caption, so a licence credit (where one is required) sits in the photo's hover title and the README.
    ===================================================================== */
 {
   const cities = JSON.parse(fs.readFileSync(path.join(dir, 'data', 'cities', 'index.json'), 'utf8')).cities;
   const plain = (h) => h.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/g, ' ').replace(/\s+/g, ' ').trim();
+  const STAR = 'St. Tammany Parish runs STAR Transit, a curb-to-curb ride service booked by phone ahead of time.';   // stpgov.org/transportation
   const info = {
+    'baton-rouge': {
+      name: 'Baton Rouge', word: 'Reliable', expect: 'Why Do You Need Our Services',
+      photo: { file: 'Baton Rouge Louisiana waterfront aerial view.jpg', alt: 'Aerial view of the Baton Rouge riverfront' },   // public domain (US Army Corps of Engineers)
+      // sources: en.wikipedia.org/wiki/Baton_Rouge,_Louisiana; brcats.com (CATS, 29 lines, Baton Rouge and Baker)
+      aboutLede: 'Baton Rouge is Louisiana’s capital and the seat of East Baton Rouge Parish, on the east bank of the Mississippi River about 79 miles from New Orleans.',
+      about: [
+        ['Things to Do', 'Tour the Old Louisiana State Capitol, visit the Louisiana Art and Science Museum or the Shaw Center for the Arts, or catch a game at LSU’s Tiger Stadium.'],
+        ['Nearby Suburbs', 'Greater Baton Rouge takes in neighboring Baker, which shares the city’s bus system. Our team travels here from New Orleans.'],
+        ['Fun Facts', 'The name is French for “red stick”. The city was incorporated in 1817, and its port ranks tenth in the country by tonnage.'],
+        ['Public Transportation', 'The Capital Area Transit System, known as CATS, runs 29 bus lines across Baton Rouge and Baker. Baton Rouge Metropolitan Airport serves the region.'],
+      ],
+    },
     covington: {
-      name: 'Covington', parish: 'St. Tammany Parish',
-      heroLines: ['Trusted Covington', 'Bathtub Contractors'],
+      name: 'Covington', word: 'Trusted', expect: 'Why Choose Us As Your Bathtub Contractors',
       // second sentence is the client's own, from the live Covington page
       lede: (hero) => `${hero} <a href="${HOME}">Big Easy Bathtubs</a> is one of the most trusted bathtub contractors in Covington.`,
-      expect: 'Why Choose Us As Your Bathtub Contractors',          // the client's section shown as "What to expect"
-      ownFaq: ['Don’t Know What to Do With Your Old Tub?'],          // the client's question sections, shown as FAQs
       servicesAnswer: 'Big Easy Bathtubs is a company that specializes in quality bathtub installation, replacement, remodel services, and bathtub construction in Covington LA.',
-      // sources: en.wikipedia.org/wiki/Covington,_Louisiana (parish seat, rivers, 1813/1816, Tammany Trace, statue, films);
-      //          stpgov.org/transportation (STAR Transit, call-ahead curb-to-curb)
-      // a real photo of the place, from Wikimedia Commons. Its licence requires a credit. The user asked for no
-      // caption under the photo (2026-10-05), so the credit shows when the photo is hovered and is listed in the README.
-      photo: {
-        src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Downtown_Covington_Louisiana_June_2013_-_Boston_Street.jpg/1280px-Downtown_Covington_Louisiana_June_2013_-_Boston_Street.jpg',
-        alt: 'Boston Street in downtown Covington, Louisiana', caption: 'Boston Street, downtown Covington.',
-        page: 'https://commons.wikimedia.org/wiki/File:Downtown_Covington_Louisiana_June_2013_-_Boston_Street.jpg', by: 'Saint Tammany', license: 'CC BY 2.0',
-      },
+      photo: { file: 'Downtown Covington Louisiana June 2013 - Boston Street.jpg', alt: 'Boston Street in downtown Covington, Louisiana', by: 'Saint Tammany', license: 'CC BY 2.0' },
+      // sources: en.wikipedia.org/wiki/Covington,_Louisiana; stpgov.org/transportation
       aboutLede: 'Covington is the parish seat of St. Tammany Parish, on the Northshore where the Bogue Falaya and the Tchefuncte River meet.',
       about: [
         ['Things to Do', 'Walk or cycle the Tammany Trace, a 31-mile paved trail on an old rail line that runs through Covington. Downtown you will also find a 10-foot statue of Ronald Reagan.'],
@@ -450,45 +455,169 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
         ['Public Transportation', 'St. Tammany Parish runs STAR Transit, a curb-to-curb ride service that covers Covington. Rides are booked by phone ahead of time.'],
       ],
     },
+    gretna: {
+      name: 'Gretna', word: 'Expert', expect: 'What Makes Our Bathtub Remodeling Services Stand Out',
+      photo: { file: 'Huey P Long Avenue 2, Gretna, Louisiana.jpg', alt: 'Huey P. Long Avenue in Gretna, Louisiana', by: 'nola.agent', license: 'CC BY 2.0' },
+      // sources: en.wikipedia.org/wiki/Gretna,_Louisiana; en.wikipedia.org/wiki/Kenner,_Louisiana (Jefferson Transit is the parish bus system)
+      aboutLede: 'Gretna is the seat of Jefferson Parish, on the west bank of the Mississippi River across from uptown New Orleans.',
+      about: [
+        ['Things to Do', 'Come for the Gretna Heritage Festival, or visit the German American Cultural Center, which hosts Maifest and Oktoberfest.'],
+        ['Nearby Suburbs', 'Gretna is part of the New Orleans, Metairie and Kenner metro area. Our team also works in Kenner and across the river in New Orleans.'],
+        ['Fun Facts', 'The town was settled in 1836 under the name Mechanikham and incorporated in 1913. Zatarain’s has been based here since 1963.'],
+        ['Public Transportation', 'The Crescent City Connection bridge crosses the Mississippi here. Jefferson Parish runs the Jefferson Transit bus system.'],
+      ],
+    },
+    hammond: {
+      name: 'Hammond', word: 'Trusted', expect: 'What To Expect When Working With Us',
+      photo: { file: 'Hammond, Louisiana.jpg', alt: 'Street view in Hammond, Louisiana' },   // public domain
+      // source: en.wikipedia.org/wiki/Hammond,_Louisiana
+      aboutLede: 'Hammond is a city in Tangipahoa Parish and the home of Southeastern Louisiana University.',
+      about: [
+        ['Things to Do', 'See a show at the Columbia Theatre, built downtown in 1928, visit the Tangipahoa African American Heritage Museum, or spend an afternoon at Zemurray Park.'],
+        ['Nearby Suburbs', 'Interstate 12 and Interstate 55 both serve Hammond. Our team also works in Covington, Madisonville and Mandeville.'],
+        ['Fun Facts', 'Hammond is named for Peter Hammond, a Swedish immigrant, and was settled in 1818. A plaque downtown calls it the “Strawberry Capital of America”.'],
+        ['Public Transportation', 'Amtrak’s City of New Orleans train stops at Hammond station every day. Hammond Northshore Regional Airport handles general aviation.'],
+      ],
+    },
+    kenner: {
+      name: 'Kenner', word: 'Reliable', expect: 'Why Choose Big Easy Bathtubs for Your Tub Services',
+      photo: { file: 'Kenner Rivertown May 2010 Train Station.jpg', alt: 'Street and railroad tracks in Kenner’s Rivertown district', by: 'Infrogmation of New Orleans', license: 'CC BY 2.0' },
+      // source: en.wikipedia.org/wiki/Kenner,_Louisiana
+      aboutLede: 'Kenner is the largest incorporated suburb of New Orleans, in Jefferson Parish between Lake Pontchartrain and the Mississippi River.',
+      about: [
+        ['Things to Do', 'Explore the museums of the Rivertown district, walk the piers at Laketown on the lake, or catch an event at the Pontchartrain Center.'],
+        ['Nearby Suburbs', 'Metairie and River Ridge lie to the east and St. Charles Parish to the west. Our team also works in St. Rose and Gretna.'],
+        ['Fun Facts', 'Minor Kenner founded the city in 1855 and it was incorporated in 1867. Today it is the sixth most populous city in Louisiana.'],
+        ['Public Transportation', 'Jefferson Transit buses serve Kenner, and Louis Armstrong New Orleans International Airport is here. Interstate 10 and Airline Drive run through the city.'],
+      ],
+    },
+    laplace: {
+      name: 'LaPlace', word: 'Expert', expect: 'Big Easy Bathtubs &#8211; Trusted Bathtub Contractors, LaPlace',
+      photo: { file: 'W 5th Street, LaPlace, Louisiana, 31 Aug 2022 - 02.jpg', alt: 'West 5th Street in LaPlace, Louisiana', by: 'Infrogmation of New Orleans', license: 'CC BY-SA 4.0' },
+      // sources: en.wikipedia.org/wiki/LaPlace,_Louisiana; rptarolls.org (River Parishes Transit Authority)
+      aboutLede: 'LaPlace is in St. John the Baptist Parish, on the east bank of the Mississippi River about 25 miles from New Orleans.',
+      about: [
+        ['Things to Do', 'Visit the 1811 Kid Ory Historic House, or come in October for the Andouille Festival, held every year since 1972.'],
+        ['Nearby Suburbs', 'Reserve is close by. Our team also works in St. Rose and Kenner, between LaPlace and New Orleans.'],
+        ['Fun Facts', 'A Louisiana governor named LaPlace the “Andouille Capital of the World”. The town takes its name from Basile Laplace, after the railroad depot was named for him in 1883.'],
+        ['Public Transportation', 'The River Parishes Transit Authority, based in LaPlace, runs a curb-to-curb ride service booked a day ahead. Interstates 10 and 55 both pass through.'],
+      ],
+    },
+    madisonville: {
+      name: 'Madisonville', word: 'Trusted', expect: 'Why Madisonville Trusts Big Easy Bathtubs',
+      photo: { file: 'Tchefuncte River view, Madisonville Louisiana, August 2023 - 2.jpg', alt: 'The Tchefuncte River at Madisonville, Louisiana' },   // public domain
+      // sources: en.wikipedia.org/wiki/Madisonville,_Louisiana; en.wikipedia.org/wiki/Mandeville,_Louisiana (swing bridge); stpgov.org/transportation
+      aboutLede: 'Madisonville is a small town in St. Tammany Parish, on the Tchefuncte River near Lake Pontchartrain.',
+      about: [
+        ['Things to Do', 'Visit Maritime Museum Louisiana, see the Tchefuncte River Lighthouse from 1837, or come in the fall for the Wooden Boat Festival.'],
+        ['Nearby Suburbs', 'A swing bridge links Madisonville with Mandeville. Our team also works in Mandeville and Covington.'],
+        ['Fun Facts', 'Founded in 1800 as Coquille, the town was renamed around 1811 for President James Madison. Its Jahncke Shipyard built wooden ships for the Navy in World War I.'],
+        ['Public Transportation', `${STAR} Highway 22 runs through town.`],
+      ],
+    },
+    mandeville: {
+      name: 'Mandeville', word: 'Reliable', expect: 'What Can Big Easy Bathtubs Do for Your Bathroom in Mandeville',
+      photo: { file: 'Mandeville Lakefront - panoramio.jpg', alt: 'The lakefront at Mandeville, Louisiana', by: 'Susan Popielaski', license: 'CC BY-SA 3.0' },
+      // sources: en.wikipedia.org/wiki/Mandeville,_Louisiana; stpgov.org/transportation
+      aboutLede: 'Mandeville is in St. Tammany Parish, on the north shore of Lake Pontchartrain.',
+      about: [
+        ['Things to Do', 'Spend a day at Fontainebleau State Park, fish from the pier at Sunset Point, or hear live music at the Dew Drop Jazz and Social Hall.'],
+        ['Nearby Suburbs', 'A swing bridge connects Mandeville to Madisonville. Our team also works in Madisonville and Covington.'],
+        ['Fun Facts', 'Bernard de Marigny founded the town in 1834. It is home to the Seven Sisters Oak, the largest certified southern live oak.'],
+        ['Public Transportation', `The Lake Pontchartrain Causeway opened in 1956, with a second span added in 1969. ${STAR}`],
+      ],
+    },
+    slidell: {
+      name: 'Slidell', word: 'Expert', expect: 'The Benefits of Working With Big Easy Bathtubs',
+      photo: { file: 'TrainStationSlidell.jpg', alt: 'The train station in Slidell, Louisiana', by: 'DwayneP', license: 'CC BY-SA 3.0', full: true },
+      // sources: en.wikipedia.org/wiki/Slidell,_Louisiana; stpgov.org/transportation
+      aboutLede: 'Slidell is in St. Tammany Parish, on the northeast shore of Lake Pontchartrain.',
+      about: [
+        ['Things to Do', 'Browse the shops and restaurants of Olde Towne Slidell, visit the Slidell Museum, or launch a boat from Heritage Park.'],
+        ['Nearby Suburbs', 'Pearl River and Pearlington, Mississippi are close by. Our team also works in Mandeville and Covington.'],
+        ['Fun Facts', 'Slidell grew up in 1882 and 1883 around the building of the New Orleans and Northeastern Railroad. It is named for the politician John Slidell.'],
+        ['Public Transportation', `Amtrak’s Crescent stops at Slidell station, and Interstates 10, 12 and 59 meet here. ${STAR}`],
+      ],
+    },
+    'st-rose': {
+      name: 'St. Rose', word: 'Trusted', expect: 'Exceptional Service Refined With Efficiency',
+      photo: { file: 'St. Charles Parish with Mississippi River, Hale Boggs Memorial Bridge, LaBranche Wetlands, Lake Pontchartrain.jpg', alt: 'Aerial view of St. Charles Parish and the Mississippi River', by: 'Spatms', license: 'CC BY-SA 4.0' },
+      // sources: en.wikipedia.org/wiki/St._Rose,_Louisiana; rptarolls.org (River Parishes Transit Authority)
+      aboutLede: 'St. Rose is a community in St. Charles Parish, on the east bank of the Mississippi River and part of Greater New Orleans.',
+      about: [
+        ['Things to Do', 'See the LaBranche Plantation Dependency House, a historic building on a site whose main house dated from 1792.'],
+        ['Nearby Suburbs', 'Destrehan is close by, and the Jefferson Parish line is two miles away. Our team also works in Kenner and LaPlace.'],
+        ['Fun Facts', 'In 1880 Palmer Elkins invited freedmen and their families to settle on his land here, the start of the community known as Elkinsville-Freetown.'],
+        ['Public Transportation', 'The River Parishes Transit Authority runs a curb-to-curb ride service across St. Charles Parish, booked a day ahead.'],
+      ],
+    },
   };
   // answers copied unchanged from the live FAQ page
   const live = Object.fromEntries([...faq.matchAll(/<details[^>]*><summary><span>\d+<\/span>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/g)].map(m => [m[1], m[2]]));
   live['How much does a new bathtub or remodel cost?'] = '<p>Cost depends on the tub type, materials, and scope of work. We offer competitive pricing and provide a free, no-pressure estimate so you know exactly what to expect before any work begins.</p>';
   live['Are you licensed and insured?'] = '<p>Yes. Big Easy Bathtubs is fully licensed and insured, so you can have complete peace of mind that your project is handled by qualified professionals.</p>';
   const serve = '<p>We serve New Orleans and the surrounding communities, including Baton Rouge, Covington, Mandeville, Slidell, Kenner, Gretna, Hammond, LaPlace, Madisonville, and St Rose.</p>';
+  // lists: short entries become sand chips, long ones a ticked list, numbered ones numbered steps (as on service pages)
+  const lists = (h) => h.replace(/<ul>([\s\S]*?)<\/ul>/g, (m, inner) => {
+    const li = [...inner.matchAll(/<li>([\s\S]*?)<\/li>/g)].map(x => plain(x[1]).length);
+    return `<ul class="${li.reduce((a, n) => a + n, 0) / (li.length || 1) < 40 ? 'tags' : 'sv-ticks'}">${inner}</ul>`;
+  }).replace(/<ol>/g, '<ol class="sv-steps">');
 
-  for (const c of cities.filter(x => info[x.slug])) {
-    const I = info[c.slug], City = I.name;
+  for (const c of cities) {
+    const I = info[c.slug];
+    if (!I) throw new Error(c.slug + ': no city entry');
+    const City = I.name;
     let art = fs.readFileSync(path.join(dir, 'data', 'cities', c.slug + '.html'), 'utf8').replace(/\r\n/g, '\n').trim();
-    art = art.replace(/<([uo])l>\s*<li>\s*(<h[34]>[\s\S]*?<\/h[34]>)\s*<\/li>\s*<\/\1l>/g, '$2');
-    const chunk = (pre) => {
-      const p = art.split(/(?=<h2>)/).find(x => plain((x.match(/^<h2>([\s\S]*?)<\/h2>/) || [, ''])[1]).startsWith(plain(pre)));
-      if (!p) throw new Error(c.slug + ': section not found: ' + pre);
+    // Some live pages put each sub-heading (and sometimes its paragraph) inside list items. The list
+    // wrapper is dropped so the heading and its text stand on their own; a paragraph left open is closed.
+    art = art.replace(/<([uo])l>((?:(?!<[uo]l>)[\s\S])*?)<\/\1l>/g, (m, t, inner) => !/^\s*<li>\s*<h[34]>/.test(inner) ? m :
+      inner.replace(/<li>\s*/g, '').replace(/\s*<\/li>/g, '\n')
+        .replace(/<p>((?:(?!<p>|<\/p>)[\s\S])*?)(?=<p>|<h[34]>|<[uo]l>|$)/g, (x, txt) => `<p>${txt.trim()}</p>\n`));
+    if (/<li>\s*<h[2-4]>/.test(art)) throw new Error(c.slug + ': a heading inside a list item would be cut in half');
+    const all = art.split(/(?=<h2>)/).filter(p => p.startsWith('<h2>')).map((p) => {
       const m = p.match(/^<h2>([\s\S]*?)<\/h2>/);
-      return { head: m[1].trim(), body: p.slice(m[0].length).replace(/<img [^>]*>/g, '').replace(/<(p|strong|em)>\s*<\/\1>/g, '').trim() };
-    };
+      return { head: m[1].replace(/<img [^>]*>/g, '').trim(), body: p.slice(m[0].length).replace(/<img [^>]*>/g, '').replace(/<(p|strong|em)>\s*<\/\1>/g, '').replace(/<(p|strong|em)>\s*<\/\1>/g, '').trim() };
+    });
+    const ex = all.find(x => plain(x.head).startsWith(plain(I.expect)));
+    if (!ex) throw new Error(c.slug + ': "what to expect" section not found: ' + I.expect);
     const heroImg = (art.match(/<img src="([^"]+)" alt="([^"]*)"/) || []);
     if (!heroImg[1] || !heroImg[1].startsWith(U)) throw new Error(c.slug + ': no photo for the hero');
+    const parish = (new RegExp(`data-k="${c.slug}">[\\s\\S]*?<span class="sa-parish">([^<]+)</span>`).exec(areasHome) || [])[1];
+    if (!parish) throw new Error(c.slug + ': parish not found in the service-area list');
 
-    // ----- What to expect: the client's own section, its sub-topics as columns -----
-    const ex = chunk(I.expect);
+    // ----- What to expect: the client's own section; sub-topics as columns where it has them -----
+    const head = ex.head.replace(/(\S+ \S+?)([?.!:]*)$/, (m, a, z) => kw(a) + z);
     const parts = ex.body.split(/(?=<h3>)/);
     const lead = parts[0].startsWith('<h3>') ? '' : parts.shift();
-    const items = parts.map(p => { const m = p.match(/^<h3>([\s\S]*?)<\/h3>/); return [m[1].trim(), p.slice(m[0].length).trim()]; });
-    if (items.length < 2) throw new Error(c.slug + ': "what to expect" needs sub-topics');
-    const expect = `<!-- ============ WHAT TO EXPECT (city pages) ============
-     The client's own section from the live city page, words unchanged. -->
+    const items = parts.map(p => { const m = p.match(/^<h3>([\s\S]*?)<\/h3>/); return [m[1].trim(), lists(p.slice(m[0].length).trim())]; });
+    const avg = items.reduce((a, it) => a + plain(it[1]).length, 0) / (items.length || 1);
+    const note = `<!-- ============ WHAT TO EXPECT (city pages) ============
+     The client's own section from the live city page, words unchanged. -->`;
+    const expect = items.length >= 2 ? `${note}
 <section class="sv sv-points sv-navy">
   <div class="wrap">
     <div class="sv-phead reveal">
       <div>
         <p class="eyebrow light">What to expect</p>
-        <h2>${ex.head.replace(/(\S+ \S+)$/, (m) => kw(m))}</h2>
-${lead.trim() ? `<div class="sv-rich">\n${lead.trim()}\n</div>\n` : ''}      </div>
+        <h2>${head}</h2>
+${lead.trim() ? `<div class="sv-rich">\n${lists(lead.trim())}\n</div>\n` : ''}      </div>
     </div>
-    <ol class="sv-items reveal" style="--d:.1s;--cols:${Math.min(items.length, 4)}">
+    <ol class="sv-items reveal" style="--d:.1s;--cols:${items.length === 4 && avg <= 330 ? 4 : items.length === 2 || avg > 520 ? 2 : 3}">
 ${items.map(([t, h], n) => `      <li><span class="sv-n" aria-hidden="true">0${n + 1}</span><h3>${t}</h3><div class="sv-rich">\n${h}\n</div></li>`).join('\n')}
     </ol>
+  </div>
+</section>
+
+` : `${note}
+<section class="sv sv-stmt sv-navy">
+  <div class="wrap sv-grid">
+    <div class="sv-head reveal">
+      <p class="eyebrow light">What to expect</p>
+      <h2>${head}</h2>
+    </div>
+    <div class="sv-rich reveal" style="--d:.1s">
+${lists(ex.body)}
+    </div>
   </div>
 </section>
 
@@ -507,9 +636,10 @@ ${items.map(([t, h], n) => `      <li><span class="sv-n" aria-hidden="true">0${n
     areas = areas.replace(/<span class="sa-n">\d+<\/span>/g, () => `<span class="sa-n">${String(++n).padStart(2, '0')}</span>`);
     areas = once(areas, `<h2>Serving ${kw('Greater New Orleans')} and the surrounding parishes</h2>`, `<h2>Also serving the communities ${kw(`around ${City}`)}</h2>`);
     areas = once(areas, '<p class="sec-lede">Ten service areas from Baton Rouge to Slidell, all reached from New Orleans. Pick your city on the map or in the list to open its page.</p>',
-      '<p class="sec-lede">Nine more service areas from Baton Rouge to Slidell, all reached from New Orleans. Pick a city on the map or in the list to open its page.</p>');
+      '<p class="sec-lede">Nine more service areas, all reached from New Orleans. Pick a city on the map or in the list to open its page.</p>');
 
     // ----- About the city -----
+    const P = I.photo;
     const about = `<!-- ============ ABOUT THE CITY (city pages) ============
      New copy. Each fact was checked against a public source; see the
      sources noted beside this city in build-pages.js. -->
@@ -524,7 +654,7 @@ ${items.map(([t, h], n) => `      <li><span class="sv-n" aria-hidden="true">0${n
 </div>
       </div>
       <figure class="sv-fig">
-        <img src="${I.photo.src}" alt="${esc(I.photo.alt)}" title="Photo: ${esc(I.photo.by)}, ${I.photo.license}, via Wikimedia Commons" loading="lazy">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(P.file)}${P.full ? '' : '?width=1280'}" alt="${esc(P.alt)}"${P.by ? ` title="Photo: ${esc(P.by)}, ${P.license}, via Wikimedia Commons"` : ''} loading="lazy">
       </figure>
     </div>
     <ol class="sv-items reveal" style="--d:.1s;--cols:4">
@@ -536,11 +666,13 @@ ${I.about.map(([t, p]) => `      <li><h3>${t}</h3><div class="sv-rich">\n<p>${p}
 `;
 
     // ----- FAQs about the service in this city -----
-    const own = I.ownFaq.map(h => chunk(h));
+    // the client's own question sections from this city's page, then the live FAQ page's answers
+    const own = all.filter((x, i) => i > 0 && x !== ex && /\?$/.test(plain(x.head)));
+    const firstSentence = (c.desc.match(/^(.*?\.)\s+(?=[A-Z])/) || [, c.desc])[1];
     const qa = [
       [`Do you serve ${City}?`, serve],
-      [`What bathtub services do you offer in ${City}?`, `<p>${I.servicesAnswer}</p>`],
-      ...own.map(o => [o.head, o.body]),
+      [`What bathtub services do you offer in ${City}?`, `<p>${I.servicesAnswer || firstSentence}</p>`],
+      ...own.map(o => [o.head, lists(o.body)]),
       ...['How long does a bathtub installation take?', 'How much does a new bathtub or remodel cost?', 'Are you licensed and insured?'].map(q => { if (!live[q]) throw new Error('live FAQ missing: ' + q); return [q, live[q]]; }),
     ];
     const fa = faq.indexOf('<details'), fb = faq.lastIndexOf('</details>') + 10;
@@ -549,14 +681,19 @@ ${I.about.map(([t, p]) => `      <li><h3>${t}</h3><div class="sv-rich">\n<p>${p}
       `<h2>Bathtub questions, ${kw('answered')}</h2>`, `<h2>${City} bathtub questions, ${kw('answered')}</h2>`) +
       qa.map(([q, a], k) => `<details${k === 0 ? ' open' : ''}><summary><span>0${k + 1}</span>${q}</summary>${a}</details>`).join('\n      ') + faq.slice(fb);
 
+    // hero line: the client's own tagline (a long dash in it becomes ", with"); the company name links home
+    const tag = c.heroText.replace(/\s+—\s+/, ', with ');
+    const lede = I.lede ? I.lede(tag) : tag.includes('Big Easy Bathtubs') ? tag.replace('Big Easy Bathtubs', `<a href="${HOME}">Big Easy Bathtubs</a>`)
+      : `${tag}${/[.!?]$/.test(tag) ? '' : '.'} <a href="${HOME}">Big Easy Bathtubs</a> serves ${City} and all of Greater New Orleans.`;
+
     write(c.slug + '.html', {
-      title: c.title.replace(/&(?!amp;)/g, '&amp;'), desc: c.desc, clientCopy: [ex.body, ...own.map(o => o.body)],
+      title: c.title.replace(/&(?!amp;)/g, '&amp;'), desc: c.desc, clientCopy: [ex.body, lists(ex.body), ...items.map(it => it[1]), ...own.flatMap(o => [o.body, lists(o.body)])],
       sections: [
         pageHero({
-          crumbs: [['Service Areas', 'service-areas.html'], [City]], title: I.heroLines,
-          lede: I.lede(c.heroText),
+          crumbs: [['Service Areas', 'service-areas.html'], [City]], title: [`${I.word} ${City}`, 'Bathtub Contractors'],
+          lede,
           img: heroImg[1].replace(U, ''), alt: heroImg[2] || `Bathtub in a ${City} home`,
-          caption: `<b class="ph-cap-sm">${City}</b><span>${I.parish}<br>Free estimates</span>`,
+          caption: `<b class="ph-cap-sm">${City}</b><span>${parish}<br>Free estimates</span>`,
         }), ticker, expect, svc, areas, about, faqBlock, ctaBand],
     });
   }
