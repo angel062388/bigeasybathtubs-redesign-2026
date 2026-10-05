@@ -518,14 +518,23 @@ ${own}`;
       `<span class="svc-name">${s.group}</span></h3><span class="svc-count">${n} services</span>`,
       `<span class="svc-name">${s.group}</span></h3><span class="svc-count">${n - 1} more services</span>`);
     const [img, alt] = photo[s.group];
+    // interlink rule: where the three sections carry no contact link, the hero line does
+    // (on the client's own "Contact us today" where it has one, otherwise as a short closing sentence)
+    let lede = s.heroText.replace(/&#0?39;/g, "'");
+    if (!(own.match(/<p[\s>][\s\S]*?<\/p>/g) || []).some(p => p.includes(`href="${CONTACT}"`))) {
+      lede = /contact us today/i.test(lede) ? lede.replace(/contact us today/i, (m) => `<a href="${CONTACT}">${m}</a>`)
+        : `${lede} <a href="${CONTACT}">Contact us</a> for a free estimate.`;
+    }
     write(s.slug + '.html', {
       title: s.title.replace(/&(?!amp;)/g, '&amp;'), desc: s.desc, clientCopy: [own, ...answers],
       sections: [
         pageHero({
           crumbs: [['Services'], [label]], title: fit(lines(name)),
-          lede: s.heroText.replace(/&#0?39;/g, "'"),
+          lede,
           img, alt, caption: `<b class="ph-cap-sm">${s.group}</b><span>Free estimates<br>across Greater New Orleans</span>`,
-        }), ticker, ownBlock, servicesOther, areasHome, process_, reviews, faqBlock, ctaBand],
+          // the page is only what the user listed: three text sections, Services, Service areas, How we
+          // work, reviews and the CTA band. faqBlock (above) is built but not placed; add it back here to restore.
+        }), ownBlock, servicesOther, areasHome, process_, reviews, ctaBand],
     });
   }
 }
