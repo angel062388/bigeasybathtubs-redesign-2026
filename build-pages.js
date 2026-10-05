@@ -512,7 +512,7 @@ ${rich(body, ' data-r')}
      of the article is in the FAQ list further down. -->
 ${own}`;
     // the Services section, minus the page we are on (a page does not link to itself)
-    const self = new RegExp(`\\n *<li><a href="${HOME}${s.slug}/">[^<]*</a></li>`);
+    const self = new RegExp(`\\n *<li><a href="${s.slug}\\.html">[^<]*</a></li>`);
     const n = data.services.filter(x => x.group === s.group).length;
     const servicesOther = once(once(services, self.exec(services)[0], ''),
       `<span class="svc-name">${s.group}</span></h3><span class="svc-count">${n} services</span>`,
