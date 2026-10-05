@@ -427,7 +427,7 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
   const info = {
     covington: {
       name: 'Covington', parish: 'St. Tammany Parish',
-      heroLines: ['Covington', 'Bathtub Contractor'],
+      heroLines: ['Trusted Covington', 'Bathtub Contractors'],
       // second sentence is the client's own, from the live Covington page
       lede: (hero) => `${hero} <a href="${HOME}">Big Easy Bathtubs</a> is one of the most trusted bathtub contractors in Covington.`,
       expect: 'Why Choose Us As Your Bathtub Contractors',          // the client's section shown as "What to expect"
@@ -471,11 +471,11 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
     if (items.length < 2) throw new Error(c.slug + ': "what to expect" needs sub-topics');
     const expect = `<!-- ============ WHAT TO EXPECT (city pages) ============
      The client's own section from the live city page, words unchanged. -->
-<section class="sv sv-points">
+<section class="sv sv-points sv-navy">
   <div class="wrap">
     <div class="sv-phead reveal">
       <div>
-        <p class="eyebrow">What to expect</p>
+        <p class="eyebrow light">What to expect</p>
         <h2>${ex.head.replace(/(\S+ \S+)$/, (m) => kw(m))}</h2>
 ${lead.trim() ? `<div class="sv-rich">\n${lead.trim()}\n</div>\n` : ''}      </div>
     </div>
