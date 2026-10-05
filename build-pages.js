@@ -402,6 +402,13 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
     // article is left off the page (it stays in data/services/). Words are not changed.
     // The client's closing "call us for a quote" section is left out: the call line and the CTA band
     // lower on the page do that job. (Where no heading says so, the closing section is the last one.)
+    // sections the user asked to leave off a particular page, by heading
+    const omit = { 'walk-in-bathtub-refinishing': ['Our Walk-in Bathtub Refinishing Process'] }[s.slug] || [];
+    for (const h of omit) {
+      const c = chunks.find(x => plain(x.head) === h);
+      if (!c) throw new Error(s.slug + ': section to omit not found: ' + h);
+      chunks.splice(chunks.indexOf(c), 1);
+    }
     const isCta = (c) => /\b(quote|estimate)\b|call us|call now|contact us|give us a call/i.test(plain(c.head));
     const dropped = chunks.some(isCta) ? chunks.filter(isCta) : [chunks[chunks.length - 1]];
     for (const c of dropped) chunks.splice(chunks.indexOf(c), 1);
