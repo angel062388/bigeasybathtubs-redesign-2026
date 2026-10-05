@@ -1,0 +1,85 @@
+{
+  "note": "Copied from the live city pages on 2026-10-05. Client content, words unchanged.",
+  "cities": [
+    {
+      "slug": "baton-rouge",
+      "title": "Bathtub Contractors in Baton Rouge, LA | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs handles bathtub installation, replacement, walk-in tubs and repairs in Baton Rouge, LA. Call 504-553-3699 today for your free estimate.",
+      "h1": "Baton Rouge",
+      "heroText": "Trusted bathtub installation, refinishing, remodeling and repair in Baton Rouge and across Greater New Orleans — quality craftsmanship and free estimates from Big Easy Bathtubs.",
+      "words": 1072
+    },
+    {
+      "slug": "covington",
+      "title": "Covington Bathtub Contractor | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs handles walk-in tubs, bathtub replacement and bathtub remodels for homes in Covington, LA. Call 504-553-3699 today for your free estimate.",
+      "h1": "Covington",
+      "heroText": "We can help you create the bathroom of your dreams.",
+      "words": 994
+    },
+    {
+      "slug": "gretna",
+      "title": "Bathtub Remodelers In Gretna | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs remodels, replaces and installs bathtubs for homeowners in Gretna, LA and nearby West Bank areas. Call us today for your free estimate.",
+      "h1": "Gretna",
+      "heroText": "Trusted bathtub installation, refinishing, remodeling and repair in Gretna and across Greater New Orleans — quality craftsmanship and free estimates from Big Easy Bathtubs.",
+      "words": 1032
+    },
+    {
+      "slug": "hammond",
+      "title": "Bathtub Contractors Hammond, LA | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs helps Hammond, Louisiana homeowners with new bathtubs, tub conversions and tub repairs. Call 504-553-3699 today to get your free estimate.",
+      "h1": "Hammond",
+      "heroText": "Trusted bathtub installation, refinishing, remodeling and repair in Hammond and across Greater New Orleans — quality craftsmanship and free estimates from Big Easy Bathtubs.",
+      "words": 1072
+    },
+    {
+      "slug": "kenner",
+      "title": "Bathtub Contractors in Kenner, LA | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs is a bathtub contractor in Kenner, LA handling all types of tub installation and repair projects. Call 504-553-3699 today for a free estimate.",
+      "h1": "Kenner",
+      "heroText": "Get a New Bathtub Today From the Leading Contractor in Kenner",
+      "words": 1013
+    },
+    {
+      "slug": "laplace",
+      "title": "Bathtub Contractors, LaPlace | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs provides bathtub installation, replacement and tub repair for homes in LaPlace, LA. Call 504-553-3699 today to get your free estimate.",
+      "h1": "LaPlace",
+      "heroText": "Trusted bathtub installation, refinishing, remodeling and repair in LaPlace and across Greater New Orleans — quality craftsmanship and free estimates from Big Easy Bathtubs.",
+      "words": 988
+    },
+    {
+      "slug": "madisonville",
+      "title": "Bathtub Remodelers in Madisonville | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs remodels bathtubs in Madisonville, LA, from walk-in tubs to full tub replacements. Call 504-553-3699 today to get your free estimate.",
+      "h1": "Madisonville",
+      "heroText": "Trusted bathtub installation, refinishing, remodeling and repair in Madisonville and across Greater New Orleans — quality craftsmanship and free estimates from Big Easy Bathtubs.",
+      "words": 1104
+    },
+    {
+      "slug": "mandeville",
+      "title": "Bathtub Contractors in Mandeville, LA | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs remodels, replaces and installs bathtubs for homeowners in Mandeville, LA and across the Northshore. Call us today to get your free estimate.",
+      "h1": "Mandeville",
+      "heroText": "Trusted bathtub installation, refinishing, remodeling and repair in Mandeville and across Greater New Orleans — quality craftsmanship and free estimates from Big Easy Bathtubs.",
+      "words": 1037
+    },
+    {
+      "slug": "slidell",
+      "title": "Slidell Bathtub Contractors | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs helps Slidell, LA homeowners with new tubs, tub conversions and walk-in tubs. Call 504-553-3699 today to schedule your free estimate.",
+      "h1": "Slidell",
+      "heroText": "Trusted bathtub installation, refinishing, remodeling and repair in Slidell and across Greater New Orleans — quality craftsmanship and free estimates from Big Easy Bathtubs.",
+      "words": 825
+    },
+    {
+      "slug": "st-rose",
+      "title": "Bathtub Contractors in Saint Rose | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs handles bathtub installation, remodeling and repair for homes in Saint Rose, Louisiana. Call 504-553-3699 today to get your free estimate.",
+      "h1": "St Rose",
+      "heroText": "Trusted bathtub installation, refinishing, remodeling and repair in St Rose and across Greater New Orleans — quality craftsmanship and free estimates from Big Easy Bathtubs.",
+      "words": 1127
+    }
+  ]
+}

@@ -413,6 +413,146 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
 }
 
 /* =====================================================================
+   CITY PAGES (service areas)
+   Order set by the user (2026-10-05), after the Big Easy Bathrooms city page:
+     hero > What to expect > Services (named for the city) > Service areas (without this city)
+     > About the city (Things to Do, Nearby Suburbs, Fun Facts, Public Transportation) > FAQs (service + city)
+   "What to expect" and the FAQ answers use the client's own words from the live city page and the
+   live FAQ page. "About the city" is new copy: every fact in it was checked against a public source
+   (listed beside it below) before it was written. A city is built only once it has an entry here.
+   ===================================================================== */
+{
+  const cities = JSON.parse(fs.readFileSync(path.join(dir, 'data', 'cities', 'index.json'), 'utf8')).cities;
+  const plain = (h) => h.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/g, ' ').replace(/\s+/g, ' ').trim();
+  const info = {
+    covington: {
+      name: 'Covington', parish: 'St. Tammany Parish',
+      heroLines: ['Covington', 'Bathtub Contractor'],
+      // second sentence is the client's own, from the live Covington page
+      lede: (hero) => `${hero} <a href="${HOME}">Big Easy Bathtubs</a> is one of the most trusted bathtub contractors in Covington.`,
+      expect: 'Why Choose Us As Your Bathtub Contractors',          // the client's section shown as "What to expect"
+      ownFaq: ['Don’t Know What to Do With Your Old Tub?'],          // the client's question sections, shown as FAQs
+      servicesAnswer: 'Big Easy Bathtubs is a company that specializes in quality bathtub installation, replacement, remodel services, and bathtub construction in Covington LA.',
+      // sources: en.wikipedia.org/wiki/Covington,_Louisiana (parish seat, rivers, 1813/1816, Tammany Trace, statue, films);
+      //          stpgov.org/transportation (STAR Transit, call-ahead curb-to-curb)
+      aboutLede: 'Covington is the parish seat of St. Tammany Parish, on the Northshore where the Bogue Falaya and the Tchefuncte River meet.',
+      about: [
+        ['Things to Do', 'Walk or cycle the Tammany Trace, a 31-mile paved trail on an old rail line that runs through Covington. Downtown you will also find a 10-foot statue of Ronald Reagan.'],
+        ['Nearby Suburbs', 'The Tammany Trace links Covington with Abita Springs, Mandeville, Lacombe and Slidell. Our team also works in Mandeville, Madisonville and Slidell.'],
+        ['Fun Facts', 'Covington was founded in 1813 under the name Wharton and became Covington in 1816. Films shot here include Eve’s Bayou and The Highwaymen.'],
+        ['Public Transportation', 'St. Tammany Parish runs STAR Transit, a curb-to-curb ride service that covers Covington. Rides are booked by phone ahead of time.'],
+      ],
+    },
+  };
+  // answers copied unchanged from the live FAQ page
+  const live = Object.fromEntries([...faq.matchAll(/<details[^>]*><summary><span>\d+<\/span>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/g)].map(m => [m[1], m[2]]));
+  live['How much does a new bathtub or remodel cost?'] = '<p>Cost depends on the tub type, materials, and scope of work. We offer competitive pricing and provide a free, no-pressure estimate so you know exactly what to expect before any work begins.</p>';
+  live['Are you licensed and insured?'] = '<p>Yes. Big Easy Bathtubs is fully licensed and insured, so you can have complete peace of mind that your project is handled by qualified professionals.</p>';
+  const serve = '<p>We serve New Orleans and the surrounding communities, including Baton Rouge, Covington, Mandeville, Slidell, Kenner, Gretna, Hammond, LaPlace, Madisonville, and St Rose.</p>';
+
+  for (const c of cities.filter(x => info[x.slug])) {
+    const I = info[c.slug], City = I.name;
+    let art = fs.readFileSync(path.join(dir, 'data', 'cities', c.slug + '.html'), 'utf8').replace(/\r\n/g, '\n').trim();
+    art = art.replace(/<([uo])l>\s*<li>\s*(<h[34]>[\s\S]*?<\/h[34]>)\s*<\/li>\s*<\/\1l>/g, '$2');
+    const chunk = (pre) => {
+      const p = art.split(/(?=<h2>)/).find(x => plain((x.match(/^<h2>([\s\S]*?)<\/h2>/) || [, ''])[1]).startsWith(plain(pre)));
+      if (!p) throw new Error(c.slug + ': section not found: ' + pre);
+      const m = p.match(/^<h2>([\s\S]*?)<\/h2>/);
+      return { head: m[1].trim(), body: p.slice(m[0].length).replace(/<img [^>]*>/g, '').replace(/<(p|strong|em)>\s*<\/\1>/g, '').trim() };
+    };
+    const heroImg = (art.match(/<img src="([^"]+)" alt="([^"]*)"/) || []);
+    if (!heroImg[1] || !heroImg[1].startsWith(U)) throw new Error(c.slug + ': no photo for the hero');
+
+    // ----- What to expect: the client's own section, its sub-topics as columns -----
+    const ex = chunk(I.expect);
+    const parts = ex.body.split(/(?=<h3>)/);
+    const lead = parts[0].startsWith('<h3>') ? '' : parts.shift();
+    const items = parts.map(p => { const m = p.match(/^<h3>([\s\S]*?)<\/h3>/); return [m[1].trim(), p.slice(m[0].length).trim()]; });
+    if (items.length < 2) throw new Error(c.slug + ': "what to expect" needs sub-topics');
+    const expect = `<!-- ============ WHAT TO EXPECT (city pages) ============
+     The client's own section from the live city page, words unchanged. -->
+<section class="sv sv-points">
+  <div class="wrap">
+    <div class="sv-phead reveal">
+      <div>
+        <p class="eyebrow">What to expect</p>
+        <h2>${ex.head.replace(/(\S+ \S+)$/, (m) => kw(m))}</h2>
+${lead.trim() ? `<div class="sv-rich">\n${lead.trim()}\n</div>\n` : ''}      </div>
+    </div>
+    <ol class="sv-items reveal" style="--d:.1s;--cols:${Math.min(items.length, 4)}">
+${items.map(([t, h], n) => `      <li><span class="sv-n" aria-hidden="true">0${n + 1}</span><h3>${t}</h3><div class="sv-rich">\n${h}\n</div></li>`).join('\n')}
+    </ol>
+  </div>
+</section>
+
+`;
+
+    // ----- Services, named for the city -----
+    let svc = once(services, `<h2>Complete bathtub &amp; ${kw('walk-in tub services')} in New Orleans</h2>`, `<h2>Bathtub &amp; walk-in tub services ${kw(`in ${City}`)}</h2>`);
+    for (const g of ['Bathtubs', 'Walk-in tubs', 'Clawfoot tubs']) svc = once(svc, `<span class="svc-name">${g}</span>`, `<span class="svc-name">${g} in ${City}</span>`);
+
+    // ----- Service areas, without this city -----
+    const dot = new RegExp(`\\n *<a class="sa-dot" data-k="${c.slug}"[\\s\\S]*?</a>`).exec(areasHome);
+    const row = new RegExp(`\\n *<li><a href="[^"]*" data-k="${c.slug}">[\\s\\S]*?</a></li>`).exec(areasHome);
+    if (!dot || !row) throw new Error(c.slug + ': not found in the service-area map');
+    let areas = once(once(areasHome, dot[0], ''), row[0], '');
+    let n = 0;
+    areas = areas.replace(/<span class="sa-n">\d+<\/span>/g, () => `<span class="sa-n">${String(++n).padStart(2, '0')}</span>`);
+    areas = once(areas, `<h2>Serving ${kw('Greater New Orleans')} and the surrounding parishes</h2>`, `<h2>Also serving the communities ${kw(`around ${City}`)}</h2>`);
+    areas = once(areas, '<p class="sec-lede">Ten service areas from Baton Rouge to Slidell, all reached from New Orleans. Pick your city on the map or in the list to open its page.</p>',
+      '<p class="sec-lede">Nine more service areas from Baton Rouge to Slidell, all reached from New Orleans. Pick a city on the map or in the list to open its page.</p>');
+
+    // ----- About the city -----
+    const about = `<!-- ============ ABOUT THE CITY (city pages) ============
+     New copy. Each fact was checked against a public source; see the
+     sources noted beside this city in build-pages.js. -->
+<section class="sv sv-alt sv-points">
+  <div class="wrap">
+    <div class="sv-phead reveal">
+      <div>
+        <p class="eyebrow">About ${City}</p>
+        <h2>Getting to know ${kw(`${City}, Louisiana`)}</h2>
+        <div class="sv-rich">
+<p>${I.aboutLede}</p>
+</div>
+      </div>
+    </div>
+    <ol class="sv-items reveal" style="--d:.1s;--cols:4">
+${I.about.map(([t, p]) => `      <li><h3>${t}</h3><div class="sv-rich">\n<p>${p}</p>\n</div></li>`).join('\n')}
+    </ol>
+  </div>
+</section>
+
+`;
+
+    // ----- FAQs about the service in this city -----
+    const own = I.ownFaq.map(h => chunk(h));
+    const qa = [
+      [`Do you serve ${City}?`, serve],
+      [`What bathtub services do you offer in ${City}?`, `<p>${I.servicesAnswer}</p>`],
+      ...own.map(o => [o.head, o.body]),
+      ...['How long does a bathtub installation take?', 'How much does a new bathtub or remodel cost?', 'Are you licensed and insured?'].map(q => { if (!live[q]) throw new Error('live FAQ missing: ' + q); return [q, live[q]]; }),
+    ];
+    const fa = faq.indexOf('<details'), fb = faq.lastIndexOf('</details>') + 10;
+    const faqBlock = once(once(faq.slice(0, fa), "<p>Still have questions? We're happy to help.</p>",
+      `<p>Still have questions? <a href="${CONTACT}">Contact our team</a> and we'll be happy to help.</p>`),
+      `<h2>Bathtub questions, ${kw('answered')}</h2>`, `<h2>${City} bathtub questions, ${kw('answered')}</h2>`) +
+      qa.map(([q, a], k) => `<details${k === 0 ? ' open' : ''}><summary><span>0${k + 1}</span>${q}</summary>${a}</details>`).join('\n      ') + faq.slice(fb);
+
+    write(c.slug + '.html', {
+      title: c.title.replace(/&(?!amp;)/g, '&amp;'), desc: c.desc, clientCopy: [ex.body, ...own.map(o => o.body)],
+      sections: [
+        pageHero({
+          crumbs: [['Service Areas', 'service-areas.html'], [City]], title: I.heroLines,
+          lede: I.lede(c.heroText),
+          img: heroImg[1].replace(U, ''), alt: heroImg[2] || `Bathtub in a ${City} home`,
+          caption: `<b class="ph-cap-sm">${City}</b><span>${I.parish}<br>Free estimates</span>`,
+        }), expect, svc, areas, about, faqBlock],
+    });
+  }
+}
+
+/* =====================================================================
    SERVICE PAGES (13): one template, each page's own article from data/services/
    ===================================================================== */
 {
