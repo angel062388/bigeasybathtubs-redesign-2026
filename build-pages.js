@@ -403,28 +403,41 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
       if (!plain(head) && chunks.length) chunks[chunks.length - 1].body += head + rest;   // an empty heading: its text belongs to the section above
       else { chunks.push({ head, body: carry + rest }); carry = ''; }
     }
-    // Three text sections per page: the intro, plus two more (sections with sub-topics first, then
-    // the earliest that are not a question or a cost note). Every other section of the
-    // article is left off the page (it stays in data/services/). Words are not changed.
-    // The client's closing "call us for a quote" section is left out: the call line and the CTA band
-    // lower on the page do that job. (Where no heading says so, the closing section is the last one.)
-    // sections the user asked to leave off a particular page, by heading
+    // The text sections of a service page, in the order the user set (2026-10-05):
+    //   1. Intro (the article's opening section)   2. Benefits   3. Why choose us
+    // Each entry names the client's own section, by the start of its heading, that fills slots 2 and 3;
+    // null where the client's article has no section of that kind. Everything else in the article is
+    // left off the page (it stays in data/services/); question sections reappear in the FAQs. Words
+    // are not changed. bathtub-installation is the user's approved example, with the sections they named.
+    const plan = {
+      'bathtub-installation': ['What To Consider Before Installing a New Tub', 'Bathtub Features'],
+      'bathtub-refinishing': ['Reasons for Bathtub Refinishing', 'Why Hire Big Easy Bathtubs'],
+      'bathtub-remodel': ['Advantages of a New Bathtub', 'More Options From Big Easy Bathtubs'],
+      'tub-repairs': ['Is it Cheaper to Replace My Tub or Repair It', 'Why Choose Us for Your Bathtub Repair Services'],
+      'bathtub-replacement': ['Bathtub Features and Benefits', null],
+      'walk-in-bathtub-installation': ['What Are the Benefits of Installing a Walk-In Tub', 'Why Choose Big Easy Bathtubs to Install'],
+      'walk-in-bathtub-remodel': ['Why Do I Need to Remodel My Walk-In Tub', 'Why choose Big Easy Bathtubs for your walk-in'],
+      'walk-in-bathtub-refinishing': ['The Value of Walk-in Bathtub Refinishing', null],
+      'walk-in-bathtub-repair': ['Benefits of walk-in bathtubs', 'Get The Most Trusted and Professional'],
+      'claw-tub-installation': [null, 'Why You Should Hire Us for the Job'],
+      'claw-tub-remodel': ['Advantages of Claw Tub to Shower Remodeling', null],
+      'claw-tub-refinishing': ['Clawfoot Bathtub Refinishing in New Orleans', 'We Can Refinish it in Any Color'],
+      'claw-tub-repair': ['Why is Claw Tub Repair', 'New Life for Your Old Claw Tubs'],
+    }[s.slug];
+    if (!plan) throw new Error(s.slug + ': no section plan');
+    const picked = plan.filter(Boolean).map((pre) => {
+      const c = chunks.slice(1).find(x => plain(x.head).startsWith(pre));
+      if (!c) throw new Error(s.slug + ': planned section not found: ' + pre);
+      return c;
+    });
+    // left off entirely: sections the user removed from a page by name, and the client's closing
+    // "call us for a quote" section (where no heading says so, the closing section is the last one)
     const omit = { 'walk-in-bathtub-refinishing': ['Our Walk-in Bathtub Refinishing Process'] }[s.slug] || [];
-    for (const h of omit) {
-      const c = chunks.find(x => plain(x.head) === h);
-      if (!c) throw new Error(s.slug + ': section to omit not found: ' + h);
-      chunks.splice(chunks.indexOf(c), 1);
-    }
+    for (const h of omit) if (!chunks.some(x => plain(x.head) === h)) throw new Error(s.slug + ': section to omit not found: ' + h);
     const isCta = (c) => /\b(quote|estimate)\b|call us|call now|contact us|give us a call/i.test(plain(c.head));
-    const dropped = chunks.some(isCta) ? chunks.filter(isCta) : [chunks[chunks.length - 1]];
-    for (const c of dropped) chunks.splice(chunks.indexOf(c), 1);
-    const mid = chunks.slice(1);
-    const hasSub = (c) => (c.body.match(/<h3>/g) || []).length >= 2 || (c.body.match(/<h4>/g) || []).length >= 2;
-    const isQ = (c) => /\?$/.test(plain(c.head)) || /\bcosts?\b/i.test(plain(c.head));
-    const keep = [];
-    for (const pick of [hasSub, (c) => !isQ(c), () => true]) for (const c of mid) if (keep.length < 2 && !keep.includes(c) && pick(c)) keep.push(c);
-    const left = mid.filter(c => !keep.includes(c));
-    for (const c of left) chunks.splice(chunks.indexOf(c), 1);
+    const closing = chunks.some(isCta) ? chunks.filter(isCta) : [chunks[chunks.length - 1]];
+    const left = chunks.slice(1).filter(c => !picked.includes(c) && !closing.includes(c) && !omit.includes(plain(c.head)));
+    chunks.splice(1, chunks.length, ...picked);
 
     // ----- FAQs that belong to this service -----
     // 1. the questions the client's own article asks and answers (sections not shown above whose heading is a question)
