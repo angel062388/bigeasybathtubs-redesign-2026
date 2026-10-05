@@ -435,7 +435,8 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
       servicesAnswer: 'Big Easy Bathtubs is a company that specializes in quality bathtub installation, replacement, remodel services, and bathtub construction in Covington LA.',
       // sources: en.wikipedia.org/wiki/Covington,_Louisiana (parish seat, rivers, 1813/1816, Tammany Trace, statue, films);
       //          stpgov.org/transportation (STAR Transit, call-ahead curb-to-curb)
-      // a real photo of the place, from Wikimedia Commons; the licence requires the credit line shown under it
+      // a real photo of the place, from Wikimedia Commons. Its licence requires a credit. The user asked for no
+      // caption under the photo (2026-10-05), so the credit shows when the photo is hovered and is listed in the README.
       photo: {
         src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Downtown_Covington_Louisiana_June_2013_-_Boston_Street.jpg/1280px-Downtown_Covington_Louisiana_June_2013_-_Boston_Street.jpg',
         alt: 'Boston Street in downtown Covington, Louisiana', caption: 'Boston Street, downtown Covington.',
@@ -523,8 +524,7 @@ ${items.map(([t, h], n) => `      <li><span class="sv-n" aria-hidden="true">0${n
 </div>
       </div>
       <figure class="sv-fig">
-        <img src="${I.photo.src}" alt="${esc(I.photo.alt)}" loading="lazy">
-        <figcaption>${I.photo.caption} Photo: <a href="${I.photo.page}" rel="nofollow noopener" target="_blank">${I.photo.by}</a>, ${I.photo.license}.</figcaption>
+        <img src="${I.photo.src}" alt="${esc(I.photo.alt)}" title="Photo: ${esc(I.photo.by)}, ${I.photo.license}, via Wikimedia Commons" loading="lazy">
       </figure>
     </div>
     <ol class="sv-items reveal" style="--d:.1s;--cols:4">
