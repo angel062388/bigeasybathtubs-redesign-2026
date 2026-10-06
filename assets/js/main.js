@@ -45,6 +45,21 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { setMega(false); } });
   });
 
+  // ---------- Service Areas menu: pointing at a city shows that city's service pages ----------
+  Array.prototype.forEach.call(document.querySelectorAll('[data-ma]'), function (box) {
+    var cityLinks = box.querySelectorAll('[data-ma-city]');
+    var panels = box.querySelectorAll('[data-ma-panel]');
+    var show = function (key) {
+      Array.prototype.forEach.call(cityLinks, function (a) { a.classList.toggle('is-on', a.getAttribute('data-ma-city') === key); });
+      Array.prototype.forEach.call(panels, function (p) { p.classList.toggle('is-on', p.getAttribute('data-ma-panel') === key); });
+    };
+    Array.prototype.forEach.call(cityLinks, function (a) {
+      var key = a.getAttribute('data-ma-city');
+      a.addEventListener('mouseenter', function () { show(key); });
+      a.addEventListener('focus', function () { show(key); });
+    });
+  });
+
   // ---------- mobile drawer ----------
   var burger = document.querySelector('[data-burger]');
   var drawer = document.querySelector('[data-drawer]');
