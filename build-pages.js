@@ -350,6 +350,38 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
 }
 
 /* =====================================================================
+   FAQS
+   Hero, every question from the live FAQ page, then the CTA band (TurnKey's FAQ page: hero, one
+   ungrouped accordion of eight, call to action). The first five questions are the homepage's own;
+   the last three are on the live FAQ page only and are copied from it unchanged.
+   ===================================================================== */
+{
+  const more = [
+    ['Are you licensed and insured?', '<p>Yes. Big Easy Bathtubs is fully licensed and insured, so you can have complete peace of mind that your project is handled by qualified professionals.</p>'],
+    ['Which areas around New Orleans do you serve?', '<p>We serve New Orleans and the surrounding communities, including Baton Rouge, Covington, Mandeville, Slidell, Kenner, Gretna, Hammond, LaPlace, Madisonville, and St Rose.</p>'],
+    ['How much does a new bathtub or remodel cost?', '<p>Cost depends on the tub type, materials, and scope of work. We offer competitive pricing and provide a free, no-pressure estimate so you know exactly what to expect before any work begins.</p>'],
+  ];
+  const fb = faq.lastIndexOf('</details>') + 10;
+  let all = faq.slice(0, fb) + '\n      ' + more.map(([q, a], k) => `<details><summary><span>0${k + 6}</span>${q}</summary>${a}</details>`).join('\n      ') + faq.slice(fb);
+  if ((all.match(/<details/g) || []).length !== 8) throw new Error('faq page: expected eight questions');
+  all = once(all, "<p>Still have questions? We're happy to help.</p>", `<p>Don't see your question? <a href="${CONTACT}">Contact our team</a> and we'll be happy to help.</p>`);
+  all = once(all, `<h2>Bathtub questions, ${kw('answered')}</h2>`, `<h2>Frequently asked ${kw('questions')}</h2>`);
+  // this is the full list, so the "View all FAQs" button becomes a phone button
+  all = once(all, '<a class="btn btn-navy" href="faqs.html">View all FAQs</a>', '<a class="btn btn-navy" href="tel:+15045533699">Call 504-553-3699</a>');
+  write('faqs.html', {
+    title: 'Bathtub Service FAQs | Big Easy Bathtubs',
+    desc: 'Find answers to common questions about bathtub installation, repair, refinishing and walk-in tubs. Call Big Easy Bathtubs today if your question is not listed.',
+    sections: [
+      pageHero({
+        crumbs: [['FAQs']], title: ['Bathtub Service', 'FAQs'],
+        lede: `Answers to the questions <a href="${HOME}">New Orleans homeowners</a> ask most about bathtub installation, refinishing, remodeling and repair. Still curious? We're happy to help.`,
+        img: '2026/06/bath-14-1024x768.jpg', alt: 'Freestanding tub under a window in a gray-blue bathroom',
+        caption: '<b>8</b><span>questions<br>answered</span>',
+      }), ticker, all, services, ctaBand],
+  });
+}
+
+/* =====================================================================
    CONTACT
    Hero, how to reach us, the estimate form, then the homepage's service-area map
    (TurnKey's contact page: hero, contact details, form, service areas).
@@ -410,6 +442,100 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
         img: '2026/06/bath-11-1024x768.jpg', alt: 'Traditional bathroom with a round jetted tub',
       }), ticker, reach, form, here(areasHome)],
   });
+}
+
+/* =====================================================================
+   GUIDE PAGES (38): the long how-to and explainer pages that sit under a service on the live site
+   (e.g. /tub-repairs/cost/), plus the six clawfoot guides. On the live site every one is a hero
+   and a single long article, so they share the article layout: contents list beside the text.
+     hero > ticker > the guide (client's words, unchanged) > more guides on the same subject >
+     Services > CTA band
+   File names are the live path with the slash turned into a hyphen.
+   ===================================================================== */
+{
+  const guides = JSON.parse(fs.readFileSync(path.join(dir, 'data', 'guides', 'index.json'), 'utf8')).guides;
+  const plain = (h) => h.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/g, ' ').replace(/\s+/g, ' ').trim();
+  const fileOf = (g) => g.slug + '.html';
+  // the subject each guide belongs to: [label, mock-up page of that subject if there is one, fallback photo]
+  const subject = {
+    'bathtub-installation': ['Bathtub installation', 'bathtub-installation.html', '2026/06/bath-6.jpg'],
+    'bathtub-refinishing': ['Bathtub refinishing', 'bathtub-refinishing.html', '2026/06/bath-6.jpg'],
+    'bathtub-remodel': ['Bathtub remodel', 'bathtub-remodel.html', '2026/06/bath-6.jpg'],
+    'bathtub-replacement': ['Bathtub replacement', 'bathtub-replacement.html', '2026/06/bath-6.jpg'],
+    'tub-repairs': ['Bathtub repairs', 'tub-repairs.html', '2026/06/bath-6.jpg'],
+    'types-of-walk-in-tubs': ['Types of walk-in tubs', null, '2023/03/walk-in-bathtub-with-bench-seat.jpg'],
+    '': ['Clawfoot tubs', null, '2025/08/Claw-Tub-Blue-Bathtub.jpg'],
+  };
+  // a heading line too long to sit beside the photo is broken at the space nearest its middle
+  const fit = (t) => {
+    if (t.length <= 21) return [t];
+    const sp = [...t.matchAll(/ /g)].map(m => m.index).sort((a, b) => Math.abs(a - t.length / 2) - Math.abs(b - t.length / 2))[0];
+    return [t.slice(0, sp), t.slice(sp + 1)].flatMap(x => x.length > 22 ? fit(x) : [x]);
+  };
+  for (const g of guides) {
+    const [label, parentFile, fallback] = subject[g.parent];
+    let art = fs.readFileSync(path.join(dir, 'data', 'guides', g.slug + '.html'), 'utf8').replace(/\r\n/g, '\n').trim();
+    art = art.replace(/<([uo])l>\s*<li>\s*(<h[34]>[\s\S]*?<\/h[34]>)\s*<\/li>\s*<\/\1l>/g, '$2');
+    // the first photo of the guide becomes the hero photo (it is then not repeated in the text)
+    const first = art.match(/<img src="([^"]+)" alt="([^"]*)">/);
+    const hero = first && first[1].startsWith(U) ? [first[1].replace(U, ''), first[2]] : [fallback, ''];
+    if (first && first[1].startsWith(U)) art = art.replace(first[0], '').replace(/<(p|strong|em)>\s*<\/\1>/g, '').replace(/<(p|strong|em)>\s*<\/\1>/g, '');
+    const toc = [], used = {};
+    art = art.replace(/<h2>([\s\S]*?)<\/h2>/g, (m, t) => {
+      const text = plain(t);
+      if (!text) return '';
+      let id = 's-' + text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
+      used[id] = (used[id] || 0) + 1; if (used[id] > 1) id += '-' + used[id];
+      toc.push([id, text]);
+      return `<h2 id="${id}">${t}</h2>`;
+    });
+    art = art.replace(/<img /g, '<img loading="lazy" ');
+    const article = `<!-- ============ THE GUIDE (guide pages) ============
+     Contents list on the left, the guide on the right. The words are the
+     client's own, exactly as published on the live page. -->
+<section class="art">
+  <div class="wrap art-grid">
+    <aside class="art-rail" aria-label="In this guide">
+      <p class="art-rail-h">In this guide</p>
+      <ol>
+${toc.map(([id, t]) => `        <li><a href="#${id}">${t}</a></li>`).join('\n')}
+      </ol>
+      <a class="btn btn-navy" href="${CONTACT}">Get a free estimate</a>
+    </aside>
+    <article class="prose">
+${art}
+    </article>
+  </div>
+</section>
+
+`;
+    const sibs = guides.filter(x => x.parent === g.parent && x !== g);
+    const more = `<!-- ============ MORE GUIDES ON THIS SUBJECT (guide pages) ============ -->
+<section class="sv sv-alt gmore">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Keep reading</p>
+      <h2>More ${label.toLowerCase()} ${kw('guides')}</h2>
+    </div>
+    <ul class="tags reveal" style="--d:.1s">
+${sibs.map(x => `      <li><a href="${fileOf(x)}">${x.h1}</a></li>`).join('\n')}
+    </ul>
+${parentFile ? `    <p class="gmore-back reveal"><a class="btn btn-line" href="${parentFile}">${label} service</a></p>\n` : ''}  </div>
+</section>
+
+`;
+    write(fileOf(g), {
+      // the guide, its hero line and its photo description are the client's own words, left as published
+      title: g.title.replace(/&(?!amp;)/g, '&amp;'), desc: g.desc, clientCopy: [art, g.heroText, esc(hero[1])].filter(Boolean),
+      sections: [
+        pageHero({
+          crumbs: [parentFile ? [label, parentFile] : [label], [g.h1]], title: fit(g.h1),
+          lede: g.heroText,
+          img: hero[0], alt: hero[1] || `${label} guide photo`,
+          caption: `<b class="ph-cap-sm">Guide</b><span>${label}</span>`,
+        }), ticker, article, more, services, ctaBand],
+    });
+  }
 }
 
 // Service + city pages to build, as [city, service]: every service in every city (the user's call, 2026-10-06).
