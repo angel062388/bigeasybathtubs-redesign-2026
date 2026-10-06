@@ -80,6 +80,25 @@ ${caption ? `      <figcaption>${caption}</figcaption>\n` : ''}    </figure>
 `;
 }
 
+// the "browse by topic" row for the Blog page (built from data/categories.json; same row as on category pages)
+function blogTopics() {
+  const cs = JSON.parse(fs.readFileSync(path.join(dir, 'data', 'categories.json'), 'utf8')).categories;
+  return `<!-- ============ BROWSE BY TOPIC (blog pages) ============ -->
+<section class="sv sv-alt gmore">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Browse by topic</p>
+      <h2>All blog ${kw('topics')}</h2>
+    </div>
+    <ul class="tags reveal" style="--d:.1s">
+${cs.map(c => `      <li><a href="category-${c.slug}.html">${esc(c.name)} <small>${c.posts.length}</small></a></li>`).join('\n')}
+    </ul>
+  </div>
+</section>
+
+`;
+}
+
 // ---------- assemble + check ----------
 const built = [];
 function write(file, { title, desc, sections, exemptContact, clientCopy }) {
@@ -284,7 +303,7 @@ ${posts.map(item).join('\n')}
         lede: `Tips, guides and inspiration for your bathtub project, from the <a href="${HOME}">Big Easy Bathtubs</a> team in New Orleans.`,
         img: '2026/06/tubhd_2-1024x683.jpg', alt: 'Freestanding tub with a chrome floor-mounted faucet',
         caption: `<b>${data.totalPublished}</b><span>articles<br>and guides</span>`,
-      }), ticker, list, ctaBand],
+      }), ticker, list, blogTopics(), ctaBand],
   });
 
   // ----- one real article in the article template -----
@@ -347,6 +366,76 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
         img: thumb(post.image), alt: '',
       }), ticker, article, areasHome, ctaBand],
   });
+}
+
+/* =====================================================================
+   BLOG CATEGORY PAGES (31). On the live site each is a heading and a grid of that topic's posts.
+     hero > ticker > the topic's articles (same rows as the Blog page) > other topics > CTA band
+   The live pages have a bare title and no description, so both are written here to the project's
+   standard (title within 60 characters, description 150 to 160 with the call to action second).
+   ===================================================================== */
+const blogCats = JSON.parse(fs.readFileSync(path.join(dir, 'data', 'categories.json'), 'utf8')).categories;
+// a row of topic buttons, used on every category page and on the Blog page
+const topicRow = (current) => `<!-- ============ BROWSE BY TOPIC (blog pages) ============ -->
+<section class="sv sv-alt gmore">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Browse by topic</p>
+      <h2>${current ? 'More' : 'All'} blog ${kw('topics')}</h2>
+    </div>
+    <ul class="tags reveal" style="--d:.1s">
+${blogCats.filter(c => c.slug !== current).map(c => `      <li><a href="category-${c.slug}.html">${esc(c.name)} <small>${c.posts.length}</small></a></li>`).join('\n')}
+    </ul>
+${current ? '    <p class="gmore-back reveal"><a class="btn btn-line" href="blog.html">All articles</a></p>\n' : ''}  </div>
+</section>
+
+`;
+{
+  const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  const seenT = new Set(), seenD = new Set();
+  for (const c of blogCats) {
+    const n = c.posts.length, name = esc(c.name), low = c.name.toLowerCase();
+    const list = `<!-- ============ ARTICLES IN THIS TOPIC (category pages) ============
+     The same rows as the Blog page: photo, a line of detail, the title and a sentence. -->
+<section class="blogx">
+  <div class="wrap">
+    <div class="blogx-list reveal" aria-label="Articles">
+${c.posts.map((p, i) => `      <a class="bpost${i === 0 ? ' bpost-lead' : ''}" href="${p.link}">
+        <span class="bpost-img"><img src="${p.image}" alt="" loading="${i === 0 ? 'eager' : 'lazy'}"></span>
+        <span class="bpost-body"><span class="post-meta">${fmt(p.date)} · ${name}</span><strong>${esc(p.title)}</strong><span class="bpost-ex">${esc(p.excerpt)}</span><span class="bpost-more">Read article</span></span>
+      </a>`).join('\n')}
+    </div>
+    <div class="blogx-foot reveal">
+      <p>${n === 1 ? 'One article' : n + ' articles'} on this topic so far. Have a question we haven't covered? <a href="${CONTACT}">Ask our team</a> and we'll point you to the right answer.</p>
+      <a class="btn btn-line" href="blog.html">All articles</a>
+    </div>
+  </div>
+</section>
+
+`;
+    const title = [`${name} Articles &amp; Guides | Big Easy Bathtubs`, `${name} Articles | Big Easy Bathtubs`, `${name} | Big Easy Bathtubs`].find(t => t.replace(/&amp;/g, '&').length <= 60);
+    const cta = 'Contact us today for your free estimate.';
+    // one sentence built from an opener and a closer; the first pairing that lands in 150 to 160 characters is used
+    const openers = ['Read the Big Easy Bathtubs articles on', 'Read Big Easy Bathtubs articles on', "Read the Big Easy Bathtubs team's articles on"];
+    const closers = ['with practical tips and guides', 'with tips and guides', 'with practical tips, costs and guides', 'with tips', 'with practical tips, costs and step-by-step guides'];
+    const desc = closers.flatMap(k => openers.map(o => `${o} ${low}, ${k} for New Orleans homeowners. ${cta}`)).find(d => d.length >= 150 && d.length <= 160);
+    if (!title || !desc) throw new Error('category ' + c.slug + ': title or description does not fit');
+    if (seenT.has(title) || seenD.has(desc)) throw new Error('category ' + c.slug + ': duplicate title or description');
+    seenT.add(title); seenD.add(desc);
+    // a long name is broken at the space nearest its middle so each line fits beside the photo
+    const mid = [...c.name.matchAll(/ /g)].map(m => m.index).sort((a, b) => Math.abs(a - c.name.length / 2) - Math.abs(b - c.name.length / 2))[0];
+    const lines = c.name.length <= 20 || mid === undefined ? [c.name] : [c.name.slice(0, mid), c.name.slice(mid + 1)];
+    write(`category-${c.slug}.html`, {
+      title, desc, clientCopy: c.posts.flatMap(p => [esc(p.title), esc(p.excerpt)]),
+      sections: [
+        pageHero({
+          crumbs: [['Blog', 'blog.html'], [name]], title: lines.map(esc),
+          lede: `Articles on ${esc(low)} from the <a href="${HOME}">Big Easy Bathtubs</a> team in New Orleans.`,
+          img: c.posts[0].image.replace(U, ''), alt: '',
+          caption: `<b>${n}</b><span>${n === 1 ? 'article' : 'articles'}<br>on this topic</span>`,
+        }), ticker, list, topicRow(c.slug), ctaBand],
+    });
+  }
 }
 
 /* =====================================================================

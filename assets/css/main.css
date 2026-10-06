@@ -521,6 +521,7 @@ p{margin:0 0 1em}
 .tags li a{display:block;padding:11px 16px}
 .tags li:has(a):hover{background:var(--sand-2);border-color:var(--sand)}
 .gmore .tags{margin-top:0}
+.tags small{margin-left:6px;font-size:12px;color:var(--taupe)}
 .gmore-back{margin:28px 0 0}
 
 /* ---------- inner pages: Service ---------- */
