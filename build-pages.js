@@ -55,7 +55,7 @@ function pageHero({ crumbs, title, lede, img, alt, caption, post, cta }) {
   const h1 = post
     ? `      <p class="post-meta fade-seq" style="--d:.2s">${post.meta}</p>\n      <h1 class="post-title fade-seq" style="--d:.3s">${lines[0]}</h1>`
     // long titles get a smaller size so each line still fits beside the photo
-    : `      <h1 class="hero-title${lines.some(t => t.length > 16) ? ' ht-long' : ''}">\n` + lines.map((t, i) =>
+    : `      <h1 class="hero-title${lines.some(t => t.length > 14) ? ' ht-long' : ''}">\n` + lines.map((t, i) =>
       `        <span class="ht-line fade-seq" style="--d:${(0.25 + i * 0.18).toFixed(2)}s"><span class="ht-txt">${t}</span><svg class="ht-ul" viewBox="0 0 400 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="${i % 2 ? 'M2 6 C 90 9, 170 3, 250 7 S 350 9, 398 5' : 'M2 8 C 80 3, 160 10, 240 6 S 360 4, 398 7'}"/></svg></span>`).join('\n') + '\n      </h1>';
   return `<!-- ============ PAGE HERO (inner pages) ============
      Same navy ground and headline treatment as the homepage hero. One
@@ -412,8 +412,10 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
   });
 }
 
-// Service + city pages to build, as [city, service]. One example for now; the full set is cities x services.
-const combos = [['covington', 'bathtub-installation']];
+// Service + city pages to build, as [city, service]: every service in every city (the user's call, 2026-10-06).
+const combos = JSON.parse(fs.readFileSync(path.join(dir, 'data', 'cities', 'index.json'), 'utf8')).cities.flatMap(c =>
+  JSON.parse(fs.readFileSync(path.join(dir, 'data', 'services', 'index.json'), 'utf8')).services.map(s => [c.slug, s.slug]));
+const comboLog = [];       // what localization changed, and what it left alone, for review
 const cityParts = {};      // filled by the city block, read by the service block
 const combosBuilt = [];
 
@@ -953,15 +955,18 @@ ${own}`;
       // becomes the city, in the words only (never in links or photo addresses). A phrase that would
       // turn into a new claim about the company's history in that city ("serving ... for many years",
       // "since ...") is left as written. A heading that names no city and is not a question gets "in CITY".
-      const changed = [];
-      const loc = (html) => html.split(/(<[^>]+>)/).map((seg, i) => {
-        if (i % 2 || /\byears?\b|\bsince\b|serving (the )?Greater New Orleans/i.test(seg)) return seg;
+      const changed = [], kept = [];
+      const loc = (html) => html.replace(/New <span class="kw">Orleans/g, '<span class="kw">New Orleans').split(/(<[^>]+>)/).map((seg, i) => {
+        if (i % 2) return seg;
+        // also left alone: statements that are only true of New Orleans itself (its sights, "X is a city"),
+        // and claims about what a city thinks or does ("New Orleans recommends", "increasingly popular in")
+        if (/\byears?\b|\bsince\b|serving (the )?Greater New Orleans|\bfounded\b|French Quarter|Mardi Gras|is a city|recommends|increasingly popular|hydrotherapy is/i.test(seg)) { if (/New Orleans/.test(seg)) kept.push(seg.trim()); return seg; }
         const out = seg.replace(/(the )?Greater New Orleans area/g, P.City).replace(/Greater New Orleans/g, P.City).replace(/New Orleans/g, P.City);
         if (out !== seg) changed.push(out.trim());
         return out;
       }).join('');
       const local = ownArr.map((sec, i) => {
-        let h = loc(sec).replace(/<h2>([\s\S]*?)<\/h2>/, (m, t) => plain(t).includes(P.City) || /\?$/.test(plain(t)) ? m : `<h2>${t} in ${P.City}</h2>`);
+        let h = loc(sec).replace(/<h2>([\s\S]*?)<\/h2>/, (m, t) => plain(t).includes(P.City) || /New Orleans/.test(plain(t)) || /\?$/.test(plain(t)) ? m : `<h2>${t} in ${P.City}</h2>`);
         if (i === 0) h = once(h, `<p class="eyebrow">${label}</p>`, `<p class="eyebrow">${label} in ${P.City}</p>`);
         return h;
       });
@@ -976,8 +981,18 @@ ${own}`;
         `<h2>Bathtub questions, ${kw('answered')}</h2>`, `<h2>${svcName} in ${P.City}: questions, ${kw('answered')}</h2>`) +
         qa.map(([q, a], k) => `<details${k === 0 ? ' open' : ''}><summary><span>0${k + 1}</span>${q}</summary>${a}</details>`).join('\n      ') + faq.slice(fb);
       const tag = s.heroText.replace(/&#0?39;/g, "'");
-      const comboTitle = `${svcName} in ${P.City}, LA | Big Easy Bathtubs`;
-      const comboDesc = `Big Easy Bathtubs provides ${label.toLowerCase()} for homeowners in ${P.City}, LA, with free estimates on every project. Call 504-553-3699 today to book yours.`;
+      // title within 60 characters and description within 150 to 160 (the project's standard); first wording that fits
+      const comboTitle = [`${svcName} in ${P.City}, LA | Big Easy Bathtubs`, `${svcName} in ${P.City} | Big Easy Bathtubs`, `${svcName}, ${P.City} | Big Easy Bathtubs`].find(t => t.length <= 60);
+      if (!comboTitle) throw new Error(`combo ${citySlug}-${s.slug}: no title fits 60 characters`);
+      const what = label.toLowerCase(), where = `homeowners in ${P.City}, LA`, cta = 'Call 504-553-3699 today to book yours.';
+      const comboDesc = [
+        `Big Easy Bathtubs provides ${what} for ${where}, with free estimates on every project. ${cta}`,
+        `Big Easy Bathtubs provides expert ${what} for ${where}, with free estimates on every project. ${cta}`,
+        `Big Easy Bathtubs provides ${what} for ${where}, with free estimates on each job. ${cta}`,
+        `Big Easy Bathtubs provides ${what} for ${where}, with free estimates. ${cta}`,
+        `Big Easy Bathtubs provides trusted, expert ${what} for ${where}, with free estimates on every project. ${cta}`,
+      ].find(d => d.length >= 150 && d.length <= 160);
+      if (!comboDesc) throw new Error(`combo ${citySlug}-${s.slug}: no description fits 150 to 160 characters`);
       write(`${citySlug}-${s.slug}.html`, {
         title: comboTitle, desc: comboDesc, clientCopy: [...local, ...answers, ...P.clientCopy],
         sections: [
@@ -989,10 +1004,14 @@ ${own}`;
             caption: `<b class="ph-cap-sm">${P.City}</b><span>${P.parish}<br>Free estimates</span>`,
           }), ticker, ...local, svcCity, P.areas, P.about, faqCity, ctaBand],
       });
-      combosBuilt.push(`${citySlug}-${s.slug}.html: title ${comboTitle.length} chars, description ${comboDesc.length} chars\n  localized text:\n   - ` + changed.join('\n   - '));
+      combosBuilt.push(`${citySlug}-${s.slug}.html`);
+      comboLog.push(`== ${citySlug}-${s.slug}.html\n   title (${comboTitle.length}): ${comboTitle}\n   description (${comboDesc.length}): ${comboDesc}\n   localized:\n     - ${changed.join('\n     - ')}${kept.length ? '\n   left as written (would claim history in the city):\n     - ' + kept.join('\n     - ') : ''}`);
     }
   }
 }
 
 console.log(built.join('\n'));
-if (combosBuilt.length) console.log('\nservice + city pages:\n' + combosBuilt.join('\n'));
+if (combosBuilt.length) {
+  fs.writeFileSync(path.join(dir, 'data', 'service-city-localization.txt'), comboLog.join('\n\n') + '\n');
+  console.log(`\nservice + city pages: ${combosBuilt.length} (review list: data/service-city-localization.txt)`);
+}
