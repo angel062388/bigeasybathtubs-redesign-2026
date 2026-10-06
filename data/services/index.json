@@ -131,5 +131,71 @@
       "heroImage": "https://www.bigeasybathtubs.com/wp-content/uploads/2022/08/banner-image.png",
       "words": 942
     }
-  ]
+  ],
+  "products": [
+    {
+      "slug": "acrylic-bathroom",
+      "group": "Bathtubs",
+      "title": "New Orleans Acrylic Bathroom Services | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs helps New Orleans homeowners choose, fit and install the right acrylic tub and bathroom surround. Call us today for your free estimate.",
+      "h1": "Acrylic Bathroom",
+      "heroText": "Durable & long-lasting acrylic bathroom in New Orleans",
+      "words": 1052
+    },
+    {
+      "slug": "acrylic-bathtub",
+      "group": "Bathtubs",
+      "title": "Acrylic Bathtub in New Orleans | Big Easy Bathtubs",
+      "desc": "Acrylic bathtubs are lightweight, warm to the touch and easy to keep clean in any New Orleans bathroom. Call Big Easy Bathtubs today for a free estimate.",
+      "h1": "Acrylic Bathtub",
+      "heroText": "Transform your bathroom with a brand-new acrylic bathtub",
+      "words": 959
+    },
+    {
+      "slug": "bathtub-removal-disposal",
+      "group": "Bathtubs",
+      "title": "Bathtub Removal & Disposal, New Orleans | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs removes and disposes of old bathtubs across New Orleans, including all the heavy lifting. Call 504-553-3699 today to schedule your removal.",
+      "h1": "Bathtub Removal & Disposal",
+      "heroText": "Bathtub Removal & Disposal by Big Easy Bathtubs — New Orleans’ trusted bathtub specialists for installation, refinishing, remodeling and repair, with quality craftsmanship and free, no-obligation estimates.",
+      "words": 1146
+    },
+    {
+      "slug": "bathtub-wall-surrounds",
+      "group": "Bathtubs",
+      "title": "Bathtub Wall Surrounds in New Orleans | Big Easy Bathtubs",
+      "desc": "Bathtub wall surrounds come in many materials, colors and styles to match your New Orleans bathroom. Call Big Easy Bathtubs today for your free estimate.",
+      "h1": "Bathtub Wall Surrounds",
+      "heroText": "Create Your Dream Tub With Wall Surrounds",
+      "words": 1127
+    },
+    {
+      "slug": "jetted-tub",
+      "group": "Bathtubs",
+      "title": "Jetted Tubs in New Orleans | Big Easy Bathtubs",
+      "desc": "A jetted bathtub turns an everyday soak into a relaxing home spa in your New Orleans home. Call Big Easy Bathtubs today for a free installation estimate.",
+      "h1": "Jetted Tub",
+      "heroText": "Turn those long & hot showers into a luxurious experience with a jetted tubs",
+      "words": 995
+    },
+    {
+      "slug": "shower-to-tubs-conversion",
+      "group": "Bathtubs",
+      "title": "New Orleans Shower to Tub Conversion | Big Easy Bathtubs",
+      "desc": "Big Easy Bathtubs converts showers to bathtubs with professional installation in homes across greater New Orleans. Contact us today for a free consultation.",
+      "h1": "Shower To Tubs Conversion",
+      "heroText": "The easy way to transform your shower into a bathtub",
+      "words": 1137
+    },
+    {
+      "slug": "step-in-tubs",
+      "group": "Walk-in tubs",
+      "title": "Step-in Tubs in New Orleans | Big Easy Bathtubs",
+      "desc": "Step-in tubs offer a safer, more comfortable way to bathe, with a low threshold for easy entry. Call Big Easy Bathtubs in New Orleans today for a free estimate.",
+      "h1": "Step-in Tubs",
+      "heroText": "Innovative bathtub offers luxurious comfort and convenience.",
+      "words": 984
+    }
+  ],
+  "productsNote": "Product-style pages (no city versions), copied from the live site on 2026-10-06. Client content, words unchanged."
 }

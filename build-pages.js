@@ -463,7 +463,7 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
     'bathtub-remodel': ['Bathtub remodel', 'bathtub-remodel.html', '2026/06/bath-6.jpg'],
     'bathtub-replacement': ['Bathtub replacement', 'bathtub-replacement.html', '2026/06/bath-6.jpg'],
     'tub-repairs': ['Bathtub repairs', 'tub-repairs.html', '2026/06/bath-6.jpg'],
-    'types-of-walk-in-tubs': ['Types of walk-in tubs', null, '2023/03/walk-in-bathtub-with-bench-seat.jpg'],
+    'types-of-walk-in-tubs': ['Types of walk-in tubs', 'types-of-walk-in-tubs.html', '2023/03/walk-in-bathtub-with-bench-seat.jpg'],
     '': ['Clawfoot tubs', null, '2025/08/Claw-Tub-Blue-Bathtub.jpg'],
   };
   // a heading line too long to sit beside the photo is broken at the space nearest its middle
@@ -472,6 +472,38 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
     const sp = [...t.matchAll(/ /g)].map(m => m.index).sort((a, b) => Math.abs(a - t.length / 2) - Math.abs(b - t.length / 2))[0];
     return [t.slice(0, sp), t.slice(sp + 1)].flatMap(x => x.length > 22 ? fit(x) : [x]);
   };
+  {
+    // TYPES OF WALK-IN TUBS: on the live site this page is a heading with nothing under it. Here it lists
+    // its five guides, each with the client's own title and tagline. The first sentence is the live page's description.
+    const kids = guides.filter(x => x.parent === 'types-of-walk-in-tubs');
+    const list = `<!-- ============ THE FIVE TYPES (this page only) ============ -->
+<section class="trustus">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Walk-in tubs</p>
+      <h2>Five types of ${kw('walk-in tubs')}</h2>
+    </div>
+    <ol class="numlist reveal" style="--d:.1s">
+${kids.map((x, i) => `      <li><span class="numlist-n">0${i + 1}</span><h3><a href="${fileOf(x)}">${x.h1}</a></h3><p>${x.heroText}</p></li>`).join('\n')}
+    </ol>
+    <p class="trustus-close reveal">Not sure which type suits your home? <a href="${CONTACT}">Contact our team</a> and we'll help you choose.</p>
+  </div>
+</section>
+
+`;
+    write('types-of-walk-in-tubs.html', {
+      title: 'Types of Walk-In Tubs | Big Easy Bathtubs',
+      desc: 'Explore the main types of walk-in tubs, from outswing door to wheelchair-accessible and lay-down models. Call Big Easy Bathtubs today to find your right fit.',
+      clientCopy: kids.map(x => x.heroText),
+      sections: [
+        pageHero({
+          crumbs: [['Types of walk-in tubs']], title: ['Types of', 'Walk-In Tubs'],
+          lede: `Explore the main types of walk-in tubs, from outswing door to wheelchair-accessible and lay-down models, with <a href="${HOME}">Big Easy Bathtubs</a>.`,
+          img: '2023/03/walk-in-bathtub-with-bench-seat.jpg', alt: 'Bathtub fitted with a bath seat and grab bar',
+          caption: '<b>5</b><span>types<br>explained</span>',
+        }), ticker, list, services, ctaBand],
+    });
+  }
   for (const g of guides) {
     const [label, parentFile, fallback] = subject[g.parent];
     let art = fs.readFileSync(path.join(dir, 'data', 'guides', g.slug + '.html'), 'utf8').replace(/\r\n/g, '\n').trim();
@@ -520,7 +552,7 @@ ${art}
     <ul class="tags reveal" style="--d:.1s">
 ${sibs.map(x => `      <li><a href="${fileOf(x)}">${x.h1}</a></li>`).join('\n')}
     </ul>
-${parentFile ? `    <p class="gmore-back reveal"><a class="btn btn-line" href="${parentFile}">${label} service</a></p>\n` : ''}  </div>
+${parentFile ? `    <p class="gmore-back reveal"><a class="btn btn-line" href="${parentFile}">${g.parent === 'types-of-walk-in-tubs' ? 'All types of walk-in tubs' : label + ' service'}</a></p>\n` : ''}  </div>
 </section>
 
 `;
@@ -868,11 +900,16 @@ ${I.about.map(([t, p]) => `      <li><h3>${t}</h3><div class="sv-rich">\n<p>${p}
     return m ? m[1] + kw(m[2]) + m[3] : kw(t);
   };
   const short = { 'Bathtubs': 'Bathtub', 'Walk-in tubs': 'Walk-in tub', 'Clawfoot tubs': 'Clawfoot tub' };
-  for (const s of data.services) {
+  // the 13 services, then the product-style pages (same template; they have no city versions and are not in the Services section)
+  for (const s of data.services.concat((data.products || []).map(p => ({ ...p, product: true })))) {
     const name = s.title.replace(/\s*\|\s*Big Easy Bathtubs\s*$/, '');
     let art = fs.readFileSync(path.join(dir, 'data', 'services', s.slug + '.html'), 'utf8').replace(/\r\n/g, '\n').trim();
     // some live pages wrap each sub-heading in its own one-item bullet list; the heading is kept, the wrapper dropped
     art = art.replace(/<([uo])l>\s*<li>\s*(<h[34]>[\s\S]*?<\/h[34]>)\s*<\/li>\s*<\/\1l>/g, '$2');
+    // the same for a list whose items each hold a sub-heading and its text; a paragraph left open is closed
+    art = art.replace(/<([uo])l>((?:(?!<[uo]l>)[\s\S])*?)<\/\1l>/g, (m, t, inner) => !/^\s*<li>\s*<h[34]>/.test(inner) ? m :
+      inner.replace(/<li>\s*/g, '').replace(/\s*<\/li>/g, '\n')
+        .replace(/<p>((?:(?!<p>|<\/p>)[\s\S])*?)(?=<p>|<h[34]>|<[uo]l>|$)/g, (x, txt) => `<p>${txt.trim()}</p>\n`));
     if (/<li>\s*<h[2-4]>/.test(art)) throw new Error(s.slug + ': a heading inside a list item would be cut in half');
     // photos the user asked to leave off a particular page, by file name
     for (const f of { 'walk-in-bathtub-refinishing': ['Less-Wasteful-Walk-in-Bathtubs-Refinishing'] }[s.slug] || []) {
@@ -880,7 +917,7 @@ ${I.about.map(([t, p]) => `      <li><h3>${t}</h3><div class="sv-rich">\n<p>${p}
       if (!tag) throw new Error(s.slug + ': photo to omit not found: ' + f);
       art = art.replace(tag[0], '');
     }
-    const label = `${short[s.group]} ${s.h1.replace(/ in New Orleans$/, '').replace(/^Bathtub /, '').toLowerCase()}`;
+    const label = s.product ? esc(s.h1[0] + s.h1.slice(1).toLowerCase()) : `${short[s.group]} ${s.h1.replace(/ in New Orleans$/, '').replace(/^Bathtub /, '').toLowerCase()}`;
 
     // ----- the client's article, cut at its own headings into separate sections -----
     const chunks = [];
@@ -912,6 +949,14 @@ ${I.about.map(([t, p]) => `      <li><h3>${t}</h3><div class="sv-rich">\n<p>${p}
       'claw-tub-remodel': ['Advantages of Claw Tub to Shower Remodeling', null],
       'claw-tub-refinishing': ['Clawfoot Bathtub Refinishing in New Orleans', 'We Can Refinish it in Any Color'],
       'claw-tub-repair': ['Why is Claw Tub Repair', 'New Life for Your Old Claw Tubs'],
+      // product-style pages
+      'acrylic-bathroom': ['Designs Ideas for Acrylic Bathrooms', 'Choose Big Easy Bathtubs for Your New Acrylic Bathroom'],
+      'acrylic-bathtub': ['Pros and Cons of Acrylic Tubs', 'Beautiful Acrylic Bathtubs Available'],
+      'bathtub-removal-disposal': ['Our Professional Bathtub Removal and Disposal Services', 'Big Easy Bathtubs Services Are Here to Help'],
+      'bathtub-wall-surrounds': ['Different Bathtub Wall Kit Styles', 'Upgrade Your Bathtub With Wall Surrounds'],
+      'jetted-tub': ['What Are the Features of a Jetted Tub', 'Top-Of-The-Quality Jetted Tubs'],
+      'shower-to-tubs-conversion': ['Benefits of New Orleans Shower-to-Tub Conversions', 'Why Choose Big Easy Bathtubs'],
+      'step-in-tubs': ['Safety Features of Step-in Tub', 'Get Step-In Tubs Installed'],
     }[s.slug];
     if (!plan) throw new Error(s.slug + ': no section plan');
     const picked = plan.filter(Boolean).map((pre) => {
@@ -933,7 +978,8 @@ ${I.about.map(([t, p]) => `      <li><h3>${t}</h3><div class="sv-rich">\n<p>${p}
     // 2. the questions from the live FAQ page that fit this kind of service and this kind of tub
     const ownQ = left.filter(c => /\?$/.test(plain(c.head)));
     const answers = ownQ.map(c => c.body.replace(/<img [^>]*>/g, '').replace(/<(p|strong|em)>\s*<\/\1>/g, '').trim());
-    const kind = (s.slug.match(/installation|refinishing|remodel|repair|replacement/) || [''])[0];
+    // product-style pages get the installation questions (how long, how much) beside their own
+    const kind = s.product ? 'installation' : (s.slug.match(/installation|refinishing|remodel|repair|replacement/) || [''])[0];
     const fits = [
       [/^How long does a bathtub installation take/, ['installation', 'replacement'].includes(kind)],
       [/^Do you install walk-in tubs/, s.group === 'Walk-in tubs'],
@@ -1049,7 +1095,7 @@ ${own}`;
     // the Services section, minus the page we are on (a page does not link to itself)
     const self = new RegExp(`\\n *<li><a href="${s.slug}\\.html">[^<]*</a></li>`);
     const n = data.services.filter(x => x.group === s.group).length;
-    const servicesOther = once(once(services, self.exec(services)[0], ''),
+    const servicesOther = s.product ? services : once(once(services, self.exec(services)[0], ''),
       `<span class="svc-name">${s.group}</span></h3><span class="svc-count">${n} services</span>`,
       `<span class="svc-name">${s.group}</span></h3><span class="svc-count">${n - 1} more services</span>`);
     const [img, alt] = photo[s.group];
@@ -1058,7 +1104,10 @@ ${own}`;
       sections: [
         pageHero({
           crumbs: [['Services'], [label]], title: fit(lines(name)),
-          lede: s.heroText.replace(/&#0?39;/g, "'"),
+          // the client's tagline; a long dash in it (the live site's stock sentence) becomes a comma
+          // (interlink rule) where the sections shown carry no homepage link in a paragraph, a short closing sentence adds one
+          lede: s.heroText.replace(/&#0?39;/g, "'").replace(/\s+—\s+/, ', ').replace(/&(?!amp;|#\d+;|[a-z]+;)/g, '&amp;') +
+            ((own.match(/<p[\s>][\s\S]*?<\/p>/g) || []).some(p => p.includes(`href="${HOME}"`)) ? '' : `${/[.!?]$/.test(s.heroText) ? '' : '.'} <a href="${HOME}">Big Easy Bathtubs</a> serves all of Greater New Orleans.`),
           img, alt, caption: `<b class="ph-cap-sm">${s.group}</b><span>Free estimates<br>across Greater New Orleans</span>`,
           // the page is only what the user listed: three text sections, Services, Service areas, How we
           // work, reviews, FAQs and the CTA band (no ticker, no closing text section)

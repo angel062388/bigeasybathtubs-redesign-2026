@@ -447,6 +447,8 @@ p{margin:0 0 1em}
 .numlist-n{grid-row:1/span 2;font:300 34px/1 var(--serif);color:var(--taupe)}
 .numlist h3{font-size:22px;margin:0 0 8px}
 .numlist p{margin:0;font-size:16px}
+.numlist h3 a{color:inherit;text-decoration:underline;text-decoration-color:var(--sand);text-underline-offset:5px;text-decoration-thickness:1.5px}
+.numlist h3 a:hover{text-decoration-color:var(--navy)}
 .trustus-close{max-width:820px;margin:34px 0 0;font-size:18px;color:var(--ink)}
 .trustus-close a,.blogx-foot a:not(.btn){color:inherit;text-decoration:underline;text-decoration-color:var(--sand);text-underline-offset:4px;text-decoration-thickness:1.5px}
 .trustus-close a:hover,.blogx-foot a:not(.btn):hover{color:var(--navy)}
