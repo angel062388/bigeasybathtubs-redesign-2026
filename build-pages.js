@@ -412,6 +412,11 @@ ${related.map((p, i) => `      <a class="post reveal" style="--d:${(0.05 + i * 0
   });
 }
 
+// Service + city pages to build, as [city, service]. One example for now; the full set is cities x services.
+const combos = [['covington', 'bathtub-installation']];
+const cityParts = {};      // filled by the city block, read by the service block
+const combosBuilt = [];
+
 /* =====================================================================
    CITY PAGES (service areas), ten pages from one template. Covington is the approved example.
    Order set by the user (2026-10-05), after the Big Easy Bathrooms city page:
@@ -627,6 +632,8 @@ ${lists(ex.body)}
     let svc = once(services, `<h2>Complete bathtub &amp; ${kw('walk-in tub services')} in New Orleans</h2>`, `<h2>Bathtub &amp; walk-in tub services ${kw(`in ${City}`)}</h2>`);
     for (const g of ['Bathtubs', 'Walk-in tubs', 'Clawfoot tubs']) svc = once(svc, `<span class="svc-name">${g}</span>`, `<span class="svc-name">${g} in ${City}</span>`);
 
+    for (const [, svcSlug] of combos.filter(x => x[0] === c.slug)) svc = once(svc, `<li><a href="${svcSlug}.html">`, `<li><a href="${c.slug}-${svcSlug}.html">`);
+
     // ----- Service areas, without this city -----
     const dot = new RegExp(`\\n *<a class="sa-dot" data-k="${c.slug}"[\\s\\S]*?</a>`).exec(areasHome);
     const row = new RegExp(`\\n *<li><a href="[^"]*" data-k="${c.slug}">[\\s\\S]*?</a></li>`).exec(areasHome);
@@ -686,6 +693,7 @@ ${I.about.map(([t, p]) => `      <li><h3>${t}</h3><div class="sv-rich">\n<p>${p}
     const lede = I.lede ? I.lede(tag) : tag.includes('Big Easy Bathtubs') ? tag.replace('Big Easy Bathtubs', `<a href="${HOME}">Big Easy Bathtubs</a>`)
       : `${tag}${/[.!?]$/.test(tag) ? '' : '.'} <a href="${HOME}">Big Easy Bathtubs</a> serves ${City} and all of Greater New Orleans.`;
 
+    cityParts[c.slug] = { City, parish, word: I.word, about, areas, svc, heroImg, serve, clientCopy: [] };
     write(c.slug + '.html', {
       title: c.title.replace(/&(?!amp;)/g, '&amp;'), desc: c.desc, clientCopy: [ex.body, lists(ex.body), ...items.map(it => it[1]), ...own.flatMap(o => [o.body, lists(o.body)])],
       sections: [
@@ -820,7 +828,7 @@ ${I.about.map(([t, p]) => `      <li><h3>${t}</h3><div class="sv-rich">\n<p>${p}
       `<h2>Bathtub questions, ${kw('answered')}</h2>`, `<h2>${label[0].toUpperCase() + label.slice(1)} questions, ${kw('answered')}</h2>`) +
       faqItems.map(([q, a], k) => `<details${k === 0 ? ' open' : ''}><summary><span>0${k + 1}</span>${q}</summary>${a}</details>`).join('\n      ') + faq.slice(fb);
     let flip = false, navyUsed = false, tone = 0;
-    const own = chunks.map((c, i) => {
+    const ownArr = chunks.map((c, i) => {
       const imgs = [];
       const grab = (h) => h.replace(/<img [^>]*>/g, (t) => { imgs.push(t.replace('<img ', '<img loading="lazy" ')); return ''; });
       const head = underline(grab(c.head).trim());
@@ -902,7 +910,8 @@ ${rich(body, ' data-r')}
 </section>
 
 `.replace('<div class="sv-rich" data-r>', '<div class="sv-rich reveal" style="--d:.1s">');
-    }).join('');
+    });
+    const own = ownArr.join('');
     const ownBlock = `<!-- ============ THE SERVICE (service pages only) ============
      The client's own words from the live page, unchanged, cut at their own
      headings into separate sections: words beside a heading, words beside
@@ -927,7 +936,47 @@ ${own}`;
           // work, reviews, FAQs and the CTA band (no ticker, no closing text section)
         }), ticker, ownBlock, servicesOther, areasHome, process_, reviews, faqBlock, ctaBand],
     });
+
+    /* ----- SERVICE + CITY pages, after bigeasybathrooms.com/service-areas/{city}/{service}/ -----
+       That site assembles each one from two existing pages: the service page (hero line, benefits, the
+       service's FAQs) and the city page (services named for the city, about the city, area map), then
+       adds a few "do you offer X in CITY" questions. Same recipe here, so no new copy is needed:
+         hero > ticker > the service's second text section, labelled for the city > Services in the city
+         (without this service) > About the city > Service areas (without the city) > FAQs > CTA band */
+    for (const [citySlug] of combos.filter(x => x[1] === s.slug)) {
+      const P = cityParts[citySlug];
+      if (!P) throw new Error('combo: city not built: ' + citySlug);
+      if (ownArr.length < 2) throw new Error('combo: ' + s.slug + ' has no second text section');
+      const svcName = label.replace(/(^|[\s-])([a-z])/g, (m, a, b) => (a === '-' ? m : a + b.toUpperCase()));
+      const benefit = once(ownArr[1], '<h2>', `<p class="eyebrow${ownArr[1].includes('sv-navy') ? ' light' : ''}">${svcName} in ${P.City}</p>\n        <h2>`);
+      const selfCity = new RegExp(`\\n *<li><a href="${citySlug}-${s.slug}\\.html">[^<]*</a></li>`).exec(P.svc);
+      if (!selfCity) throw new Error('combo: own chip not found in the city services');
+      const svcCity = once(once(P.svc, selfCity[0], ''),
+        `<span class="svc-name">${s.group} in ${P.City}</span></h3><span class="svc-count">${n} services</span>`,
+        `<span class="svc-name">${s.group} in ${P.City}</span></h3><span class="svc-count">${n - 1} more services</span>`);
+      const qa = [[`Do you offer ${label.toLowerCase()} in ${P.City}?`, P.serve], ...faqItems];
+      const faqCity = once(once(faq.slice(0, fa), "<p>Still have questions? We're happy to help.</p>",
+        `<p>Still have questions? <a href="${CONTACT}">Contact our team</a> and we'll be happy to help.</p>`),
+        `<h2>Bathtub questions, ${kw('answered')}</h2>`, `<h2>${svcName} in ${P.City}: questions, ${kw('answered')}</h2>`) +
+        qa.map(([q, a], k) => `<details${k === 0 ? ' open' : ''}><summary><span>0${k + 1}</span>${q}</summary>${a}</details>`).join('\n      ') + faq.slice(fb);
+      const tag = s.heroText.replace(/&#0?39;/g, "'");
+      const comboTitle = `${svcName} in ${P.City}, LA | Big Easy Bathtubs`;
+      const comboDesc = `Big Easy Bathtubs provides ${label.toLowerCase()} for homeowners in ${P.City}, LA, with free estimates on every project. Call 504-553-3699 today to book yours.`;
+      write(`${citySlug}-${s.slug}.html`, {
+        title: comboTitle, desc: comboDesc, clientCopy: [own, ...answers, ...P.clientCopy],
+        sections: [
+          pageHero({
+            crumbs: [['Service Areas', 'service-areas.html'], [P.City, citySlug + '.html'], [svcName]],
+            title: fit([`${P.word} ${svcName}`, `in ${P.City}`]),
+            lede: `${tag}${/[.!?]$/.test(tag) ? '' : '.'} <a href="${HOME}">Big Easy Bathtubs</a> serves ${P.City} and all of Greater New Orleans.`,
+            img: P.heroImg[1].replace(U, ''), alt: P.heroImg[2] || `Bathtub in a ${P.City} home`,
+            caption: `<b class="ph-cap-sm">${P.City}</b><span>${P.parish}<br>Free estimates</span>`,
+          }), ticker, benefit, svcCity, P.about, P.areas, faqCity, ctaBand],
+      });
+      combosBuilt.push(`${citySlug}-${s.slug}.html: title ${comboTitle.length} chars, description ${comboDesc.length} chars`);
+    }
   }
 }
 
 console.log(built.join('\n'));
+if (combosBuilt.length) console.log('\nservice + city pages:\n' + combosBuilt.join('\n'));
