@@ -23,23 +23,27 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  // ---------- services mega menu ----------
-  var megaBtn = document.querySelector('.nav-btn');
-  var mega = document.getElementById('mega');
-  if (megaBtn && mega) {
+  // ---------- drop-down menus (Services, Service Areas) ----------
+  var megaSetters = [];
+  Array.prototype.forEach.call(document.querySelectorAll('.nav-btn[aria-controls]'), function (megaBtn) {
+    var mega = document.getElementById(megaBtn.getAttribute('aria-controls'));
+    if (!mega) return;
     var setMega = function (open) {
       megaBtn.setAttribute('aria-expanded', String(open));
       mega.classList.toggle('is-open', open);
     };
+    megaSetters.push(setMega);
     megaBtn.addEventListener('click', function (e) {
       e.stopPropagation();
-      setMega(megaBtn.getAttribute('aria-expanded') !== 'true');
+      var open = megaBtn.getAttribute('aria-expanded') !== 'true';
+      megaSetters.forEach(function (close) { close(false); });
+      setMega(open);
     });
     megaBtn.parentElement.addEventListener('mouseenter', function () { setMega(true); });
     megaBtn.parentElement.addEventListener('mouseleave', function () { setMega(false); });
     document.addEventListener('click', function (e) { if (!mega.contains(e.target)) setMega(false); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { setMega(false); } });
-  }
+  });
 
   // ---------- mobile drawer ----------
   var burger = document.querySelector('[data-burger]');

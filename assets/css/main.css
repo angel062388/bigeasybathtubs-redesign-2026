@@ -87,6 +87,8 @@ p{margin:0 0 1em}
 .mega-h{font:500 17px/1.2 var(--serif);margin-bottom:10px;color:var(--navy)}
 .mega a{display:block;color:var(--body);letter-spacing:.04em;text-transform:none;font-size:15px;padding:6px 0}
 .mega a:hover{color:var(--navy)}
+.mega-areas{grid-template-columns:repeat(2,170px)}
+.mega .mega-all{grid-column:1/-1;margin-top:-6px;padding-top:16px;border-top:1px solid var(--line);font-weight:500;color:var(--navy)}
 .head-cta{display:flex;align-items:center;gap:18px}
 .head-tel{font:500 15px/1 var(--sans);letter-spacing:.06em;color:var(--white);text-decoration:none;transition:color .2s}
 .head-tel:hover{color:var(--sand)}

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/main.css?v=45">
+<link rel="stylesheet" href="assets/css/main.css?v=46">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body class="inner">
@@ -51,7 +51,26 @@
             </div>
           </div>
         </li>
-        <li><a href="service-areas.html">Service Areas</a></li>
+        <li class="has-mega">
+          <button class="nav-btn" aria-expanded="false" aria-controls="mega-areas">Service Areas <span aria-hidden="true">+</span></button>
+          <div class="mega mega-areas" id="mega-areas">
+            <div class="mega-col">
+              <a href="baton-rouge.html">Baton Rouge</a>
+              <a href="covington.html">Covington</a>
+              <a href="gretna.html">Gretna</a>
+              <a href="hammond.html">Hammond</a>
+              <a href="kenner.html">Kenner</a>
+            </div>
+            <div class="mega-col">
+              <a href="laplace.html">LaPlace</a>
+              <a href="madisonville.html">Madisonville</a>
+              <a href="mandeville.html">Mandeville</a>
+              <a href="slidell.html">Slidell</a>
+              <a href="st-rose.html">St. Rose</a>
+            </div>
+            <a class="mega-all" href="service-areas.html">All service areas</a>
+          </div>
+        </li>
         <li><a href="testimonials.html">Reviews</a></li>
         <li><a href="blog.html">Blog</a></li>
         <li><a href="contact.html">Contact</a></li>
@@ -88,7 +107,19 @@
       <a href="claw-tub-refinishing.html">Refinishing</a>
       <a href="claw-tub-repair.html">Repair</a>
     </details>
-    <a href="service-areas.html">Service Areas</a>
+    <details><summary>Service areas</summary>
+      <a href="service-areas.html">All service areas</a>
+      <a href="baton-rouge.html">Baton Rouge</a>
+      <a href="covington.html">Covington</a>
+      <a href="gretna.html">Gretna</a>
+      <a href="hammond.html">Hammond</a>
+      <a href="kenner.html">Kenner</a>
+      <a href="laplace.html">LaPlace</a>
+      <a href="madisonville.html">Madisonville</a>
+      <a href="mandeville.html">Mandeville</a>
+      <a href="slidell.html">Slidell</a>
+      <a href="st-rose.html">St. Rose</a>
+    </details>
     <a href="testimonials.html">Reviews</a>
     <a href="blog.html">Blog</a>
     <a href="contact.html">Contact</a>
@@ -332,6 +363,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=30" defer></script>
+<script src="assets/js/main.js?v=31" defer></script>
 </body>
 </html>

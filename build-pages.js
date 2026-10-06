@@ -941,14 +941,30 @@ ${own}`;
        That site assembles each one from two existing pages: the service page (hero line, benefits, the
        service's FAQs) and the city page (services named for the city, about the city, area map), then
        adds a few "do you offer X in CITY" questions. Same recipe here, so no new copy is needed:
-         hero > ticker > the service's second text section, labelled for the city > Services in the city
-         (without this service) > About the city > Service areas (without the city) > FAQs > CTA band */
+         hero > ticker > the service page's text sections, localized > Services in the city (without this
+         service) > Service areas (without the city) > About the city > FAQs > CTA band
+       (order and localization set by the user, 2026-10-06, on the bathtub-installation / Covington example) */
     for (const [citySlug] of combos.filter(x => x[1] === s.slug)) {
       const P = cityParts[citySlug];
       if (!P) throw new Error('combo: city not built: ' + citySlug);
       if (ownArr.length < 2) throw new Error('combo: ' + s.slug + ' has no second text section');
       const svcName = label.replace(/(^|[\s-])([a-z])/g, (m, a, b) => (a === '-' ? m : a + b.toUpperCase()));
-      const benefit = once(ownArr[1], '<h2>', `<p class="eyebrow${ownArr[1].includes('sv-navy') ? ' light' : ''}">${svcName} in ${P.City}</p>\n        <h2>`);
+      // The service page's own text sections, localized as the user asked (2026-10-06): "New Orleans"
+      // becomes the city, in the words only (never in links or photo addresses). A phrase that would
+      // turn into a new claim about the company's history in that city ("serving ... for many years",
+      // "since ...") is left as written. A heading that names no city and is not a question gets "in CITY".
+      const changed = [];
+      const loc = (html) => html.split(/(<[^>]+>)/).map((seg, i) => {
+        if (i % 2 || /\byears?\b|\bsince\b|serving (the )?Greater New Orleans/i.test(seg)) return seg;
+        const out = seg.replace(/(the )?Greater New Orleans area/g, P.City).replace(/Greater New Orleans/g, P.City).replace(/New Orleans/g, P.City);
+        if (out !== seg) changed.push(out.trim());
+        return out;
+      }).join('');
+      const local = ownArr.map((sec, i) => {
+        let h = loc(sec).replace(/<h2>([\s\S]*?)<\/h2>/, (m, t) => plain(t).includes(P.City) || /\?$/.test(plain(t)) ? m : `<h2>${t} in ${P.City}</h2>`);
+        if (i === 0) h = once(h, `<p class="eyebrow">${label}</p>`, `<p class="eyebrow">${label} in ${P.City}</p>`);
+        return h;
+      });
       const selfCity = new RegExp(`\\n *<li><a href="${citySlug}-${s.slug}\\.html">[^<]*</a></li>`).exec(P.svc);
       if (!selfCity) throw new Error('combo: own chip not found in the city services');
       const svcCity = once(once(P.svc, selfCity[0], ''),
@@ -963,17 +979,17 @@ ${own}`;
       const comboTitle = `${svcName} in ${P.City}, LA | Big Easy Bathtubs`;
       const comboDesc = `Big Easy Bathtubs provides ${label.toLowerCase()} for homeowners in ${P.City}, LA, with free estimates on every project. Call 504-553-3699 today to book yours.`;
       write(`${citySlug}-${s.slug}.html`, {
-        title: comboTitle, desc: comboDesc, clientCopy: [own, ...answers, ...P.clientCopy],
+        title: comboTitle, desc: comboDesc, clientCopy: [...local, ...answers, ...P.clientCopy],
         sections: [
           pageHero({
             crumbs: [['Service Areas', 'service-areas.html'], [P.City, citySlug + '.html'], [svcName]],
-            title: fit([`${P.word} ${svcName}`, `in ${P.City}`]),
+            title: fit([svcName, `in ${P.City}`]),
             lede: `${tag}${/[.!?]$/.test(tag) ? '' : '.'} <a href="${HOME}">Big Easy Bathtubs</a> serves ${P.City} and all of Greater New Orleans.`,
             img: P.heroImg[1].replace(U, ''), alt: P.heroImg[2] || `Bathtub in a ${P.City} home`,
             caption: `<b class="ph-cap-sm">${P.City}</b><span>${P.parish}<br>Free estimates</span>`,
-          }), ticker, benefit, svcCity, P.about, P.areas, faqCity, ctaBand],
+          }), ticker, ...local, svcCity, P.areas, P.about, faqCity, ctaBand],
       });
-      combosBuilt.push(`${citySlug}-${s.slug}.html: title ${comboTitle.length} chars, description ${comboDesc.length} chars`);
+      combosBuilt.push(`${citySlug}-${s.slug}.html: title ${comboTitle.length} chars, description ${comboDesc.length} chars\n  localized text:\n   - ` + changed.join('\n   - '));
     }
   }
 }
