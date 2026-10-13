@@ -1,0 +1,23 @@
+{
+  "note": "New blog posts written for review, not yet on the live site. Each is shown in the mock-up's article design at draft-{slug}.html (noindex). Once a post is approved and published on the live site, remove it from this list.",
+  "drafts": [
+    {
+      "slug": "standard-bathtub-sizes",
+      "title": "Standard Bathtub Sizes: How to Measure Before You Replace a Tub",
+      "category": "Bathtub Replacement",
+      "categoryId": 48,
+      "planDate": "2026-09-29",
+      "primaryKeyword": "standard bathtub size",
+      "metaTitle": "Standard Bathtub Sizes: How to Measure | Big Easy Bathtubs",
+      "metaDesc": "Standard bathtub sizes explained, with the key measurements to take before you replace an old tub. Call Big Easy Bathtubs at 504-553-3699 for a free estimate.",
+      "image": "2026/06/bath-6.jpg",
+      "imageAlt": "Modern bathroom with a built-in tub",
+      "imageNote": "Placeholder from the site's own media library until the image source for new posts is decided.",
+      "sources": [
+        "https://resources.kohler.com/webassets/kpna/catalog/pdf/en/K-715_spec_US-CA_Kohler_en.pdf",
+        "https://resources.kohler.com/webassets/kpna/catalog/pdf/en/K-745_spec_US-CA_Kohler_en.pdf",
+        "https://www.thisoldhouse.com/bathrooms/standard-bathtub-sizes"
+      ]
+    }
+  ]
+}

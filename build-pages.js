@@ -439,6 +439,52 @@ ${c.posts.map((p, i) => `      <a class="bpost${i === 0 ? ' bpost-lead' : ''}" h
 }
 
 /* =====================================================================
+   NEW BLOG POSTS FOR REVIEW (data/drafts/): posts written from the blog plan that are not on the
+   live site yet, shown in the article design so they can be read and approved first.
+   ===================================================================== */
+{
+  const drafts = JSON.parse(fs.readFileSync(path.join(dir, 'data', 'drafts', 'index.json'), 'utf8')).drafts;
+  for (const d of drafts) {
+    let art = fs.readFileSync(path.join(dir, 'data', 'drafts', d.slug + '.html'), 'utf8').replace(/\r\n/g, '\n').trim();
+    const words = art.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+    if (d.metaTitle.length > 60 || d.metaDesc.length < 150 || d.metaDesc.length > 160) throw new Error('draft ' + d.slug + ': meta title or description outside the standard');
+    const toc = [];
+    art = art.replace(/<h2>([\s\S]*?)<\/h2>/g, (m, t) => {
+      const text = t.replace(/<[^>]+>/g, '').trim();
+      const id = 's-' + text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
+      toc.push([id, text]);
+      return `<h2 id="${id}">${t}</h2>`;
+    });
+    art = art.replace(/<table>/g, '<div class="prose-table"><table>').replace(/<\/table>/g, '</table></div>');
+    const article = `<!-- ============ ARTICLE (new post for review) ============ -->
+<section class="art">
+  <div class="wrap art-grid">
+    <aside class="art-rail" aria-label="In this article">
+      <p class="art-rail-h">In this article</p>
+      <ol>
+${toc.map(([id, t]) => `        <li><a href="#${id}">${t}</a></li>`).join('\n')}
+      </ol>
+      <a class="btn btn-navy" href="${CONTACT}">Get a free estimate</a>
+    </aside>
+    <article class="prose">
+${art}
+    </article>
+  </div>
+</section>
+
+`;
+    write(`draft-${d.slug}.html`, {
+      title: d.metaTitle, desc: d.metaDesc,
+      sections: [
+        pageHero({
+          crumbs: [['Blog', 'blog.html'], ['Article']], title: d.title, post: { meta: `Draft for review · ${d.category} · ${words} words` },
+          img: d.image, alt: d.imageAlt,
+        }), ticker, article, areasHome, ctaBand],
+    });
+  }
+}
+
+/* =====================================================================
    FAQS
    Hero, every question from the live FAQ page, then the CTA band (TurnKey's FAQ page: hero, one
    ungrouped accordion of eight, call to action). The first five questions are the homepage's own;
